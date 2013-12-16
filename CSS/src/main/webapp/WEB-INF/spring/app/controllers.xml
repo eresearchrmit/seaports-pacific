@@ -10,6 +10,6 @@
 	<!-- Scans within the base package of the application for @Components to configure as beans -->
 	<!-- <context:annotation-config />	 -->
 
-	<context:component-scan base-package="war" />
+	<context:component-scan base-package="edu.rmit.eres.seaports" />
 	<tx:annotation-driven />
 </beans>

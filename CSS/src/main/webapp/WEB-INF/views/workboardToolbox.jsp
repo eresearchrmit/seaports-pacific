@@ -10,9 +10,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ page language="java" import="war.model.UserStory" %>
-<%@ page language="java" import="war.model.User" %>
-<%@ page language="java" import="war.model.DataElement" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.UserStory" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.User" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.DataElement" %>
 
 <c:if test="${not empty userstory}">
 <p>

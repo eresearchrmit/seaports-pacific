@@ -17,10 +17,10 @@
         <access-denied-handler error-page="/accessDenied" />
     </http>
 
-	<beans:bean id="userDao" class="war.dao.UserDao">
+	<beans:bean id="userDao" class="edu.rmit.eres.seaports.dao.UserDao">
 	</beans:bean>
 
-	<beans:bean id="userService" class="security.UserLoginService">
+	<beans:bean id="userService" class="edu.rmit.eres.seaports.security.UserLoginService">
 		<beans:property name="userDao" ref="userDao"></beans:property>
 	</beans:bean> 
     

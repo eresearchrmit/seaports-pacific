@@ -11,8 +11,8 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ page language="java" import="war.model.UserStory" %>
-<%@ page language="java" import="war.model.User" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.UserStory" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.User" %>
 
 <div class="grid_12">
 	<h2>New Workboard</h2>

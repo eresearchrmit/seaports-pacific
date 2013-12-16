@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="true" %>
 <%@ page import= "org.springframework.web.servlet.tags.*" %>
-<%@ page import="war.model.DataElementCmar" %>
+<%@ page import="edu.rmit.eres.seaports.model.DataElementCmar" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
