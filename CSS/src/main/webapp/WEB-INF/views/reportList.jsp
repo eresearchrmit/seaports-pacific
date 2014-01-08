@@ -12,7 +12,7 @@
 <%@ page import="org.apache.commons.codec.binary.*"%>
 <%@ page import= "org.springframework.web.servlet.tags.*" %>
 <%@ page import="org.apache.commons.lang.*" %>
-<%@ page language="java" import="edu.rmit.eres.seaports.model.UserStory" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.Report" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.User" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.DataElement" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
@@ -20,15 +20,24 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <div class="grid_12">
-	<h2>${listingTitle}</h2>
+	<div style="margin-left: 20px; float:left">
+		<h2>${listingTitle}</h2>
+	</div>
+	
+	<a class="lnkConvertToUserStory" href="/auth/report/create" style="margin-right: 10px; float:right">
+		<button id="btnConvertToUserStory" type="button" class="btn btn-icon btn-blue btn-plus" >
+			<span></span>New Report
+		</button>
+	</a>
+	<div class="clear"></div><br />
 	
 	<c:set var="successMessage" scope="request" value="${successMessage}"/>
 	<c:set var="warningMessage" scope="request" value="${warningMessage}"/>
 	<c:set var="errorMessage" scope="request" value="${errorMessage}"/> 			
 	<jsp:include page="notifications.jsp" />
 	
-	<c:if test="${not empty userStoriesList}">
-		<table class="data display datatable" id="tblUserStoryList">
+	<c:if test="${not empty reportsList}">
+		<table class="data display datatable" id="tblReportList">
 			<thead>
 				<tr>
 					<th>Title</th>
@@ -39,20 +48,20 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${userStoriesList}" var="story" varStatus="status"> 
+				<c:forEach items="${reportsList}" var="report" varStatus="status"> 
 				<tr>
-					<td><c:out value="${story.name}" /></td>
-					<td><a href="/auth/userstory/view?id=${story.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
+					<td><c:out value="${report.name}" /></td>
+					<td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
 					<c:choose>
-						<c:when test="${story.mode == 'published'}">
+						<c:when test="${report.mode == 'published'}">
 							<td></td>
-							<td>Published (<fmt:formatDate value="${story.publishDate}" pattern="dd MMM yyyy" />) <img src="<c:url value="/resources/img/icons/accept.png" />" /></td>
+							<td>Published (<fmt:formatDate value="${report.publishDate}" pattern="dd MMM yyyy" />) <img src="<c:url value="/resources/img/icons/accept.png" />" /></td>
 							<td></td>
 	                 	</c:when>
 	                 	<c:otherwise>
-	                 		<td><a href="/auth/userstory?id=${story.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/pencil.png" />" alt="Edit"/></a></td>
-	                 		<td><a href="/auth/userstory/publish?id=${story.id}" class="lnkPublishUserStory" title="Publish this Report"><img src="<c:url value="/resources/img/icons/world_go.png" />" alt="Publish"/></a></td>
-							<td><a href="/auth/userstory/delete?id=${story.id}" class="lnkDeleteUserStory" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
+	                 		<td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/pencil.png" />" alt="Edit"/></a></td>
+	                 		<td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/world_go.png" />" alt="Publish"/></a></td>
+							<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
 	                 	</c:otherwise>
 					</c:choose>
 				</tr>
@@ -61,19 +70,11 @@
 		</table>
 		<script type="text/javascript">
 			$(document).ready(function () {
-				$('#tblUserStoryList').dataTable();
+				$('#tblReportList').dataTable();
 			});
 	 	</script>
 	</c:if>
 
-	<div id="confirmUserStoryPrivateModalWindow" title="Make this report private ?" style="display:none">
-		<p>Once private, you will be the only one able to see this report.</p>
-		<p>Are you sure you want to make this report private ?</p> 
-	</div>
-	<div id="confirmUserStoryPublicModalWindow" title="Make this report public ?" style="display:none">
-		<p>Once public, everyone will be able to see this report.</p>
-		<p>Are you sure you want to make this report public ?</p> 
-	</div>
 	<div id="confirmUserStoryPublishModalWindow" title="Really publish this report ?" style="display:none">
 		<p class="message"><span class="error"><b>Publishing this report will automatically submit it to ANDS, and appear on Research Data Australia.</b></span></p>
 		<p class="message"><span class="error"><b>Once published, a report cannot be edited, deleted or made private again.</b></span></p>
@@ -84,9 +85,7 @@
 		<p>Are you sure you want to permanently delete this report ?</p> 
 	</div>
 	<script type="text/javascript">
-	setupConfirmBox("confirmUserStoryPrivateModalWindow", "lnkLockUserStory");
-	setupConfirmBox("confirmUserStoryPublicModalWindow", "lnkUnlockUserStory");
-	setupConfirmBox("confirmUserStoryPublishModalWindow", "lnkPublishUserStory");
-	setupConfirmBox("confirmUserStoryDeletionModalWindow", "lnkDeleteUserStory");
+	setupConfirmBox("confirmUserStoryPublishModalWindow", "lnkPublishReport");
+	setupConfirmBox("confirmUserStoryDeletionModalWindow", "lnkDeleteReport");
 	</script>
 </div>	

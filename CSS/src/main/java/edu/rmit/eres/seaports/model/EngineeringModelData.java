@@ -69,8 +69,8 @@ public class EngineeringModelData
 	/**
 	 * The Data Elements using this data
 	 */
-	@ManyToMany(mappedBy="engineeringModelDataList")
-	private List<DataElementEngineeringModel> dataElementEngineeringModelList;
+	/*@ManyToMany(mappedBy="engineeringModelDataList")
+	private List<DataElementEngineeringModel> dataElementEngineeringModelList;*/
 	
     /**
      * The string content of the engineering model data
@@ -178,17 +178,17 @@ public class EngineeringModelData
 	 * Getter for the list of Data Element using this data
 	 * @return: the current list of Data Element using this data
 	 */
-	public List<DataElementEngineeringModel> getDataElementEngineeringModelList() {
+	/*public List<DataElementEngineeringModel> getDataElementEngineeringModelList() {
 		return dataElementEngineeringModelList;
-	}
+	}*/
 	
 	/**
 	 * Setter for the list of Data Element using this data
 	 * @param asset: the new list of Data Element using this data
 	 */
-	public void setDataElementEngineeringModelList(List<DataElementEngineeringModel> dataElementEngineeringModelList) {
+	/*public void setDataElementEngineeringModelList(List<DataElementEngineeringModel> dataElementEngineeringModelList) {
 		this.dataElementEngineeringModelList = dataElementEngineeringModelList;
-	}
+	}*/
 	
 	
 	/**

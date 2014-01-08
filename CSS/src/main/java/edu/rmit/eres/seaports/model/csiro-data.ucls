@@ -1,94 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.2" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" language="java" name="war.model.CsiroDataBaseline" project="CSS" 
-    file="/CSS/src/main/java/war/model/CsiroDataBaseline.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="381" y="777" width="256" height="177"/>    
+  <class id="1" language="java" name="edu.rmit.eres.seaports.model.CsiroDataBaseline" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/CsiroDataBaseline.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="177" width="256" x="381" y="777"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="war.model.CsiroData" project="CSS" 
-    file="/CSS/src/main/java/war/model/CsiroData.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="365" y="287" width="284" height="433"/>    
+  <class id="2" language="java" name="edu.rmit.eres.seaports.model.CsiroData" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/CsiroData.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="433" width="284" x="365" y="287"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="war.model.CsiroVariable" project="CSS" 
-    file="/CSS/src/main/java/war/model/CsiroVariable.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="167" y="865" width="-1" height="-1"/>    
+  <class id="3" language="java" name="edu.rmit.eres.seaports.model.CsiroVariable" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/CsiroVariable.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="167" y="865"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="war.model.DataElementCsiro" project="CSS" 
+  <class id="4" language="java" name="edu.rmit.eres.seaports.model.DataElementCsiro" project="CSS" 
     file="/CSS/src/main/java/war/model/DataElementCsiro.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="11" y="283" width="317" height="178"/>    
+    <position height="178" width="317" x="11" y="283"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="war.model.Variable" project="CSS" 
-    file="/CSS/src/main/java/war/model/Variable.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="70" y="498" width="189" height="212"/>    
+  <class id="5" language="java" name="edu.rmit.eres.seaports.model.Variable" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/Variable.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="212" width="189" x="70" y="498"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="war.model.Region" project="CSS" file="/CSS/src/main/java/war/model/Region.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position x="715" y="766" width="191" height="195"/>    
+  <class id="6" language="java" name="edu.rmit.eres.seaports.model.Region" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/Region.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="195" width="191" x="715" y="766"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="war.model.ClimateParams" project="CSS" 
-    file="/CSS/src/main/java/war/model/ClimateParams.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="699" y="286" width="229" height="358"/>    
+  <class id="7" language="java" name="edu.rmit.eres.seaports.model.ClimateParams" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/ClimateParams.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="358" width="229" x="699" y="286"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="war.model.ClimateModel" project="CSS" 
-    file="/CSS/src/main/java/war/model/ClimateModel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="700" y="41" width="223" height="197"/>    
+  <class id="8" language="java" name="edu.rmit.eres.seaports.model.ClimateModel" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/ClimateModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="197" width="223" x="700" y="41"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="war.model.ClimateEmissionScenario" project="CSS" 
-    file="/CSS/src/main/java/war/model/ClimateEmissionScenario.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position x="458" y="48" width="204" height="176"/>    
+  <class id="9" language="java" name="edu.rmit.eres.seaports.model.ClimateEmissionScenario" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/ClimateEmissionScenario.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="176" width="204" x="458" y="48"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <association id="10">    
     <end type="SOURCE" refId="7" navigable="false">      
       <attribute id="11" name="model">        
-        <position x="765" y="253" width="43" height="20"/>      
+        <position height="20" width="43" x="765" y="253"/>      
       </attribute>      
       <multiplicity id="12" minimum="0" maximum="1">        
-        <position x="816" y="253" width="27" height="18"/>      
+        <position height="18" width="27" x="816" y="253"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
@@ -97,10 +98,10 @@
   <association id="13">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="14" name="baseline">        
-        <position x="437" y="749" width="56" height="20"/>      
+        <position height="20" width="56" x="437" y="749"/>      
       </attribute>      
       <multiplicity id="15" minimum="0" maximum="1">        
-        <position x="514" y="751" width="27" height="18"/>      
+        <position height="18" width="27" x="514" y="751"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
@@ -109,10 +110,10 @@
   <association id="16">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="17" name="variable">        
-        <position x="183" y="773" width="51" height="20"/>      
+        <position height="20" width="51" x="183" y="773"/>      
       </attribute>      
       <multiplicity id="18" minimum="0" maximum="1">        
-        <position x="257" y="776" width="27" height="18"/>      
+        <position height="18" width="27" x="257" y="776"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
@@ -121,10 +122,10 @@
   <association id="19">    
     <end type="SOURCE" refId="4" navigable="false">      
       <attribute id="20" name="csiroDataList">        
-        <position x="272" y="463" width="84" height="20"/>      
+        <position height="20" width="84" x="272" y="463"/>      
       </attribute>      
       <multiplicity id="21" minimum="0" maximum="2147483647">        
-        <position x="331" y="482" width="25" height="18"/>      
+        <position height="18" width="25" x="331" y="482"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
@@ -133,10 +134,10 @@
   <association id="22">    
     <end type="SOURCE" refId="7" navigable="false">      
       <attribute id="23" name="region">        
-        <position x="754" y="744" width="43" height="20"/>      
+        <position height="20" width="43" x="754" y="744"/>      
       </attribute>      
       <multiplicity id="24" minimum="0" maximum="1">        
-        <position x="820" y="744" width="27" height="18"/>      
+        <position height="18" width="27" x="820" y="744"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
@@ -145,7 +146,7 @@
   <association id="25">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="26" name="parameters">        
-        <position x="631" y="465" width="73" height="20"/>      
+        <position height="20" width="73" x="631" y="465"/>      
       </attribute>      
       <multiplicity id="27" minimum="0" maximum="1"/>    
     </end>    
@@ -155,10 +156,10 @@
   <association id="28">    
     <end type="SOURCE" refId="7" navigable="false">      
       <attribute id="29" name="emissionScenario">        
-        <position x="508" y="233" width="111" height="20"/>      
+        <position height="20" width="111" x="508" y="233"/>      
       </attribute>      
       <multiplicity id="30" minimum="0" maximum="1">        
-        <position x="646" y="237" width="27" height="18"/>      
+        <position height="18" width="27" x="646" y="237"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
@@ -171,10 +172,10 @@
   <association id="32">    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="33" name="region">        
-        <position x="667" y="863" width="43" height="20"/>      
+        <position height="20" width="43" x="667" y="863"/>      
       </attribute>      
       <multiplicity id="34" minimum="0" maximum="1">        
-        <position x="679" y="904" width="27" height="18"/>      
+        <position height="18" width="27" x="679" y="904"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
@@ -183,10 +184,10 @@
   <association id="35">    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="36" name="variable">        
-        <position x="325" y="840" width="51" height="20"/>      
+        <position height="20" width="51" x="325" y="840"/>      
       </attribute>      
       <multiplicity id="37" minimum="0" maximum="1">        
-        <position x="332" y="867" width="27" height="18"/>      
+        <position height="18" width="27" x="332" y="867"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
@@ -194,8 +195,8 @@
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
-    <attributes public="true" package="true" protected="true" private="true"/>    
-    <operations public="true" package="true" protected="true" private="true"/>  
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
   </classifier-display>  
   <association-display labels="true" multiplicity="true"/>
 </class-diagram>

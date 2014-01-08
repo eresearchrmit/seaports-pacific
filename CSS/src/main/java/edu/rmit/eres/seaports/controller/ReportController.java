@@ -28,25 +28,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 
 import edu.rmit.eres.seaports.dao.*;
-import edu.rmit.eres.seaports.helpers.DataElementPositionComparator;
+import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
 import edu.rmit.eres.seaports.model.*;
-import edu.rmit.eres.seaports.model.DataElement.DisplayType;
 
 @Controller
 @RequestMapping("auth/userstory")
-public class UserStoryController {
+public class ReportController {
 		
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 
 	@Autowired
 	private UserDao userDao;
 	
 	@Autowired
-	private UserStoryDao userStoryDao;
+	private ReportDao reportDao;
 	
 	@Autowired
-	private DataElementDao dataElementDao;
+	private ElementDao elementDao;
 	
 	@Autowired
 	private CsiroDataBaselineDao csiroDataBaselineDao;
@@ -58,10 +57,10 @@ public class UserStoryController {
 	}*/
 	
 	@RequestMapping(value= "/list", method = RequestMethod.GET)
-	public ModelAndView getUserStoriesList(@RequestParam(value="user",required=true) String username, Model model) {
-		logger.info("Inside getUserStoriesList");
+	public ModelAndView getReportList(@RequestParam(value="user",required=true) String username, Model model) {
+		logger.info("Inside getReportList");
 		
-		ModelAndView mav = new ModelAndView("userstoryList");
+		ModelAndView mav = new ModelAndView("reportList");
 		try {
 			User curentUser = userDao.find(SecurityHelper.getCurrentlyLoggedInUsername());
 			mav.addObject("user", curentUser);
@@ -73,8 +72,8 @@ public class UserStoryController {
 				throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
 			// Retrieve user's Stories
-			List<UserStory> userStoriesList = userStoryDao.getUserStories(user);
-			mav.addObject("userStoriesList", userStoriesList);
+			List<Report> reportsList = reportDao.getReports(user);
+			mav.addObject("userStoriesList", reportsList);
 			
 			// Define a title
 	 		model.addAttribute("listingTitle", "My Reports");
@@ -88,14 +87,14 @@ public class UserStoryController {
 	
 	@ModelAttribute("userstory")
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView getUserStory(@RequestParam(value="id",required=true) Integer id, Model model) {
-		logger.info("Inside getUserStory");
+	public ModelAndView getReport(@RequestParam(value="id",required=true) Integer id, Model model) {
+		logger.info("Inside getReport");
 		
-		UserStory userStory = null;
+		Report report = null;
 		try {
-			userStory = userStoryDao.find(id);
+			report = reportDao.find(id);
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 		}
 		catch (IllegalArgumentException e) {
@@ -104,27 +103,27 @@ public class UserStoryController {
 		catch (NoResultException e) {
 			model.addAttribute("errorMessage", e.getMessage());
 		}
-		return ModelForUserStory(model, userStory);
+		return ModelForReport(model, report);
 	}
 	
 	@RequestMapping(value= "/view", method = RequestMethod.GET)
-	public ModelAndView getUserStoryView(@RequestParam(value="id",required=true) Integer id, Model model) {
-		logger.info("Inside getUserStoryView");
+	public ModelAndView getReportView(@RequestParam(value="id",required=true) Integer id, Model model) {
+		logger.info("Inside getReportView");
 		
-		ModelAndView mav = getUserStory(id, model);
-		mav.setViewName("userstoryView");
+		ModelAndView mav = getReport(id, model);
+		mav.setViewName("reportView");
 		return mav;
 	}
 
 	@RequestMapping(value= "/lock", method = RequestMethod.GET)
-	public String changeUserStoryPrivacy(
+	public String changeReportPrivacy(
 			@RequestParam(value="id",required=true) Integer id, 
 			@RequestParam(value="lock",required=true) Boolean lock, 
 			RedirectAttributes attributes) {
 		logger.info("Inside getUserStoriesList !");
 		
 		try {
-			UserStory userStory= userStoryDao.find(id);
+			Report userStory= reportDao.find(id);
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
@@ -133,7 +132,7 @@ public class UserStoryController {
 				userStory.setAccess("private");
 			else // false == unlocked == public
 				userStory.setAccess("public");
-			userStoryDao.save(userStory);
+			reportDao.save(userStory);
 		}
 		catch (IllegalArgumentException e) {
 			attributes.addFlashAttribute("errorMessage", ERR_SAVE_USERSTORY);
@@ -145,28 +144,28 @@ public class UserStoryController {
 	}
 
 	@RequestMapping(value="/create", method=RequestMethod.GET) 
-	public ModelAndView createUserStory(@RequestParam(value="id",required=true) Integer id, Model model) {
-		logger.info("Inside createUserStory");
+	public ModelAndView createReport(@RequestParam(value="id",required=true) Integer id, Model model) {
+		logger.info("Inside createReport");
 		
-		UserStory userStory = null;
+		Report userStory = null;
 		try {
 			// Retrieve the user story
-			userStory = userStoryDao.find(id);
+			userStory = reportDao.find(id);
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
 			if (!(userStory.getMode().equals("published"))) {
 				userStory.setMode("passive");
-				userStoryDao.save(userStory);
+				reportDao.save(userStory);
 				
 				// Initial ordering of the data elements in the user story
 				int i = 1;
-				for (DataElement de : userStory.getDataElements()) {
-					de.setPosition(i);
+				for (Element elem : userStory.getElements()) {
+					elem.setPosition(i);
 					i++;
 				}
-				userStoryDao.save(userStory);
+				reportDao.save(userStory);
 				model.addAttribute("userstory", userStory);
 				return new ModelAndView("userstoryCreated");
 			}
@@ -179,40 +178,40 @@ public class UserStoryController {
 		catch (NoResultException e) {
 			model.addAttribute("errorMessage", ERR_SAVE_USERSTORY);
 		}
-		return ModelForUserStory(model, userStory);
+		return ModelForReport(model, userStory);
 	}
 	
 	@RequestMapping(value="/save", method=RequestMethod.POST) 
-	public String saveUserStory(
+	public String saveReport(
 			@RequestParam(value="comments",required=false) String[] updatedTexts, 
-			@Valid @ModelAttribute("userstory") UserStory updatedUserStory, 
+			@Valid @ModelAttribute("userstory") Report updatedReport, 
 			RedirectAttributes attributes) {
-		logger.info("Inside saveUserStory");
+		logger.info("Inside saveReport");
 		
-		UserStory userStory = null;
+		Report userStory = null;
 		try {
 			// Retrieve the original user story
-			userStory = userStoryDao.find(updatedUserStory.getId());
+			userStory = reportDao.find(updatedReport.getId());
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
 			// Reorder the data elements in the user story
-			for (DataElement de : userStory.getDataElements()) {
-				for (DataElement updatedDataElement : updatedUserStory.getDataElements()) {
-					if (de.getId() == updatedDataElement.getId()) {
-						de.setPosition(updatedDataElement.getPosition());
+			for (Element elem : userStory.getElements()) {
+				for (Element updatedDataElement : updatedReport.getElements()) {
+					if (elem.getId() == updatedDataElement.getId()) {
+						elem.setPosition(updatedDataElement.getPosition());
 						break;
 					}
 				}
 			}
 			// Save the user story after reordering
-			userStoryDao.save(userStory);
+			reportDao.save(userStory);
 			
-			Collections.sort(userStory.getDataElements(), new DataElementPositionComparator());
+			Collections.sort(userStory.getElements(), new ElementPositionComparator());
 			
-			// Update content of the text data elements if they have been changed
-			if (updatedTexts != null) {
+			// TODO: Update content of the text data elements if they have been changed
+			/*if (updatedTexts != null) {
 				int i = 0;
 				for (DataElement dataElement : userStory.getDataElements()) {
 					if (dataElement.getClass().equals(DataElementText.class)) {
@@ -224,7 +223,7 @@ public class UserStoryController {
 						i++;
 					}
 				}
-			}
+			}*/
 			attributes.addFlashAttribute("successMessage", MSG_USERSTORY_SAVED);
 		}
 		catch (IllegalArgumentException e) {
@@ -241,16 +240,16 @@ public class UserStoryController {
 	}
 	
 	@RequestMapping(value = "/delete",method=RequestMethod.GET) 
-	public String deleteUserStory(@RequestParam(value="id", required=true) Integer userStoryId, RedirectAttributes attributes) {
-		logger.debug("Inside deleteUserStory");
+	public String deleteReport(@RequestParam(value="id", required=true) Integer userStoryId, RedirectAttributes attributes) {
+		logger.debug("Inside deleteReport");
 		
 		try {
-			UserStory userStory = userStoryDao.find(userStoryId);
+			Report userStory = reportDao.find(userStoryId);
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			userStoryDao.delete(userStory);
+			reportDao.delete(userStory);
 			attributes.addFlashAttribute("successMessage", MSG_USERSTORY_DELETED);
 		}
 		catch (IllegalArgumentException e) {
@@ -264,32 +263,33 @@ public class UserStoryController {
 	}	
 
 	@RequestMapping(value="/addText", method=RequestMethod.POST) 
-	public String addTextToUserStory(@RequestParam(value="userStoryId",required=true) Integer id, 
+	public String addTextToReport(@RequestParam(value="userStoryId",required=true) Integer id, 
 			@RequestParam(value="textContent",required=true) String textContent, 
 			@RequestParam(value="textInsertPosition",required=true) String insertTextAfter, RedirectAttributes attributes) {
-		logger.info("Inside saveUserStory");
+		logger.info("Inside saveReport");
 		
-		UserStory userStory = null;
+		Report report = null;
 		try {
-			userStory = userStoryDao.find(id);
+			report = reportDao.find(id);
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
 			Integer newTextPosition = Integer.parseInt(insertTextAfter) + 1;
 			
 			// Increment the positions of all data elements after the new one
 			int i = 0;
-			for (DataElement de : userStory.getDataElements()) {
-				if (de.getPosition() >= newTextPosition)
-					de.setPosition(de.getPosition() + 1);
+			for (Element elem : report.getElements()) {
+				if (elem.getPosition() >= newTextPosition)
+					elem.setPosition(elem.getPosition() + 1);
 				i++;
 			}
 			// Save the user story after reordering
-			userStoryDao.save(userStory);
+			reportDao.save(report);
 			
-			DataElementText newTextItem = new DataElementText(new Date(), "Report Text", true, newTextPosition, DisplayType.PLAIN, userStory, textContent);
-			dataElementDao.save(newTextItem);
+			// TODO: Add Text Data Element
+			/*DataElementText newTextItem = new DataElementText(new Date(), "Report Text", true, newTextPosition, DisplayType.PLAIN, userStory, textContent);
+			dataElementDao.save(newTextItem);*/
 			
 			attributes.addFlashAttribute("successMessage", MSG_TEXT_ADDED);
 		}
@@ -300,30 +300,31 @@ public class UserStoryController {
 			attributes.addFlashAttribute("errorMessage", ERR_ADD_TEXT);
 		}
 		
-		if (userStory != null)
-			return "redirect:/auth/userstory?id=" + userStory.getId();
+		if (report != null)
+			return "redirect:/auth/userstory?id=" + report.getId();
 		else
 			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
 	@RequestMapping(value="/editText", method=RequestMethod.POST) 
-	public String editText(@RequestParam(value="dataElementId") Integer dataElementId,
+	public String editText(@RequestParam(value="dataElementId") Integer elementId,
 			@RequestParam(value="textContent") String textContent, RedirectAttributes attributes) {
 		logger.info("Inside editText");
 		
-		DataElement dataElement = null;
+		Element element = null;
 		try {
 			// Retrieve the data element
-			dataElement = dataElementDao.find(dataElementId);
+			element = elementDao.find(elementId);
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(dataElement.getUserStory()))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			if (dataElement instanceof DataElementText) {
+			// TODO: make changes to the content of the text element
+			/*if (dataElement instanceof DataElementText) {
 				DataElementText deText = (DataElementText)(dataElement);
 				deText.setText(textContent);
 				dataElementDao.save(deText);
-			}
+			}*/
 			attributes.addFlashAttribute("successMessage", MSG_TEXT_EDITED);
 		}
 		catch (IllegalArgumentException e) {
@@ -333,27 +334,28 @@ public class UserStoryController {
 			attributes.addFlashAttribute("errorMessage", ERR_EDIT_TEXT);
 		}
 		
-		if (dataElement != null)
-			return "redirect:/auth/userstory?id=" + dataElement.getUserStory().getId();
+		if (element != null)
+			return "redirect:/auth/userstory?id=" + element.getReport().getId();
 		else
 			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
 	@RequestMapping(value="/deleteText", method=RequestMethod.GET) 
-	public String removeTextFromUserStory(@RequestParam(value="text",required=true) Integer id, RedirectAttributes attributes) {
-		logger.info("Inside removeTextFromUserStory");
+	public String removeTextFromReport(@RequestParam(value="text",required=true) Integer id, RedirectAttributes attributes) {
+		logger.info("Inside removeTextFromReport");
 		
-		DataElement dataElement = null;
+		Element element = null;
 		try {
-			dataElement = dataElementDao.find(id);
+			element = elementDao.find(id);
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(dataElement.getUserStory()))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			if (!(dataElement instanceof DataElementText))
-				throw new IllegalArgumentException();
+			// TODO: Exception if the element isn't a text
+			//if (!(dataElement instanceof DataElementText))
+				//throw new IllegalArgumentException();
 			
-			dataElementDao.delete(dataElement);
+			elementDao.delete(element);
 			attributes.addFlashAttribute("successMessage", MSG_TEXT_REMOVED);
 		}
 		catch (IllegalArgumentException e) {
@@ -363,25 +365,25 @@ public class UserStoryController {
 			attributes.addFlashAttribute("errorMessage", ERR_REMOVE_TEXT);
 		}
 		
-		if (dataElement != null)
-			return "redirect:/auth/userstory?id=" + dataElement.getUserStory().getId();
+		if (element != null)
+			return "redirect:/auth/userstory?id=" + element.getReport().getId();
 		else
 			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
 	@RequestMapping(value="/includeDataElement", method=RequestMethod.GET) 
-	public String includeDataElementToUserStory(@RequestParam(value="dataelement",required=true) Integer dataElementId, RedirectAttributes attributes) {
-		logger.info("Inside includeDataElementToUserStory");
+	public String includeDataElementToReport(@RequestParam(value="dataelement",required=true) Integer elementId, RedirectAttributes attributes) {
+		logger.info("Inside includeDataElementToReport");
 		
-		DataElement dataElement = null;
+		Element element = null;
 		try {
-			dataElement = dataElementDao.find(dataElementId);
+			element = elementDao.find(elementId);
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(dataElement.getUserStory()))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			dataElement.setIncluded(!dataElement.getIncluded());
-			dataElementDao.save(dataElement);
+			element.setIncluded(!element.getIncluded());
+			elementDao.save(element);
 		}
 		catch (IllegalArgumentException e) {
 			attributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -390,29 +392,29 @@ public class UserStoryController {
 			attributes.addFlashAttribute("errorMessage", e.getMessage());
 		}
  		
-		if (dataElement != null)
-			return "redirect:/auth/userstory?id=" + dataElement.getUserStory().getId();
+		if (element != null)
+			return "redirect:/auth/userstory?id=" + element.getReport().getId();
 		else
 			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
 	@RequestMapping(value = "/publish", method=RequestMethod.GET) 
-	public String publishUserStory(@RequestParam(value="id", required=true) Integer userStoryId, RedirectAttributes attributes) {
-		logger.debug("Inside publishUserStory");
+	public String publishReport(@RequestParam(value="id", required=true) Integer reportId, RedirectAttributes attributes) {
+		logger.debug("Inside publishReport");
 		
-		UserStory userStory = null;
+		Report report= null;
 		try {
-			userStory = userStoryDao.find(userStoryId);
+			report = reportDao.find(reportId);
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			if (!userStory.getMode().equals("published")) {
-				userStory.setAccess("public");
-				userStory.setMode("published");
-				userStory.setPublishDate(new Date());
+			if (!report.getMode().equals("published")) {
+				report.setAccess("public");
+				report.setMode("published");
+				report.setPublishDate(new Date());
 								
-				userStoryDao.save(userStory);
+				reportDao.save(report);
 				
 				attributes.addFlashAttribute("successMessage", MSG_STORY_PUBLISHED);
 			}
@@ -426,24 +428,25 @@ public class UserStoryController {
 			attributes.addFlashAttribute("errorMessage", ERR_DELETE_USERSTORY);
 		}
 
-		if (userStory != null)
-			return "redirect:/auth/userstory?id=" + userStory.getId();
+		if (report != null)
+			return "redirect:/auth/userstory?id=" + report.getId();
 		else
 			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
-	public ModelAndView ModelForUserStory(Model model, UserStory userStory) {
-		logger.debug("Inside ModelForUserStory");
+	public ModelAndView ModelForReport(Model model, Report report) {
+		logger.debug("Inside ModelForReport");
 
 		model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
 		
-		if (userStory != null)
+		if (report != null)
 		{
-			Collections.sort(userStory.getDataElements(), new DataElementPositionComparator());
+			Collections.sort(report.getElements(), new ElementPositionComparator());
 			
-			List<DataElement> dataElements = userStory.getDataElements();
-	 		for (DataElement dataElement : dataElements) {
-	 			if (dataElement.getClass().equals(DataElementAbs.class)) {
+			List<Element> elements = report.getElements();
+	 		for (Element element : elements) {
+	 			// TODO: get values to plot
+	 			/*if (dataElement.getClass().equals(DataElementAbs.class)) {
 	 				List<AbsData> absDataList = ((DataElementAbs)dataElement).getAbsDataList();
 	 				for (AbsData data : absDataList) {
 	 					data.generateValues();
@@ -468,9 +471,9 @@ public class UserStoryController {
 	 				for (EngineeringModelData data : engineeringModelDataList) {
 	 					data.generateValues();
 	 				}
-	 			}
+	 			}*/
 			}
-			model.addAttribute("userstory", userStory);
+			model.addAttribute("userstory", report);
 		}
 		return new ModelAndView("userstory");
 	}

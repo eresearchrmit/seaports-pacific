@@ -25,12 +25,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import edu.rmit.eres.seaports.controller.AdminController;
 import edu.rmit.eres.seaports.controller.PublicController;
-import edu.rmit.eres.seaports.controller.UserStoryController;
+import edu.rmit.eres.seaports.controller.ReportController;
 import edu.rmit.eres.seaports.controller.WorkboardController;
-import edu.rmit.eres.seaports.dao.UserStoryDao;
+import edu.rmit.eres.seaports.dao.ReportDao;
 import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.Seaport;
-import edu.rmit.eres.seaports.model.UserStory;
+import edu.rmit.eres.seaports.model.Report;
 
 /**
  * This test class holds tests against all the protected controllers methods performed by an anonymous user
@@ -50,13 +50,13 @@ public class AnonymousControllerTest {
 	private WorkboardController workboardController;
 
 	@Autowired
-	private UserStoryController userStoryController;
+	private ReportController reportController;
 	
 	@Autowired
 	private AdminController adminController;
 	
 	@Autowired
-	private  UserStoryDao userStoryDao;
+	private  ReportDao userStoryDao;
 	
 	/**
 	 * Method executed before starting the unit tests to prepared the data
@@ -108,29 +108,29 @@ public class AnonymousControllerTest {
 	/* ----------------------------- Workboard ----------------------------- */
 	/* --------------------------------------------------------------------- */
 	
-	@Test
+	/*@Test
 	public void getWorkboardTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
 		workboardController.getWorkboard(model);
-	}
+	}*/
 	
 	@Test(expected = AccessDeniedException.class)
-	public void getWorkboardUserTest() {
+	public void getReportUserTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		workboardController.getWorkboard("testuser1", model);
+		workboardController.getReport(1, model);
 	}
 	
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addAbsDataToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		workboardController.addAbsDataToWorkboard(1, 1, "AUSYD", "graph", redirectAttributes);
-	}
+	}*/
 	
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addBitreSatDataToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		workboardController.addBitreDataToWorkboard(1, 1, "AUSYD", "graph", redirectAttributes);
-	}
+	}*/
 	
 	@Test(expected = AccessDeniedException.class)
 	public void uploadfileinWorkboardTest() {
@@ -139,56 +139,56 @@ public class AnonymousControllerTest {
 		workboardController.uploadfileinWorkboard(mockMultipartFileText, 1, redirectAttributes);
 	}
 
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addPastDataToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		workboardController.addPastDataToWorkboard(1, 1, redirectAttributes);
-	}
+	}*/
 	
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addAcornSatDataToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		workboardController.addAcornSatDataToWorkboard(1, "extreme", redirectAttributes);
-	}
+	}*/
 	
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addCsiroDataToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		workboardController.addCsiroDataToWorkboard(1, "Temperature", "A1B", "2030", "", redirectAttributes);
-	}
+	}*/
 	
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addCmarDataToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		workboardController.addCmarDataToWorkboard(1, "2030", "on", redirectAttributes);
-	}
+	}*/
 	
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addEngineeringDataToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		MockMultipartFile mockMultipartFileText = new MockMultipartFile("content", "test.css", "text/css", "Hello World".getBytes());
 		workboardController.addEngineeringDataToWorkboard(mockMultipartFileText, "upload", "Crack propagation time", "Chloride", 1, "graph", redirectAttributes);
-	}
+	}*/
 	
-	@Test(expected = AccessDeniedException.class)
+	/*@Test(expected = AccessDeniedException.class)
 	public void addVulnerabilityAssessmentToWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		workboardController.addVulnerabilityAssessmentToWorkboard(1, "Storm", "2005", "direct", "Impact text", "0", "1", "2", "3", "4", "2", "4", "1", "0", "3", "4", "2", "Other consequences", "adequate", "Changes imlepemented", redirectAttributes);
-	}
+	}*/
 	
 	@Test(expected = AccessDeniedException.class)
 	public void addWorkboardTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		UserStory userStory = new UserStory();
-		userStory.setName("addWorkBoardTest");
-		userStory.setSeaport(new Seaport("AUSYD", "Sydney Harbour", new Region("East Coast South", "")));
-		workboardController.createWorkboard(userStory, model);
+		Report report = new Report();
+		report.setName("addWorkBoardTest");
+		report.setSeaport(new Seaport("AUSYD", "Sydney Harbour", new Region("East Coast South", "")));
+		workboardController.createReport(report, model);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void deleteWorkboardTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		workboardController.deleteWorkboard(1, model);
+		workboardController.deleteReport(1, model);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
@@ -207,70 +207,70 @@ public class AnonymousControllerTest {
 	@Test(expected = AccessDeniedException.class)
 	public void getUserStoriesListTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		userStoryController.getUserStoriesList("testuser1", model);
+		reportController.getReportList("testuser1", model);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void getUserStoryTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		userStoryController.getUserStory(2, model);
+		reportController.getReport(2, model);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void getUserStoryViewTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		userStoryController.getUserStoryView(2, model);
+		reportController.getReportView(2, model);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void changeUserStoryPrivacyTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		userStoryController.changeUserStoryPrivacy(2, true, redirectAttributes);
+		reportController.changeReportPrivacy(2, true, redirectAttributes);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void createUserStoryTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		userStoryController.createUserStory(2, model);
+		reportController.createReport(2, model);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void saveUserStoryTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		UserStory refUserstory = userStoryDao.find(2);
+		Report refUserstory = userStoryDao.find(2);
 		String[] updatedTexts = new String[] {"Updated Text 1", "Updated Text 2"};
 		
-		userStoryController.saveUserStory(updatedTexts, refUserstory, redirectAttributes);
+		reportController.saveReport(updatedTexts, refUserstory, redirectAttributes);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void deleteUserStoryTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		userStoryController.deleteUserStory(2, redirectAttributes);
+		reportController.deleteReport(2, redirectAttributes);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void addTextToUserStoryTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		userStoryController.addTextToUserStory(2, "Content", "0", redirectAttributes);
+		reportController.addTextToReport(2, "Content", "0", redirectAttributes);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void removeTextFromUserStoryTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		userStoryController.removeTextFromUserStory(2, redirectAttributes);
+		reportController.removeTextFromReport(2, redirectAttributes);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void includeDataElementToUserStoryTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		userStoryController.includeDataElementToUserStory(4, redirectAttributes);
+		reportController.includeDataElementToReport(4, redirectAttributes);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void publishUserStoryTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		userStoryController.publishUserStory(4, redirectAttributes);
+		reportController.publishReport(4, redirectAttributes);
 	}
 
 	/* --------------------------------------------------------------------- */

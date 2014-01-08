@@ -26,59 +26,59 @@ import edu.rmit.eres.seaports.model.*;
  * @author Guillaume Prevost
  */
 @Repository
-public class DataElementDao {
+public class ElementDao {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	/**
-	 * The name of the table in the database where the Data Elements are stored
+	 * The name of the table in the database where the Elements are stored
 	 */
-	public final static String TABLE_NAME = "DataElement";
+	public final static String TABLE_NAME = "Element";
 	
 	/**
-	 * Retrieve the data element in the database associated to a unique ID 
-	 * @param id: the unique ID of the required data element
-	 * @return the data element associated to the given unique ID
+	 * Retrieve the element in the database associated to a unique ID 
+	 * @param id: the unique ID of the required element
+	 * @return the element associated to the given unique ID
 	 * @throws NoResultException if the search didn't return any result
 	 */
-	public DataElement find(Integer id) throws NoResultException {
-		DataElement de = entityManager.find(DataElement.class, id);
-		if (de == null)
-			throw new NoResultException(ERR_NO_SUCH_DATA_ELEMENT);
-		return de;
+	public Element find(Integer id) throws NoResultException {
+		Element elem = entityManager.find(Element.class, id);
+		if (elem == null)
+			throw new NoResultException(ERR_NO_SUCH_ELEMENT);
+		return elem;
 	}
 	
 	/**
-	 * Get a list of all the data elements belonging to a User Story
-	 * @param userStory: the user story to retrieve the data elements of
-	 * @return the list of data elements of the given user story
+	 * Get a list of all the elements belonging to a report
+	 * @param userStory: the report to retrieve the elements of
+	 * @return the list of elements of the given report
 	 */
 	@Transactional
-	public List<DataElement> getDataElements(UserStory userStory) {
-		Query query = entityManager.createQuery("SELECT de FROM " + DataElementDao.TABLE_NAME + " de WHERE de.userStory = :userStory ");
-		query.setParameter("userStory", userStory);
+	public List<Element> getElements(Report report) {
+		Query query = entityManager.createQuery("SELECT elem FROM " + ElementDao.TABLE_NAME + " elem WHERE elem.report = :report ");
+		query.setParameter("report", report);
 		
 		return performQueryAndCheckResultList(query);		
 	}
 	
 	/**
-	 * Saves a given data element into the database, by adding it or updating it
-	 * @param dataElement: the data element to save in the database
-	 * @return the saved data element
+	 * Saves a given element into the database, by adding it or updating it
+	 * @param element: the element to save in the database
+	 * @return the saved element
 	 */
 	@Transactional
-	public DataElement save(DataElement dataElement) throws IllegalArgumentException {
-		if (dataElement == null)
+	public Element save(Element element) throws IllegalArgumentException {
+		if (element == null)
 			throw new IllegalArgumentException();
 		
-		if (dataElement.getId() == 0) {
-			entityManager.persist(dataElement);
-			return dataElement;
+		if (element.getId() == 0) {
+			entityManager.persist(element);
+			return element;
 		}
 		else {
-			entityManager.merge(dataElement);
-			return dataElement;
+			entityManager.merge(element);
+			return element;
 		}		
 	}
 	
@@ -87,16 +87,18 @@ public class DataElementDao {
 	 * @param id: the unique ID of the data element to delete
 	 */
 	@Transactional
-	public void delete(DataElement dataElement) throws IllegalArgumentException {
-		if (dataElement == null)
+	public void delete(Element element) throws IllegalArgumentException {
+		if (element == null)
 			throw new IllegalArgumentException();
 		
 		// Delete the data element itself
-		DataElement de = entityManager.find(DataElement.class, dataElement.getId());
-		entityManager.remove(de);
+		Element elem = entityManager.find(Element.class, element.getId());
+		entityManager.remove(elem);
+		
+		// TODO: Delete the corresponding Eng Model Data
 		
 		// For Engineering Model Data Element, deletes the corresponding Engineering Model Data when it is not an example
-		if (dataElement instanceof DataElementEngineeringModel) {
+		/*if (dataElement instanceof DataElementEngineeringModel) {
 			List<EngineeringModelData> dataList = ((DataElementEngineeringModel)dataElement).getEngineeringModelDataList();
 			EngineeringModelAsset asset = dataList.get(0).getAsset();
 			
@@ -108,7 +110,7 @@ public class DataElementDao {
 				asset = entityManager.find(EngineeringModelAsset.class, asset.getId());
 				entityManager.remove(asset);
 			}
-		}
+		}*/
 	}
 	
 	/**
@@ -116,14 +118,14 @@ public class DataElementDao {
 	 * @param query: the query to execute
 	 * @return the list of data elements returned by the query and checked
 	 */
-	private List<DataElement> performQueryAndCheckResultList(Query query) {
+	private List<Element> performQueryAndCheckResultList(Query query) {
 		try {
-			List<DataElement> dataElements = new ArrayList<DataElement>();
+			List<Element> elements  = new ArrayList<Element>();
 			for (Object obj : query.getResultList()) {
-				if (obj instanceof DataElement)
-					dataElements.add((DataElement)(obj));
+				if (obj instanceof Element)
+					elements.add((Element)(obj));
 			}
-			return dataElements;
+			return elements;
 		}
 		catch (NoResultException e) {
 			return null;
@@ -131,5 +133,5 @@ public class DataElementDao {
 	}
 	
 	// Information, success, warning and error messages
-	public static final String ERR_NO_SUCH_DATA_ELEMENT = "No such data element could be found";
+	public static final String ERR_NO_SUCH_ELEMENT = "No such element could be found";
 }

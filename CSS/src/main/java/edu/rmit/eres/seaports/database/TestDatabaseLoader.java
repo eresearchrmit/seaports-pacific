@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,7 +21,6 @@ import org.hibernate.cfg.ImprovedNamingStrategy;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import edu.rmit.eres.seaports.model.*;
-import edu.rmit.eres.seaports.model.DataElement.DisplayType;
 import edu.rmit.eres.seaports.security.UserLoginService;
 
 /**
@@ -45,7 +45,7 @@ public class TestDatabaseLoader {
 	{
 		AnnotationConfiguration config = new AnnotationConfiguration();
 		config.setNamingStrategy(ImprovedNamingStrategy.INSTANCE);
-		config.configure("database/hibernate-test.cfg.xml");
+		config.configure("hibernate-test.cfg.xml");
 		new SchemaExport(config).create(true,true);
 
 		SessionFactory factory = config.buildSessionFactory();
@@ -53,14 +53,14 @@ public class TestDatabaseLoader {
 		session.beginTransaction();	
 
 		// Regions & Ports
-		Region r1 = new Region("East Coast South", "149.0547914184899,-28.24548513942176 148.9609907444339,-35.25426489702431 155.2660617233398,-35.19627668034501 154.8867619045885,-27.90208550082615 149.0547914184899,-28.24548513942176");
-		Region r2 = new Region("Southern Slopes Vic East", "145.3189141977523,-33.8991314327851 145.0790050622273,-39.34717405549549 153.0808752795217,-39.39167277749677 152.564341927145,-34.0115196362042 145.3189141977523,-33.8991314327851");
-		Region r3 = new Region("Southern and Southwestern Flatlands West", "112.7632954156051,-26.52537830109324 112.2397686001995,-35.9640923319097 125.4390964302563,-36.01229549528745 124.759915381913,-26.54545205884348 112.7632954156051,-26.52537830109324");
-		Region r4 = new Region("Monsoonal North", "");
-		Region r5 = new Region("Wet Tropics", "");
-		Region r6 = new Region("Rangelands", "");
-		Region r7 = new Region("Central Slopes", "");
-		Region r8 = new Region("Murray Basin", "");
+		Region r1 = new Region("Fiji", "176.284180,-15.891800 -178.046875,-15.891800 -178.046875,-20.070571 176.284180,-20.070571");
+		Region r2 = new Region("New Caledonia", "");
+		Region r3 = new Region("Vaunuatu", "");
+		Region r4 = new Region("Tonga", "");
+		Region r5 = new Region("American Samoa", "");
+		Region r6 = new Region("Wallis and Futuna", "");
+		Region r7 = new Region("Solomon Islands", "");
+		Region r8 = new Region("Papua New Guinea", "");
 		session.save(r1);
 		session.save(r2);
 		session.save(r3);
@@ -70,114 +70,62 @@ public class TestDatabaseLoader {
 		session.save(r7);
 		session.save(r8);
 		
-		Seaport port1 = new Seaport("AUYBA", "Port of Yamba", r1);
-		Seaport port2 = new Seaport("AUNTL", "Port of Newcastle", r1, "Newcastle");
-		Seaport port3 = new Seaport("AUSYD", "Sydney Ports", r1, "Sydney");
-		//Seaport port4 = new Seaport("AUBTB", "Port of Botany Bay", r1);
-		//Seaport port5 = new Seaport("AUCFS", "Coffs Harbour", r1);
-		
-		Seaport port6 = new Seaport("AUBSJ", "Lakes Entrance", r2, "Bairnsdale");
-		Seaport port7 = new Seaport("AUPKL", "Port Kembla", r2, "Wollongong");
-		Seaport port8 = new Seaport("AUQDN", "Port of Eden", r2);
-		Seaport port9 = new Seaport("AUXMC", "Port of Mallacoota", r2);
-		Seaport port10 = new Seaport("AUWHL", "Port Welshpool", r2);
-		
-		Seaport port11 = new Seaport("AUEPR", "Esperance Ports", r3);
-		Seaport port12 = new Seaport("AUALH", "Albany Port", r3, "Albany");
-		Seaport port13 = new Seaport("AUBUY", "Bunbury Port", r3, "Bunbury");
-		Seaport port14 = new Seaport("AUGET", "Geraldton Port", r3, "Geraldton");
-		Seaport port15 = new Seaport("AUFRE", "Fremantle Ports", r3, "Perth");
+		Seaport port1 = new Seaport("FJLEV", "Levuka", r1, "Levuka");
+		Seaport port2 = new Seaport("FJSUV", "Suva", r1, "Suva");
+		Seaport port3 = new Seaport("FJLTK", "Lautoka", r1, "Lautoka");
+		Seaport port4 = new Seaport("FJSVU", "Savu Savu", r1, "Savu Savu");
+		Seaport port5 = new Seaport("FJLBS", "Lambasa", r1, "Lambasa");
 		
 		session.save(port1);
 		session.save(port2);
 		session.save(port3);
-		//session.save(port4);
-		//session.save(port5);
-		session.save(port6);
-		session.save(port7);
-		session.save(port8);
-		session.save(port9);
-		session.save(port10);
-		session.save(port11);
-		session.save(port12);
-		session.save(port13);
-		session.save(port14);
-		session.save(port15);
+		session.save(port4);
+		session.save(port5);
 		
-		CsiroDataLoader.LoadCsiroData(session);
+		/*CsiroDataLoader.LoadCsiroData(session);
 		EngineeringModelDataLoader.LoadEngineeringModelData(session);
 		BomDataLoader.LoadBomData(session);
 		AcornSatDataLoader.LoadAcornSatData(session);
 		AbsDataLoader.LoadAbsData(session);
-		BitreDataLoader.LoadBitreData(session);
+		BitreDataLoader.LoadBitreData(session);*/
 		
 		// Add Users
-		User p1 = new User("testuser1", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser1", "testuser1");
-		User p2 = new User("testuser2", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser2", "testuser2");
-		User p3 = new User("testuser3", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser3", "testuser3");
-		User p4 = new User("testuser4", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser4", "testuser4");
-		User p5 = new User("testadmin1", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_ADMINISTRATOR, "email@company.com", "testadmin1", "testadmin1");
-		User p6 = new User("testadmin2", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_ADMINISTRATOR, "email@company.com", "testadmin2", "testadmin2");
-		session.save(p1);
-		session.save(p2);
-		session.save(p3);
-		session.save(p4);
-		session.save(p5);
-		session.save(p6);
+		User u1 = new User("testuser1", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser1", "testuser1");
+		User u2 = new User("testuser2", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser2", "testuser2");
+		User u3 = new User("testuser3", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser3", "testuser3");
+		User u4 = new User("testuser4", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser4", "testuser4");
+		User u5 = new User("testadmin1", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_ADMINISTRATOR, "email@company.com", "testadmin1", "testadmin1");
+		User u6 = new User("testadmin2", DEFAULT_PASSWORD, true, true, UserLoginService.ROLE_ADMINISTRATOR, "email@company.com", "testadmin2", "testadmin2");
+		session.save(u1);
+		session.save(u2);
+		session.save(u3);
+		session.save(u4);
+		session.save(u5);
+		session.save(u6);
 		
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = null;
 		try { date = dateFormatter.parse("2013-04-10"); } catch (ParseException e) {}
 		
-		// Add Workboards & User Stories
-		UserStory user1wb = new UserStory();
-		user1wb.setName("User 1 Workboard");
-		user1wb.setMode("active");
-		user1wb.setAccess("private");
+		// Add Reports
+		Report user1wb = new Report("User 1 Workboard", "Purpose", "active", "private", u1, port3, null);
 		user1wb.setCreationDate(date);
-		user1wb.setOwner(p1);
-		user1wb.setSeaport(port3);
 		
-		UserStory user1us1 = new UserStory();
-		user1us1.setName("User 1 Story 1");
-		user1us1.setMode("passive");
-		user1us1.setAccess("private");
+		Report user1us1 = new Report("User 1 Story 1", "Purpose", "passive", "private", u1, port5, null);
 		user1us1.setCreationDate(date);
-		user1us1.setOwner(p1);
-		user1us1.setSeaport(port7);
 		
-		UserStory user1us2 = new UserStory();
-		user1us2.setName("User 1 Story 2 (Public)");
-		user1us2.setMode("passive");
-		user1us2.setAccess("public");
+		Report user1us2 = new Report("User 1 Story 2 (Public)", "Purpose", "passive", "public", u1, port3, null);
 		user1us2.setCreationDate(date);
-		user1us2.setOwner(p1);
-		user1us2.setSeaport(port3);
 		
-		UserStory user1us3 = new UserStory();
-		user1us3.setName("User 1 Story 3 (Published)");
-		user1us3.setMode("published");
-		user1us3.setAccess("public");
+		Report user1us3 = new Report("User 1 Story 3 (Published)", "Purpose", "published", "public", u1, port3, null);
 		user1us3.setCreationDate(date);
 		user1us3.setPublishDate(date);
-		user1us3.setOwner(p1);
-		user1us3.setSeaport(port3);
 		
-		UserStory user2wb = new UserStory();
-		user2wb.setName("User 2 Workboard (Empty)");
-		user2wb.setMode("active");
-		user2wb.setAccess("private");
+		Report user2wb = new Report("User 2 Workboard (Empty)", "Purpose", "active", "private", u2, port5, null);
 		user2wb.setCreationDate(date);
-		user2wb.setOwner(p2);
-		user2wb.setSeaport(port7);
 		
-		UserStory user2us = new UserStory();
-		user2us.setName("User 2 Story (Empty)");
-		user2us.setMode("passive");
-		user2us.setAccess("private");
+		Report user2us = new Report("User 2 Story (Empty)", "Purpose", "passive", "private", u2, port3, null);
 		user2us.setCreationDate(date);
-		user2us.setOwner(p2);
-		user2us.setSeaport(port3);
 		
 		session.save(user1wb);
 		session.save(user1us1);
@@ -185,49 +133,218 @@ public class TestDatabaseLoader {
 		session.save(user1us3);
 		session.save(user2wb);
 		session.save(user2us);
+
+		
+		// Display Types
+		DisplayType textDisplayType = new DisplayType("Text");
+		DisplayType graphDisplayType = new DisplayType("Graph");
+		DisplayType mapDisplayType = new DisplayType("Map");
+		DisplayType tableDisplayType = new DisplayType("Table");
+		session.save(textDisplayType);
+		session.save(graphDisplayType);
+		session.save(mapDisplayType);
+		session.save(tableDisplayType);
+		
+		List<Seaport> seaportsDS1 = new ArrayList<Seaport>();
+		seaportsDS1.add(port1);
+		seaportsDS1.add(port2);
+		seaportsDS1.add(port3);
+		seaportsDS1.add(port4);
+		seaportsDS1.add(port5);
+		
+		// Data Source 1
+		List<DisplayType> displayTypesDS1 = new ArrayList<DisplayType>();
+		displayTypesDS1.add(textDisplayType);
+		displayTypesDS1.add(graphDisplayType);
+		displayTypesDS1.add(mapDisplayType);
+		displayTypesDS1.add(tableDisplayType);
+		
+		DataSource ds1 = new DataSource("Data Source 1", null, null, displayTypesDS1);
+		
+		DataSourceParameter param1a = new DataSourceParameter("Param 1A", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);		
+		DataSourceParameterOption option1a1 = new DataSourceParameterOption("Option 1A1", 1, param1a, 0);
+		DataSourceParameterOption option1a2 = new DataSourceParameterOption("Option 1A2", 1, param1a, 0);
+		DataSourceParameterOption option1a3 = new DataSourceParameterOption("Option 1A3", 1, param1a, 0);
+		
+		DataSourceParameter param1b = new DataSourceParameter("Param 1B", "desc", ds1, null, DataSourceParameter.Display.RADIO);
+		DataSourceParameterOption option1b1 = new DataSourceParameterOption("Option 1B1", 1, param1b, 0);
+		DataSourceParameterOption option1b2 = new DataSourceParameterOption("Option 1B2", 1, param1b, 0);
+		DataSourceParameterOption option1b3 = new DataSourceParameterOption("Option 1B3", 1, param1b, 0);
+
+		DataSourceParameter param1c = new DataSourceParameter("Param 1C", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);
+		DataSourceParameterOption option1c1 = new DataSourceParameterOption("Option 1C1", 1, param1c, 0);
+		DataSourceParameterOption option1c2 = new DataSourceParameterOption("Option 1C2", 1, param1c, 0);
+		DataSourceParameterOption option1c3 = new DataSourceParameterOption("Option 1C3", 1, param1c, 0);
+		
+		
+		session.save(ds1);
+		session.save(param1a);
+		session.save(option1a1);
+		session.save(option1a2);
+		session.save(option1a3);
+		session.save(param1b);
+		session.save(option1b1);
+		session.save(option1b2);
+		session.save(option1b3);
+		session.save(param1c);
+		session.save(option1c1);
+		session.save(option1c2);
+		session.save(option1c3);
+				
+		// Data Source 2
+		List<DisplayType> displayTypesDS2 = new ArrayList<DisplayType>();
+		displayTypesDS2.add(textDisplayType);
+		displayTypesDS2.add(tableDisplayType);
+		
+		DataSource ds2 = new DataSource("Data Source 2", null, null, displayTypesDS2);
+		
+		DataSourceParameter param2a = new DataSourceParameter("Param 2A", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);		
+		DataSourceParameterOption option2a1 = new DataSourceParameterOption("Option 2A1", 1, param2a, 0);
+		DataSourceParameterOption option2a2 = new DataSourceParameterOption("Option 2A2", 1, param2a, 0);
+		DataSourceParameterOption option2a3 = new DataSourceParameterOption("Option 2A3", 1, param2a, 0);
+		
+		DataSourceParameter param2b = new DataSourceParameter("Param 2B", "desc", ds1, null, DataSourceParameter.Display.RADIO);
+		DataSourceParameterOption option2b1 = new DataSourceParameterOption("Option 2B1", 1, param2b, 0);
+		DataSourceParameterOption option2b2 = new DataSourceParameterOption("Option 2B2", 1, param2b, 0);
+		DataSourceParameterOption option2b3 = new DataSourceParameterOption("Option 2B3", 1, param2b, 0);
+
+		DataSourceParameter param2c = new DataSourceParameter("Param 2C", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);
+		DataSourceParameterOption option2c1 = new DataSourceParameterOption("Option 2C1", 1, param2c, 0);
+		DataSourceParameterOption option2c2 = new DataSourceParameterOption("Option 2C2", 1, param2c, 0);
+		DataSourceParameterOption option2c3 = new DataSourceParameterOption("Option 2C3", 1, param2c, 0);
+		
+		session.save(ds2);
+		session.save(param2a);
+		session.save(option2a1);
+		session.save(option2a2);
+		session.save(option2a3);
+		session.save(param2b);
+		session.save(option2b1);
+		session.save(option2b2);
+		session.save(option2b3);
+		session.save(param2c);
+		session.save(option2c1);
+		session.save(option2c2);
+		session.save(option2c3);
+		
+		
+		// Availability of data sources for each seaport
+		List<DataSource> dataSourcesAvailable = new ArrayList<DataSource>();
+		dataSourcesAvailable.add(ds1);
+		dataSourcesAvailable.add(ds2);
+		port1.setDataSourcesAvailable(dataSourcesAvailable);
+		session.save(port1);
+		
+		dataSourcesAvailable = new ArrayList<DataSource>();
+		dataSourcesAvailable.add(ds1);
+		port2.setDataSourcesAvailable(dataSourcesAvailable);
+		session.save(port2);
+		
+		dataSourcesAvailable = new ArrayList<DataSource>();
+		dataSourcesAvailable.add(ds2);
+		port3.setDataSourcesAvailable(dataSourcesAvailable);
+		session.save(port3);
+		
+		dataSourcesAvailable = new ArrayList<DataSource>();
+		dataSourcesAvailable.add(ds1);
+		dataSourcesAvailable.add(ds2);
+		port4.setDataSourcesAvailable(dataSourcesAvailable);
+		session.save(port4);
+		
+		dataSourcesAvailable = new ArrayList<DataSource>();
+		dataSourcesAvailable.add(ds1);
+		dataSourcesAvailable.add(ds2);
+		port5.setDataSourcesAvailable(dataSourcesAvailable);
+		session.save(port5);		
+		
+		
+		// Element Categories
+		ElementCategory nonClimateCategory = new ElementCategory("Non-climate context", 
+				"<h6>Non-Climate Context</h6><p class=\"justified\">Non-climate data helps set the operational context of ports. It also provides a starting point for consideration of possible impacts of non-climate factors into the future. For example, population growth along the coast can constrain a port's ability to expand in the future, and to retreat as sea level rise and climatic conditions change. National population growth can also be a driver of increased activity at container import ports, which may lead to congestion problems. <p class=\"justified\">This tab identifies particular non-climate-related information.  It includes trade and population data. Note that only limited data may be available for some ports. <p class=\"justified\">Two publicly available data sets are offered within this section. These are urban pressure data derived from the Australian Bureau of Statistics (ABS), and freight data from Ports Australia and individual ports' published annual reports. <p class=\"justified\">Recognising that non-climate information will be gathered by ports themselves, this section allows for ports to upload port-specific files and information regarding organisational objectives, current risks, or data on throughput volume or the types of activity that characterise the port. <p class=\"justified\">Users can select from three main data sources on this tab:</p> <p class=\"justified\"><strong>\"ABS\"</strong> data, which provides Population change data;</p><p class=\"justified\"><strong>\"Ports Australia data\"</strong> which provides data on:</p><ul><li>Freight throughput by cargo type,</li><li>Commercial vessel calls by type, and</li> <li>Export commodities by type</li></ul><p class=\"justified\"><strong>\"Custom file\"</strong> data which can be text and/or images provided by the port, relating to their current, non-climate context.</p><a href=\"/public/guidelines#non-climate\" target=\"_blank\">Read more...</a>", 
+				"<h6>Non-Climate Context</h6><p class=&quot;justified&quot;>This tab identifies particular non-climate-related information.  It includes trade and population data. Note that only limited data may be available for some ports. <p class=&quot;justified&quot;>Two publicly available data sets are offered within this section. These are urban pressure data derived from the Australian Bureau of Statistics (ABS), and freight data from Ports Australia and individual ports' published annual reports.<p class=&quot;justified&quot;>Recognising that non-climate information will be gathered by ports themselves, this section allows for ports to upload port-specific files and information regarding organisational objectives, current risks, or data on throughput volume or the types of activity that characterise the port. <p class=&quot;justified&quot;>Users can select from three main data sources on this tab:</p><p class=&quot;justified&quot;><strong>&quot;ABS&quot;</strong> data, which provides Population change data;</p><p class=&quot;justified&quot;><strong>&quot;Ports Australia data&quot;</strong> which provides data on:</p><ul><li>Freight throughput by cargo type,</li><li>Commercial vessel calls by type, and</li><li>Export commodities by type</li></ul><p class=&quot;justified&quot;><strong>&quot;Custom file&quot;</strong> data which can be text and/or images provided by the port, relating to their current, non-climate context.</p><a href=&quot;/public/guidelines#non-climate&quot; target=&quot;_blank&quot;>Read more...</a>");
+		ElementCategory observedClimateCategory = new ElementCategory("Observed climate",
+				"<h6>Observed Climate</h6><p class=\"justified\">Climate change is already increasing the intensity and frequency of many extreme weather events. Extreme events occur naturally, however, climate change is influencing these events and record-breaking weather is becoming more common.</p> <p class=\"justified\">This tab sets the historical and current context of climate and marine observations for ports, to assist ports understand their current climate context. It includes data publicly available from the Bureau of Meteorology and the CSIRO.</p> Three types of data have been selected: <ul><li>national trends for temperature and rainfall;</li><li>global and national trends for sea-level rise; and</li><li>specific weather station data (including examples of extreme weather events).</li></ul><p>Users select from two main data sources in this tab:</p><strong>\"CSIRO and BoM trend data\"</strong> which provides national or global data on: <ul>	<li>Trend in mean temperatures,</li><li>Trend in maximum temperatures,</li><li>Trend in total annual rainfall,</li><li>Long-term sea level rise measurements and</li> <li>Shorter term changes in sea level.</li></ul><strong>\"ACORN-SAT\"</strong> which provides data from specific weather stations for:<ul><li>Mean measurements (annual mean surface temperature, annual mean rainfall, annual mean relative humidity and annual mean wind speed)</li><li>Extreme measurements (highest temperature, highest daily rainfall, maximum wind gust)</li></ul><br /><p>All data has been chosen to support the data in the Future Climate section. Please note, however, that the Future Climate is based on modelled data and is not directly comparable to the factual data sourced in this section.</p><br /><p class=\"justified\">For further information about extreme weather in Australia, head to the Bureau of Meteorology's \"<a href=\"http://www.bom.gov.au/climate/change/index.shtml#tabs=Climate-change-tracker&tracker=trend-maps\" target=\"_blank\">Climate Change Tracker</a>\" website.</p> <br /><a href=\"/public/guidelines#observed-climate\" target=\"_blank\">Read more...</a>", 
+				"<h6>Observed Climate</h6><p class=&quot;justified&quot;>This tab sets the historical and current context of climate and marine observations for ports, to assist ports understand their current climate context. It includes data publicly available from the Bureau of Meteorology and the CSIRO.</p> Three types of data have been selected: <ul><li>national trends for temperature and rainfall;</li><li>global and national trends for sea-level rise; and</li><li>specific weather station data (including examples of extreme weather events).</li></ul><p>Users select from two main data sources in this tab:</p><strong>&quot;CSIRO and BoM trend data&quot;</strong> which provides national or global data on: <ul><li>Trend in mean temperatures,</li><li>Trend in maximum temperatures,</li>	<li>Trend in total annual rainfall,</li><li>Long-term sea level rise measurements and</li><li>Shorter term changes in sea level.</li></ul><strong>&quot;ACORN-SAT&quot;</strong> which provides data from specific weather stations for:<ul><li>Mean measurements (annual mean surface temperature, annual mean rainfall, annual mean relative humidity and annual mean wind speed)</li><li>Extreme measurements (highest temperature, highest daily rainfall, maximum wind gust)</li></ul><br /><p class=&quot;justified&quot;>For further information about extreme weather in Australia, head to the Bureau of Meteorology's &quot;<a href=&quot;http://www.bom.gov.au/climate/change/index.shtml#tabs=Climate-change-tracker&tracker=trend-maps&quot; target=&quot;_blank&quot;>Climate Change Tracker</a>&quot; website.</p><br /><a href=&quot;/public/guidelines#observed-climate&quot; target=&quot;_blank&quot;>Read more...</a>");
+		ElementCategory futureClimateCategory = new ElementCategory("Future climate", 
+				"<h6>Future Climate</h6><p class=\"justified\">The future climate context faced by ports is an important factor in future planning and risk assessment processes. Direct impacts on ports, and indirect impacts on supply chains, will impact capital investment, maintenance requirements, as well as knowledge, skill and training requirements for personnel. Understanding potential future climate impacts allows ports to adequately assess their future planning options, and accommodate the most appropriate adaptation choices. <p class=\"justified\">This tab assists ports to identify some of the future climate projections data relevant for their region. <p class=\"justified\">Global climate models were selected using CSIRO's Climate Futures tool. Projections were classified using two climate variables: rainfall and temperature, and grouped into \"climate futures\", for example \"hotter &amp; drier\" or \"cooler and wetter\". Likelihoods were then assigned according to the number of climate models that fell within each category. In this application, three global climate models from the following categories are offered for users to choose from: \"hotter &amp; drier\", \"cooler &amp; wetter\" and \"most likely\"</p><p class=\"justified\">Users select from two data sources (CSIRO and CMAR), and then select from a choice of variables.</p><strong>\"CSIRO\"</strong> which displays future climate projection data for:<ul><li>Temperature, rainfall wind speed and relative humidity</li><li>Two emissions scenarios: A1B (medium) and A1FI (high)</li><li>Three climate models: most likely, hotter &amp; drier, and cooler &amp; wetter</li><li>Three time periods: 2030, 2055 and 2070</li></ul><p class=\"justified\"><strong>\"CMAR\"</strong> which only displays sea-level rise data for the \"medium emissions scenario (A1B)\", using a \"most likely\" climate model, for two time periods, \"2030\" and \"2070\".</p><br /><a href=\"/public/guidelines#future-climate\" target=\"_blank\">Read more...</a>", 
+				"<h6>Future Climate</h6><p class=&quot;justified&quot;>This tab assists ports to identify some of the future climate projections data relevant for their region.   <p class=&quot;justified&quot;>Global climate models were selected using CSIRO's Climate Futures tool. Projections were classified using two climate variables: rainfall and temperature, and grouped into &quot;climate futures&quot;, for example &quot;hotter &amp; drier&quot; or &quot;cooler and wetter&quot;. Likelihoods were then assigned according to the number of climate models that fell within each category. In this application, three global climate models from the following categories are offered for users to choose from: &quot;hotter &amp; drier&quot;, &quot;cooler &amp; wetter&quot; and &quot;most likely&quot;</p><p class=&quot;justified&quot;>Users select from two data sources (CSIRO and CMAR), and then select from a choice of variables.</p><strong>&quot;CSIRO&quot;</strong> which displays future climate projection data for:<ul><li>Temperature, rainfall wind speed and relative humidity</li><li>Two emissions scenarios: A1B (medium) and A1FI (high)</li><li>Three climate models: most likely, hotter &amp; drier, and cooler &amp; wetter</li><li>Three time periods: 2030, 2055 and 2070</li></ul><p class=&quot;justified&quot;><strong>&quot;CMAR&quot;</strong> which only displays sea-level rise data for the &quot;medium emissions scenario (A1B)&quot;, using a &quot;most likely&quot; climate model, for two time periods, &quot;2030&quot; and &quot;2070&quot;.</p><br /><a href=&quot;/public/guidelines#future-climate&quot; target=&quot;_blank&quot;>Read more...</a>");
+		ElementCategory applicationsCategory = new ElementCategory("Applications", 
+				"<h6>Applications</h6><strong>Concrete Deterioration Model</strong><p class=\"justified\">Climate change will affect the rate of deterioration of materials such as concrete, timber and steel. The main construction material at ports is concrete and the rate of its deterioration will affect maintenance schedules, budgets and long term plans for refurbishment and replacement.</p><p class=\"justified\">This tab provides access to a tool designed by engineers that models rates of concrete deterioration under conditions of climate change in a port environment.</p>It provides:<ol><li>a set of example outputs for those who are not engineers, and</li><li>the tool for the engineers that have the knowledge to use it</li></ol>The tool enables the user to define:<ul><li>The concrete: e.g.: distance from coast, zone of activity (atmosphere, tidal, splash, submerged), size of structure,  depth of cover, diameter of rebar, water-to-cement ratio, cement content, depth of carbonation from maintenance records etc.;</li><li>The potential climate influences (following the range provided in the Future Climate tab), and;</li><li>A date range for all years 2013 - 2070</li></ul><p class=\"justified\">Data is not currently available for port areas in the South South West Flatlands West (SSWFW) Region.</p>				<strong>Vulnerability Assessment</strong><p class=\"justified\">When considering impacts of climate change, the term vulnerability represents exposure to a particular climate variable combined with the level of sensitivity to that variable, or the degree of impact.</p><p class=\"justified\">The Climate Smart Seaports Tool assists users to investigate vulnerability to current extreme climate-related events. How a port copes with, and responds to current extreme weather events, can be an indication of how well it will cope with future climate change.</p><p class=\"justified\">This tab allows users to identify the current vulnerability of a nominated port to particular climate related events. It presents a series of questions, exploring how recent climate-related events have disrupted operations at the port, and what this has meant for the port's business.</p> <p class=\"justified\">When considering the questions in this tab, think of the impact on port assets (machinery, buildings, equipment), infrastructure (drainage, rail, road, berths), and people (injuries, work disruptions).</p><a href=\"/public/guidelines#applications\" target=\"_blank\">Read more...</a>", 
+				"<h6>Applications</h6><strong>Concrete Deterioration Model</strong><p class=&quot;justified&quot;>This tab connects users to an engineering tool that models rates of concrete deterioration under conditions of climate change in a port environment.</p> It provides:<ol><li>a set of example outputs for those who are not engineers, and</li><li>the tool for the engineers that have the knowledge to use it</li></ol>The tool enables the user to define: <ul><li>The concrete: e.g.: distance from coast, zone of activity (atmosphere, tidal, splash, submerged), size of structure,  depth of cover, diameter of rebar, water-to-cement ratio, cement content, depth of carbonation from maintenance records etc.;</li><li>The potential climate influences (following the range provided in the Future Climate tab), and;</li><li>A date range for all years 2013 - 2070</li></ul> <p class=&quot;justified&quot;>Data is not currently available for port areas in the South South West Flatlands West (SSWFW) Region.</p> <strong>Vulnerability Assessment</strong><p class=&quot;justified&quot;>This tab allows users to identify the current vulnerability of a nominated port to particular climate related events. It presents a series of questions, exploring how recent climate-related events have disrupted operations at the port, and what this has meant for the port's business.</p> <p class=&quot;justified&quot;>When considering the questions in this tab, think of the impact on port assets (machinery, buildings, equipment), infrastructure (drainage, rail, road, berths), and people (injuries, work disruptions).</p> <a href=&quot;/public/guidelines#applications&quot; target=&quot;_blank&quot;>Read more...</a>");
+		
+		session.save(nonClimateCategory);
+		session.save(observedClimateCategory);
+		session.save(futureClimateCategory);
+		session.save(applicationsCategory);
+		
 		
 		// Add Data Elements
+		// TODO: Modify to add test data
 	    date = new Date();
 	    String content = "This is a test for Data Element";
-	    DataElementFile de1 = new DataElementFile(date, "Test 1", true, 0, DisplayType.PLAIN, user1wb, "csv", content.getBytes());
+	    InputElement ie1 = new InputElement(date, "Test 1", nonClimateCategory, user1wb, true, 1, "csv", content.getBytes());
+	    //DataElementFile de1 = new DataElementFile(date, "Test 1", true, 0, DisplayType.PLAIN, user1wb, "csv", content.getBytes());
 	   
 	    content = "This is the second test";
-	    DataElementFile de2 = new DataElementFile(date, "Test 2", true, 0, DisplayType.PLAIN, user1wb, "xml", content.getBytes());
+	    InputElement ie2 = new InputElement(date, "Test 2", observedClimateCategory, user1wb, true, 1, "xml", content.getBytes());
+	    //DataElementFile de2 = new DataElementFile(date, "Test 2", true, 0, DisplayType.PLAIN, user1wb, "xml", content.getBytes());
 		
 	    content = "This is the third test";
-	    DataElementFile de3 = new DataElementFile(date, "Test 3", true, 0, DisplayType.PLAIN, user1wb, "txt", content.getBytes());
+	    InputElement ie3 = new InputElement(date, "Test 3", futureClimateCategory, user1wb, true, 1, "txt", content.getBytes());
+	    //DataElementFile de3 = new DataElementFile(date, "Test 3", true, 0, DisplayType.PLAIN, user1wb, "txt", content.getBytes());
 		
 	    content = "User Story's Data Element content test";
 	    
-	    DataElementFile de4 = new DataElementFile(date, "Test 4", true, 1, DisplayType.PLAIN, user1us1, "txt", content.getBytes());
-	    DataElementText text1 = new DataElementText(date, "Comment text 1", true, 2, DisplayType.PLAIN, user1us1, "This is a text comment");
-	    DataElementFile de5 = new DataElementFile(date, "Test 5", true, 3, DisplayType.PLAIN, user1us1, "txt", content.getBytes());
-	    DataElementText text2 = new DataElementText(date, "Comment text 2", true, 4, DisplayType.PLAIN, user1us1, "This is a second text comment");
-		
-	    DataElementFile de6 = new DataElementFile(date, "Test 6", true, 1, DisplayType.PLAIN, user1us2, "txt", content.getBytes());
+	    InputElement ie4 = new InputElement(date, "Test 4", nonClimateCategory, user1us1, true, 1, "txt", content.getBytes());
+	    //DataElementFile de4 = new DataElementFile(date, "Test 4", true, 1, DisplayType.PLAIN, user1us1, "txt", content.getBytes());
 	    
-		session.save(de1);
-		session.save(de2);
-		session.save(de3);
-		session.save(de4);
+	    InputElement text1 = new InputElement(date, "Comment text 1", nonClimateCategory, user1us1, true, 2, "txt", content.getBytes());
+	    //DataElementText text1 = new DataElementText(date, "Comment text 1", true, 2, DisplayType.PLAIN, user1us1, "This is a text comment");
+	    
+	    InputElement ie5 = new InputElement(date, "Test 5", applicationsCategory, user1us1, true, 3, "txt", content.getBytes());
+	    //DataElementFile de5 = new DataElementFile(date, "Test 5", true, 3, DisplayType.PLAIN, user1us1, "txt", content.getBytes());
+	    
+	    content = "This is a second text comment";
+	    InputElement text2 = new InputElement(date, "Comment text 2", futureClimateCategory, user1us1, true, 4, "txt", content.getBytes());
+	    //DataElementText text2 = new DataElementText(date, "Comment text 2", true, 4, DisplayType.PLAIN, user1us1, "This is a second text comment");
+		
+	    InputElement ie6 = new InputElement(date, "Test 6", applicationsCategory, user1us1, true, 5, "txt", content.getBytes());
+	    //DataElementFile de6 = new DataElementFile(date, "Test 6", true, 5, DisplayType.PLAIN, user1us2, "txt", content.getBytes());
+	    
+		session.save(ie1);
+		session.save(ie2);
+		session.save(ie3);
+		session.save(ie4);
 		session.save(text1);
-		session.save(de5);
+		session.save(ie5);
 		session.save(text2);
-		session.save(de6);
+		session.save(ie6);
 
 		// CSIRO Data Element
-		ArrayList<CsiroData> csiroDataList = new ArrayList<CsiroData>();
+		/*ArrayList<CsiroData> csiroDataList = new ArrayList<CsiroData>();
 		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 1)));
 		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 2)));
 		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 3)));
 		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 4)));
-	    DataElementCsiro deCsiro = new DataElementCsiro(date, "CSIRO Data Element Test", true, 0, DisplayType.TABLE, user1wb, csiroDataList);
+	    DataElementCsiro deCsiro = new DataElementCsiro(date, "CSIRO Data Element Test", true, 0, DisplayType.TABLE, user1wb, csiroDataList);*/
+		List<DataSourceParameterOption> selectedOptions = new ArrayList<DataSourceParameterOption>();
+		selectedOptions.add(option1a3);
+		selectedOptions.add(option1b2);
+		selectedOptions.add(option1c1);
+	    DataElement deCsiro = new DataElement(date, "CSIRO Data Element Test", futureClimateCategory, user1wb, true, 1, ds1, selectedOptions, tableDisplayType);
 	    session.save(deCsiro);
 	    
 	    // CMAR Data Element
-	    ArrayList<CmarData> cmarDataList = new ArrayList<CmarData>();
+	    /*ArrayList<CmarData> cmarDataList = new ArrayList<CmarData>();
 	    cmarDataList.add((CmarData)(session.get(CmarData.class, 1)));
 	    DataElementCmar deCmar = new DataElementCmar(date, "CMAR Data Element Test", true, 0, DisplayType.TABLE, user1wb, cmarDataList, true);
+	    session.save(deCmar);*/
+	    
+	    selectedOptions = new ArrayList<DataSourceParameterOption>();
+		selectedOptions.add(option2a2);
+		selectedOptions.add(option2b2);
+		selectedOptions.add(option2c2);
+	    DataElement deCmar = new DataElement(date, "CMAR Data Element Test", futureClimateCategory, user1wb, true, 2, ds2, selectedOptions, tableDisplayType);
 	    session.save(deCmar);
 	    
 	    // Engineering Model Data Element
@@ -235,12 +352,15 @@ public class TestDatabaseLoader {
 	    session.save(deEngModel);*/
 	    
 	    // Vulnerability Data Element
-	    WeatherEvent we = new WeatherEvent("Heavy rain", 2006, true, "Impact of the event", "1;2;4;0;0;1;5;3;2;0;1;4", "Other consequences", false, "Changes implemented");
+	    /*WeatherEvent we = new WeatherEvent("Heavy rain", 2006, true, "Impact of the event", "1;2;4;0;0;1;5;3;2;0;1;4", "Other consequences", false, "Changes implemented");
 	    session.save(we);
 	    session.save(new DataElementVulnerability(date, "Vulnerability Assessment", true, 0, DisplayType.GRAPH, user1wb, we));
-	    
+	    */
 	    
 		// Commit all the transaction
 		session.getTransaction().commit();
+		
+		System.out.println("Created TEST database schema with test data");
+		System.out.println("DONE !");
 	}
 }

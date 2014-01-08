@@ -9,16 +9,16 @@ package edu.rmit.eres.seaports.helpers;
 
 import java.util.Comparator;
 
-import edu.rmit.eres.seaports.model.DataElement;
+import edu.rmit.eres.seaports.model.Element;
 
 /**
  * Implementation of the Comparator interface enabling the comparison of 
- * DataElements objects in function of the date and time they were created.
+ * Element objects in function of the date and time they were created.
  * @author Guillaume Prevost
  */
-public class DataElementCreationDateComparator implements Comparator<DataElement> {
+public class ElementCreationDateComparator implements Comparator<Element> {
 	@Override
-    public int compare(DataElement de1, DataElement de2) {
-        return -(de1.getCreationDate().compareTo(de2.getCreationDate()));
+    public int compare(Element elem1, Element elem2) {
+        return -(elem1.getCreationDate().compareTo(elem2.getCreationDate()));
     }
 }

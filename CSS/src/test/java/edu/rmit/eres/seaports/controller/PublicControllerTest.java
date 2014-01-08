@@ -21,8 +21,8 @@ import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.rmit.eres.seaports.controller.PublicController;
-import edu.rmit.eres.seaports.dao.UserStoryDao;
-import edu.rmit.eres.seaports.model.UserStory;
+import edu.rmit.eres.seaports.dao.ReportDao;
+import edu.rmit.eres.seaports.model.Report;
 
 /**
  * 
@@ -37,7 +37,7 @@ public class PublicControllerTest {
 	private PublicController publicController;
 	
 	@Autowired
-	private UserStoryDao userStoryDao;
+	private ReportDao userStoryDao;
 	
 	/**
 	 * Method executed before starting the unit tests to prepared the data
@@ -65,9 +65,9 @@ public class PublicControllerTest {
 		List<Object> resUserStoriesList = (List<Object>)(result.getModelMap().get("userStoriesList"));
 		Assert.assertEquals(1, resUserStoriesList.size()); // There should be 1 published story in the test database
 		for (Object obj : resUserStoriesList) {
-			if (obj instanceof UserStory) {
-				UserStory us = (UserStory)obj;
-				Assert.assertEquals("published", us.getMode());
+			if (obj instanceof Report) {
+				Report report = (Report)obj;
+				Assert.assertEquals("published", report.getMode());
 			}
 			else
 				Assert.fail();
@@ -81,14 +81,14 @@ public class PublicControllerTest {
 	public void getPublishedUserStoriesListNoresultTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
 		
-		UserStory userStory = userStoryDao.find(4); // Published user story
-		userStory.setMode("passive");
-		userStoryDao.save(userStory);
+		Report report = userStoryDao.find(4); // Published user story
+		report.setMode("passive");
+		userStoryDao.save(report);
 		
 		ModelAndView result = publicController.getPublishedUserStoriesList(model);
 		
-		userStory.setMode("published");
-		userStoryDao.save(userStory);
+		report.setMode("published");
+		userStoryDao.save(report);
 		
 		Assert.assertNotNull(result);
 		Assert.assertTrue(result.hasView());
@@ -113,7 +113,7 @@ public class PublicControllerTest {
 		Assert.assertEquals("userstoryPublicView", result.getViewName());
 		
 		Assert.assertNotNull(model.get("errorMessage"));
-		Assert.assertEquals(UserStoryDao.ERR_NO_SUCH_USERSTORY, model.get("errorMessage"));
+		Assert.assertEquals(ReportDao.ERR_NO_SUCH_USERSTORY, model.get("errorMessage"));
 		
 		Assert.assertNotNull(model.get("publicView"));
 		Assert.assertEquals(true, model.get("publicView"));
@@ -159,8 +159,8 @@ public class PublicControllerTest {
 		Assert.assertEquals(true, model.get("publicView"));
 		
 		Assert.assertNotNull(model.get("userstory"));
-		UserStory us = (UserStory)(model.get("userstory"));
-		Assert.assertEquals(4, us.getId()); // The User Story with ID 4 should be published
-		Assert.assertEquals("published", us.getMode());
+		Report report = (Report)(model.get("userstory"));
+		Assert.assertEquals(4, report.getId()); // The User Story with ID 4 should be published
+		Assert.assertEquals("published", report.getMode());
 	}
 }

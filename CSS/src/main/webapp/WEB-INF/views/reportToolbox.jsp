@@ -10,7 +10,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ page language="java" import="edu.rmit.eres.seaports.model.UserStory" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.Report" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.User" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.DataElement" %>
 

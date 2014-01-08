@@ -127,4 +127,8 @@ public class Region {
 	public void setPorts(List<Seaport> ports) {
 		this.ports = ports;
 	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

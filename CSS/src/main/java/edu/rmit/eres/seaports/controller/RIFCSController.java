@@ -19,16 +19,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import edu.rmit.eres.seaports.dao.UserStoryDao;
+import edu.rmit.eres.seaports.dao.ReportDao;
 import edu.rmit.eres.seaports.model.User;
-import edu.rmit.eres.seaports.model.UserStory;
+import edu.rmit.eres.seaports.model.Report;
 
 @Controller
 public class RIFCSController {
  
 	private static RIFCS rifcs = null;
 
-	@Autowired UserStoryDao userStoryDao;
+	@Autowired ReportDao reportDao;
 	
 	@RequestMapping(value="public/rifcs", method = RequestMethod.GET)
 	public void getRifcsXML(HttpServletRequest request, HttpServletResponse response) {
@@ -40,14 +40,14 @@ public class RIFCSController {
 	        rifcs.addRegistryObject(createRMITPartyRIFCS());
 	        
 	        List<User> users = new ArrayList<User>();
-	        List<UserStory> stories = userStoryDao.getAllPublishedStories();
-	        for (UserStory story : stories) {
-	        	if (!users.contains(story.getOwner()))
+	        List<Report> reports = reportDao.getAllPublishedStories();
+	        for (Report report : reports) {
+	        	if (!users.contains(report.getOwner()))
 	        	{
-	        		users.add(story.getOwner());
-	        		rifcs.addRegistryObject(createPartyRIFCS(story.getOwner())); // Create a party record for the owner of the story
+	        		users.add(report.getOwner());
+	        		rifcs.addRegistryObject(createPartyRIFCS(report.getOwner())); // Create a party record for the owner of the report
 	        	}
-	        	rifcs.addRegistryObject(createCollectionRIFCS(story)); // Create a collection record for the story
+	        	rifcs.addRegistryObject(createCollectionRIFCS(report)); // Create a collection record for the report
 	        }
 	        
 	        //mw.write(System.out);
@@ -205,19 +205,19 @@ public class RIFCSController {
         return r;
 	}
 	
-	public RegistryObject createCollectionRIFCS(UserStory story) throws RIFCSException {
+	public RegistryObject createCollectionRIFCS(Report report) throws RIFCSException {
 		
 		RegistryObject r = rifcs.newRegistryObject();
-        r.setKey(KEY_COLLECTION_PREFIX + story.getId());
+        r.setKey(KEY_COLLECTION_PREFIX + report.getId());
         r.setGroup(RMIT_GROUP);
-        r.setOriginatingSource(CSS_URL + "public/reports/view?id=" + story.getId());
+        r.setOriginatingSource(CSS_URL + "public/reports/view?id=" + report.getId());
         
 		Collection c = r.newCollection();
 		
 		c.setType("collection");
-		c.addIdentifier(HANDLE_PREFIX + "report" + story.getId(), "local");
-		c.addIdentifier(CSS_URL + "public/reports/view?id=" + story.getId(), "uri");
-        c.setDateModified(story.getPublishDate());
+		c.addIdentifier(HANDLE_PREFIX + "report" + report.getId(), "local");
+		c.addIdentifier(CSS_URL + "public/reports/view?id=" + report.getId(), "uri");
+        c.setDateModified(report.getPublishDate());
         
         // TODO: LVL3 Add "Dates" element (not available in RIF-CS API 1.3.0)
         
@@ -226,26 +226,26 @@ public class RIFCSController {
         name.setType("primary");
         
         NamePart namepart = name.newNamePart();
-        namepart.setValue(story.getName());
+        namepart.setValue(report.getName());
         name.addNamePart(namepart);
         c.addName(name);
                 
-        c.addDescription(story.getShortDescription(), "brief", "en");
-        c.addDescription(story.getFullDescription(), "full", "en");
+        c.addDescription(report.getShortDescription(), "brief", "en");
+        c.addDescription(report.getFullDescription(), "full", "en");
         
         // Location
         Location location = c.newLocation();
         Address address = location.newAddress();
         Electronic electronic = address.newElectronic();
         electronic.setType("url");
-        electronic.setValue(CSS_URL + "public/reports/view?id=" + story.getId());
+        electronic.setValue(CSS_URL + "public/reports/view?id=" + report.getId());
         address.addElectronic(electronic);
         location.addAddress(address);
         c.addLocation(location);
         
         // Related objects
         c.addRelatedObject(createRelatedObject("isProducedBy", KEY_SERVICE_PREFIX + CSS_APP_SERVICE, c.newRelatedObject()));
-        c.addRelatedObject(createRelatedObject("hasCollector", KEY_PARTY_PREFIX + story.getOwner().getUsername(), c.newRelatedObject()));
+        c.addRelatedObject(createRelatedObject("hasCollector", KEY_PARTY_PREFIX + report.getOwner().getUsername(), c.newRelatedObject()));
         //c.addRelatedObject(createRelatedObject("isManagedBy", KEY_PARTY_PREFIX + CSS_TEAM_PARTY, c.newRelatedObject()));
         c.addRelatedObject(createRelatedObject("isManagedBy", ERESEARCH_PARTY_KEY, c.newRelatedObject()));
         // TODO: LVL3 Link to an Activity record
@@ -266,7 +266,7 @@ public class RIFCSController {
         coverage.addTemporal(temporalCoverage);
         Spatial spatialCoverage = coverage.newSpatial();
         spatialCoverage.setType("kmlPolyCoords");
-        spatialCoverage.setValue(story.getSeaport().getRegion().getCoordinates());
+        spatialCoverage.setValue(report.getSeaport().getRegion().getCoordinates());
         coverage.addSpatial(spatialCoverage);
         c.addCoverage(coverage);
         
@@ -291,7 +291,7 @@ public class RIFCSController {
         return relatedObject;
 	}
 	
-	public static final String ERR_RETRIEVE_USERSTORY_LIST = "Impossible to retrieve the list of published stories";
+	public static final String ERR_RETRIEVE_USERSTORY_LIST = "Impossible to retrieve the list of published reports";
 	
 	public static final String ERESEARCH_PARTY_KEY = "RMIT-AP35/1/2";
 	public static final String RMIT_GROUP = "RMIT University";

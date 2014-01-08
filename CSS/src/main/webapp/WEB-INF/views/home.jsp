@@ -19,7 +19,7 @@
 	<br />
 	<sec:authorize access="!isAuthenticated()">
 	<center>
-		<input type="button" class="btn btn-blue btn-large" value="Log in" onclick="location.href='/auth/workboard/my-workboard'" />&nbsp;
+		<input type="button" class="btn btn-blue btn-large" value="Log in" onclick="location.href='/auth/report/my-reports'" />&nbsp;
 		<input type="button" class="btn btn-blue btn-large" value="Sign up" onclick="location.href='/register'" />
 	</center>
 	<br />

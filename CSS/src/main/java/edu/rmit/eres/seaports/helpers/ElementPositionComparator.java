@@ -9,17 +9,17 @@ package edu.rmit.eres.seaports.helpers;
 
 import java.util.Comparator;
 
-import edu.rmit.eres.seaports.model.DataElement;
+import edu.rmit.eres.seaports.model.Element;
 
 /**
  * Implementation of the Comparator interface enabling the comparison of 
- * DataElements objects in function of their position in the User Story 
+ * Element objects in function of their position in the Report 
  * they belong to.
  * @author Guillaume Prevost
  */
-public class DataElementPositionComparator implements Comparator<DataElement> {
+public class ElementPositionComparator implements Comparator<Element> {
 	@Override
-    public int compare(DataElement de1, DataElement de2) {
-        return Integer.compare(de1.getPosition(), de2.getPosition());
+    public int compare(Element elem1, Element elem2) {
+        return Integer.compare(elem1.getPosition(), elem2.getPosition());
     }
 }

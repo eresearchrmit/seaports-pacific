@@ -12,16 +12,16 @@
 	<li class="ic-home${requestScope['javax.servlet.forward.servlet_path'] == '/' ? ' current' : ''}"><a href="/"><span>Home</span></a> </li>
 	
 	<sec:authorize access="isAuthenticated()">
-	<li class="ic-workboard
+	<!--<li class="ic-workboard
 		${requestScope['javax.servlet.forward.servlet_path'] == '/auth/workboard' ? ' current' : ''}">
 		<a href="/auth/workboard?user=${user.username}"><span>My Workboard</span></a>
-	</li>
+	</li>-->
 	
 	<li class="ic-story
 		${requestScope['javax.servlet.forward.servlet_path'] == '/auth/userstory/list' 
 		|| requestScope['javax.servlet.forward.servlet_path'] == '/auth/userstory' 
 		|| requestScope['javax.servlet.forward.servlet_path'] == '/auth/userstory/view' ? ' current' : ''}">
-		<a href="/auth/userstory/list?user=${user.username}"><span>My Reports</span></a>
+		<a href="/auth/report/list?user=${user.username}"><span>My Reports</span></a>
 	</li>
 	</sec:authorize>
 	

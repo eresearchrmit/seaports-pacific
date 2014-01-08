@@ -12,7 +12,7 @@
 <%@ page import="org.apache.commons.codec.binary.*"%>
 <%@ page import= "org.springframework.web.servlet.tags.*" %>
 <%@ page import="org.apache.commons.lang.*" %>
-<%@ page language="java" import="edu.rmit.eres.seaports.model.UserStory" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.Report" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.User" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.DataElement" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>

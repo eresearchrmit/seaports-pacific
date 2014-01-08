@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import edu.rmit.eres.seaports.model.UserStory;
+import edu.rmit.eres.seaports.model.Report;
 
 /**
  * Class representing a user of the application
@@ -83,8 +83,8 @@ public class User implements Serializable, UserDetails {
 	/**
 	 * The stories of the user
 	 */
-	@OneToMany(targetEntity=UserStory.class, mappedBy="owner", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH}, fetch=FetchType.EAGER)
-	private List<UserStory> userStories;
+	@OneToMany(targetEntity=Report.class, mappedBy="owner", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH}, fetch=FetchType.EAGER)
+	private List<Report> reports;
 	
 	/**
 	 * Default constructor of user
@@ -284,19 +284,19 @@ public class User implements Serializable, UserDetails {
 	}
 	
 	/**
-	 * Getter for the list of UserStory belonging to the user
-	 * @return the list of UserStory of the user
+	 * Getter for the list of reports belonging to the user
+	 * @return the list of reports of the user
 	 */
-	public List<UserStory> getUserStories() {
-		return userStories;
+	public List<Report> getReports() {
+		return this.reports;
 	}
 
 	/**
-	 * Setter for the list of UserStory belonging to the user
-	 * @param userStories: the new list of UserStory of the user
+	 * Setter for the list of reports belonging to the user
+	 * @param userStories: the new list of reports of the user
 	 */
-	public void setUserStories(List<UserStory> userStories) {
-		this.userStories = userStories;
+	public void setReports(List<Report> reports) {
+		this.reports = reports;
 	}
 	
 	@Override

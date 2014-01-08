@@ -15,8 +15,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import edu.rmit.eres.seaports.model.Report;
 import edu.rmit.eres.seaports.model.User;
-import edu.rmit.eres.seaports.model.UserStory;
 import edu.rmit.eres.seaports.security.UserLoginService;
 
 /**
@@ -52,13 +52,13 @@ public class SecurityHelper {
 	}
 	
 	/**
-	 * Checks whether the currently logged user is allowed to access a given user story
+	 * Checks whether the currently logged user is allowed to access a given report
 	 */
-	public static Boolean IsCurrentUserAllowedToAccess(UserStory story) {
-		if (story.getOwner() == null)
+	public static Boolean IsCurrentUserAllowedToAccess(Report report) {
+		if (report.getOwner() == null)
 			throw new IllegalArgumentException();
 		
-		return IsCurrentUserMatching(story.getOwner().getUsername()) || IsCurrentUserAdmin();
+		return IsCurrentUserMatching(report.getOwner().getUsername()) || IsCurrentUserAdmin();
 	}
 	
 	/**

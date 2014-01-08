@@ -92,12 +92,13 @@ public class CsiroVariableDao {
 	public List<Variable> getEngineeringModelVariables() {
 		List<Variable> results = new ArrayList<Variable>();
 		
-		List<Variable> allVars = getAll();
+		// TODO: Get the Engineering Model Variables list
+		/*List<Variable> allVars = getAll();
 		for (Variable var : allVars) {
 			if (EngineeringModelHelper.ENGINEERING_MODEL_VARIABLES.containsKey("Chloride|" + var.getName())
 				|| EngineeringModelHelper.ENGINEERING_MODEL_VARIABLES.containsKey("Carbonation|" + var.getName()))
 				results.add(var);
-		}
+		}*/
 		
 		return results;
 	}

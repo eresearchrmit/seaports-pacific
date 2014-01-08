@@ -7,11 +7,18 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * Class representing an Australian seaport. It is related to the NRM region where it is located.
@@ -43,9 +50,17 @@ public class Seaport {
 	private Region region;
 	
 	/**
-	 * The name of the seaport
+	 * The urban center the seaport belongs to, if any
 	 */
 	private String urbanCenter;
+	
+	/**
+	 * The list of available data sources for this seaport
+	 */
+    @ManyToMany
+    @JoinTable(name="seaport_data_source_availability", joinColumns={@JoinColumn(name="seaport_code")}, inverseJoinColumns={@JoinColumn(name="data_source_id")})
+	@LazyCollection(value=LazyCollectionOption.FALSE)
+	private List<DataSource> dataSourcesAvailable;
 	
 	/**
 	 * Default constructor of Seaport
@@ -141,5 +156,25 @@ public class Seaport {
 	 */
 	public void setUrbanCenter(String urbanCenter) {
 		this.urbanCenter = urbanCenter;
+	}
+	
+	/**
+	 * Getter for the list of available data sources for this seaport
+	 * @return the list of available data sources for this seaport
+	 */
+	public List<DataSource> getDataSourcesAvailable() {
+		return this.dataSourcesAvailable;
+	}
+	
+	/**
+	 * Setter for the list of available data sources for this seaport
+	 * @param dataSourcesAvailable: the new list of available data sources for this seaport
+	 */
+	public void setDataSourcesAvailable(List<DataSource> dataSourcesAvailable) {
+		this.dataSourcesAvailable = dataSourcesAvailable;
+	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

@@ -24,20 +24,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.rmit.eres.seaports.dao.CsiroDataBaselineDao;
 import edu.rmit.eres.seaports.dao.UserDao;
-import edu.rmit.eres.seaports.dao.UserStoryDao;
-import edu.rmit.eres.seaports.helpers.DataElementPositionComparator;
+import edu.rmit.eres.seaports.dao.ReportDao;
+import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
 import edu.rmit.eres.seaports.model.AbsData;
 import edu.rmit.eres.seaports.model.BitreData;
 import edu.rmit.eres.seaports.model.CsiroData;
 import edu.rmit.eres.seaports.model.DataElement;
-import edu.rmit.eres.seaports.model.DataElementAbs;
+import edu.rmit.eres.seaports.model.Element;
+/*import edu.rmit.eres.seaports.model.DataElementAbs;
 import edu.rmit.eres.seaports.model.DataElementBitre;
 import edu.rmit.eres.seaports.model.DataElementCsiro;
 import edu.rmit.eres.seaports.model.DataElementEngineeringModel;
-import edu.rmit.eres.seaports.model.DataElementFile;
+import edu.rmit.eres.seaports.model.DataElementFile;*/
 import edu.rmit.eres.seaports.model.EngineeringModelData;
-import edu.rmit.eres.seaports.model.UserStory;
+import edu.rmit.eres.seaports.model.Report;
 
 /**
  * Controller for the public section of the application
@@ -51,7 +52,7 @@ public class PublicController {
 	private UserDao userDao;
 	
 	@Autowired
-	private UserStoryDao userStoryDao;
+	private ReportDao userStoryDao;
 	
 	@Autowired
 	private CsiroDataBaselineDao csiroDataBaselineDao;
@@ -122,11 +123,11 @@ public class PublicController {
 		ModelAndView mav = new ModelAndView("userstoryPublicList");
 		try {
 			// Retrieve all published reports
-			List<UserStory> userStoriesList = userStoryDao.getAllPublishedStories();
-			mav.addObject("userStoriesList", userStoriesList);
+			List<Report> reportsList = userStoryDao.getAllPublishedStories();
+			mav.addObject("userStoriesList", reportsList);
 				
 			model.addAttribute("listingTitle", "Published Reports");
-			if (userStoriesList.size() == 0)
+			if (reportsList.size() == 0)
 				model.addAttribute("warningMessage", ERR_NO_RESULT);
 		}
 		catch (Exception e) {
@@ -142,10 +143,10 @@ public class PublicController {
 		
 		tryGetLoggedInUser(model);
 		
-		UserStory userStory = null;
+		Report report = null;
 		try {			
-			userStory = userStoryDao.find(id);
-			if (!userStory.getMode().equals("published")) {
+			report = userStoryDao.find(id);
+			if (!report.getMode().equals("published")) {
 				model.addAttribute("errorMessage", ERR_REPORT_NOT_PUBLISHED);
 			}
 		}
@@ -153,12 +154,14 @@ public class PublicController {
 			model.addAttribute("errorMessage", e.getMessage());
 		}
 		
-		if (userStory != null && userStory.getMode().equals("published"))
+		if (report != null && report.getMode().equals("published"))
 		{
-			Collections.sort(userStory.getDataElements(), new DataElementPositionComparator());
+			Collections.sort(report.getElements(), new ElementPositionComparator());
 			
-			List<DataElement> dataElements = userStory.getDataElements();
-	 		for (DataElement dataElement : dataElements) {
+			List<Element> elements = report.getElements();
+	 		
+			// TODO: Prepare data to be displayed
+			/*for (DataElement dataElement : dataElements) {
 	 			if (dataElement.getClass().equals(DataElementAbs.class)) {
 	 				List<AbsData> absDataList = ((DataElementAbs)dataElement).getAbsDataList();
 	 				for (AbsData data : absDataList) {
@@ -185,8 +188,8 @@ public class PublicController {
 	 					data.generateValues();
 	 				}
 	 			}
-			}
-			model.addAttribute("userstory", userStory);
+			}*/
+			model.addAttribute("userstory", report);
 		}
 		
 		model.addAttribute("publicView", true);

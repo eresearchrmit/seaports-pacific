@@ -20,11 +20,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.dao.UserStoryDao;
+import edu.rmit.eres.seaports.dao.ReportDao;
 import edu.rmit.eres.seaports.model.Region;
+import edu.rmit.eres.seaports.model.Report;
 import edu.rmit.eres.seaports.model.Seaport;
 import edu.rmit.eres.seaports.model.User;
-import edu.rmit.eres.seaports.model.UserStory;
 import edu.rmit.eres.seaports.security.UserLoginService;
 
 /**
@@ -34,16 +34,16 @@ import edu.rmit.eres.seaports.security.UserLoginService;
 @ContextConfiguration("/test-context.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class UserStoryDaoTest {
+public class ReportDaoTest {
 
 	User userForTest;
 	
 	User userWithoutStory;
 	
-	UserStory userStoryForTest;
+	Report reportForTest;
 	
 	@Autowired
-	private UserStoryDao userStoryDao;
+	private ReportDao reportDao;
 
 	/**
 	 * Method executed before starting the unit tests to prepared the data
@@ -53,7 +53,7 @@ public class UserStoryDaoTest {
 		userForTest = new User("testuser1", "password", true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser1", "testuser1");
 		userWithoutStory = new User("testuser4", "password", true, true, UserLoginService.ROLE_USER, "email@company.com", "testuser4", "testuser4");
 		
-		userStoryForTest = new UserStory("User 1 WorkBoard", "User story Purpose", "active", "private", userForTest, 
+		reportForTest = new Report("User 1 WorkBoard", "User story Purpose", "active", "private", userForTest, 
 				new Seaport("AUSYD", "Sydney Harbour", new Region("East Coast South", "")), null);
 	}
 
@@ -63,15 +63,15 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void userStoryfindTest() {
-		UserStory story = userStoryDao.find(1);
+		Report report = reportDao.find(1);
 
-		Assert.assertNotNull(story);
+		Assert.assertNotNull(report);
 		
-		Assert.assertEquals("User 1 Workboard", story.getName());
-		Assert.assertEquals("active", story.getMode());
-		Assert.assertEquals("private", story.getAccess());
-		Assert.assertEquals("testuser1", story.getOwner().getUsername());
-		Assert.assertEquals("East Coast South", story.getSeaport().getRegion().getName());
+		Assert.assertEquals("User 1 Workboard", report.getName());
+		Assert.assertEquals("active", report.getMode());
+		Assert.assertEquals("private", report.getAccess());
+		Assert.assertEquals("testuser1", report.getOwner().getUsername());
+		Assert.assertEquals("Fiji", report.getSeaport().getRegion().getName());
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test(expected = NoResultException.class)
 	public void userStoryfindUnexistingStoryTest() {
-		userStoryDao.find(9999); // Non-existing ID
+		reportDao.find(9999); // Non-existing ID
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getAllStoriesTest() {
-		List<UserStory> stories = userStoryDao.getAllStories();
+		List<Report> stories = reportDao.getAllStories();
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(6, stories.size());
@@ -100,18 +100,18 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getUserStoriesTest() {
-		List<UserStory> stories = userStoryDao.getUserStories(userForTest);
+		List<Report> stories = reportDao.getUserStories(userForTest);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(3, stories.size());
 	}
 	
 	/**
-	 * Test for getUserStories. It should retrieve a list of 0 user story
+	 * Test for getUserStories. It should retrieve a list of 0 report
 	 */
 	@Test
 	public void getUserStoriesNoStoryTest() {
-		List<UserStory> stories = userStoryDao.getUserStories(userWithoutStory);
+		List<Report> stories = reportDao.getUserStories(userWithoutStory);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(0, stories.size());
@@ -122,7 +122,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getPrivateUserStoriesTest() {
-		List<UserStory> stories = userStoryDao.getPrivateUserStories(userForTest);
+		List<Report> stories = reportDao.getPrivateUserStories(userForTest);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(1, stories.size());
@@ -133,7 +133,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getPrivateUserStoriesNoStoryTest() {
-		List<UserStory> stories = userStoryDao.getPrivateUserStories(userWithoutStory);
+		List<Report> stories = reportDao.getPrivateUserStories(userWithoutStory);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(0, stories.size());
@@ -144,7 +144,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getPublicUserStoriesTest() {
-		List<UserStory> stories = userStoryDao.getPublicUserStories(userForTest);
+		List<Report> stories = reportDao.getPublicUserStories(userForTest);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(2, stories.size());
@@ -155,7 +155,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getPublicUserStoriesNoStoryTest() {
-		List<UserStory> stories = userStoryDao.getPublicUserStories(userWithoutStory);
+		List<Report> stories = reportDao.getPublicUserStories(userWithoutStory);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(0, stories.size());
@@ -166,7 +166,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getPublishedUserStoriesTest() {
-		List<UserStory> stories = userStoryDao.getPublishedUserStories(userForTest);
+		List<Report> stories = reportDao.getPublishedUserStories(userForTest);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(1, stories.size());
@@ -177,7 +177,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getPublishedUserStoriesNoStoryTest() {
-		List<UserStory> stories = userStoryDao.getPublishedUserStories(userWithoutStory);
+		List<Report> stories = reportDao.getPublishedUserStories(userWithoutStory);
 		
 		Assert.assertNotNull(stories);
 		Assert.assertEquals(0, stories.size());
@@ -188,7 +188,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getWorkBoardTest() {
-		UserStory workboard = userStoryDao.getWorkboard(userForTest);
+		Report workboard = reportDao.getWorkboard(userForTest);
 		
 		Assert.assertNotNull(workboard);
 		Assert.assertEquals("User 1 Workboard", workboard.getName());
@@ -201,7 +201,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void getWorkBoardNoWorkboardTest() {
-		UserStory workboard = userStoryDao.getWorkboard(userWithoutStory);
+		Report workboard = reportDao.getWorkboard(userWithoutStory);
 		
 		Assert.assertNull(workboard);
 	}
@@ -210,26 +210,26 @@ public class UserStoryDaoTest {
 	 * Test for save.
 	 */
 	@Test
-	public void userSaveNewUserStoryTest() {
-		UserStory savedUserStory = userStoryDao.save(new UserStory("test", "Purpose", "active", "private", userForTest, 
+	public void userSaveNewReportTest() {
+		Report savedReport = reportDao.save(new Report("test", "Purpose", "active", "private", userForTest, 
 				new Seaport("AUSYD", "Sydney Harbour", new Region("East Coast South", "")), null));
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("test", savedUserStory.getName());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("test", savedReport.getName());
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("active", savedUserStory.getMode());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("active", savedReport.getMode());
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("private", savedUserStory.getAccess());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("private", savedReport.getAccess());
 		
-		Assert.assertNotNull(savedUserStory.getOwner());
-		Assert.assertEquals("testuser1", savedUserStory.getOwner().getUsername());
+		Assert.assertNotNull(savedReport.getOwner());
+		Assert.assertEquals("testuser1", savedReport.getOwner().getUsername());
 		
-		Assert.assertNotNull(savedUserStory.getSeaport().getRegion());
-		Assert.assertEquals("East Coast South", savedUserStory.getSeaport().getRegion().getName());
+		Assert.assertNotNull(savedReport.getSeaport().getRegion());
+		Assert.assertEquals("East Coast South", savedReport.getSeaport().getRegion().getName());
 		
-		Assert.assertNull(savedUserStory.getDataElements());
+		Assert.assertNull(savedReport.getElements());
 	}
 	
 	/**
@@ -237,39 +237,39 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void userSaveStoryOnlyNameTest() {
-		UserStory userStory = new UserStory();
+		Report userStory = new Report();
 		userStory.setName("test");
-		UserStory savedUserStory = userStoryDao.save(userStory);
+		Report savedReport = reportDao.save(userStory);
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("test", savedUserStory.getName());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("test", savedReport.getName());
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("active", savedUserStory.getMode());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("active", savedReport.getMode());
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("private", savedUserStory.getAccess());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("private", savedReport.getAccess());
 		
-		Assert.assertNull(savedUserStory.getOwner());
-		Assert.assertNull(savedUserStory.getSeaport());
-		Assert.assertNull(savedUserStory.getDataElements());
+		Assert.assertNull(savedReport.getOwner());
+		Assert.assertNull(savedReport.getSeaport());
+		Assert.assertNull(savedReport.getElements());
 	}
 	
 	/**
 	 * Test for save.
 	 */
 	@Test
-	public void userSaveExistingUserStoryTest() {
-		UserStory savedUserStory = userStoryDao.save(userStoryForTest);
+	public void userSaveExistingReportTest() {
+		Report savedReport = reportDao.save(reportForTest);
 	
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("User 1 WorkBoard", savedUserStory.getName());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("User 1 WorkBoard", savedReport.getName());
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("active", savedUserStory.getMode());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("active", savedReport.getMode());
 		
-		Assert.assertNotNull(savedUserStory.getName());
-		Assert.assertEquals("private", savedUserStory.getAccess());
+		Assert.assertNotNull(savedReport.getName());
+		Assert.assertEquals("private", savedReport.getAccess());
 	}
 	
 	/**
@@ -277,7 +277,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void userSaveNullTest() {
-		userStoryDao.save(null);
+		reportDao.save(null);
 	}
 	
 	/**
@@ -285,7 +285,7 @@ public class UserStoryDaoTest {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void userSaveEmptyTest() {
-		userStoryDao.save(new UserStory());
+		reportDao.save(new Report());
 	}
 	
 	/**
@@ -293,10 +293,10 @@ public class UserStoryDaoTest {
 	 */
 	@Test
 	public void userDeleteStoryTest() {
-		UserStory story = userStoryDao.find(1);
+		Report story = reportDao.find(1);
 		Assert.assertNotNull(story);
 		
-		userStoryDao.delete(story);
+		reportDao.delete(story);
 	}
 	
 	/**
@@ -304,6 +304,6 @@ public class UserStoryDaoTest {
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void userDeleteNullTest() {
-		userStoryDao.delete(null);
+		reportDao.delete(null);
 	}
 }
