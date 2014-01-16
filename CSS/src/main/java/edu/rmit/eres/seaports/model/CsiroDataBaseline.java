@@ -52,7 +52,7 @@ public class CsiroDataBaseline
 	 * The variable that this baseline data represents
 	 */
 	@ManyToOne
-	@JoinColumn(name="climate_variable_id")
+	@JoinColumn(name="csiro_variable_id")
 	private CsiroVariable variable;
 	
 	/**

@@ -152,66 +152,71 @@ public class TestDatabaseLoader {
 		seaportsDS1.add(port4);
 		seaportsDS1.add(port5);
 		
+		// Loads the various datasets
+		CsiroDataLoader.LoadCsiroData(session);
+		
+		
 		// Data Source 1
-		List<DisplayType> displayTypesDS1 = new ArrayList<DisplayType>();
-		displayTypesDS1.add(textDisplayType);
-		displayTypesDS1.add(graphDisplayType);
-		displayTypesDS1.add(mapDisplayType);
-		displayTypesDS1.add(tableDisplayType);
+		List<DisplayType> displayTypesCsiro = new ArrayList<DisplayType>();
+		displayTypesCsiro.add(textDisplayType);
+		displayTypesCsiro.add(graphDisplayType);
+		displayTypesCsiro.add(mapDisplayType);
+		displayTypesCsiro.add(tableDisplayType);
 		
-		DataSource ds1 = new DataSource("Data Source 1", null, null, displayTypesDS1);
+		CsiroDataSource dsCsiro = new CsiroDataSource("CSIRO", null, null, displayTypesCsiro);
 		
-		DataSourceParameter param1a = new DataSourceParameter("Param 1A", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);		
-		DataSourceParameterOption option1a1 = new DataSourceParameterOption("Option 1A1", 1, param1a, 0);
-		DataSourceParameterOption option1a2 = new DataSourceParameterOption("Option 1A2", 1, param1a, 0);
-		DataSourceParameterOption option1a3 = new DataSourceParameterOption("Option 1A3", 1, param1a, 0);
+		DataSourceParameter csiroVariableParam = new DataSourceParameter("Variable", "<h6>MEAN TEMPERATURE</h6><p>Mean air temperature in degrees Celsius (°C) as measured at 2 m above ground. Values are given as change from modelled baseline (1981-2000) climate.</p><h6>RAINFALL</h6><p>Mean rainfall in millimetres (mm). Values are given as change from modelled baseline (1981-2000) climate.</p><h6>DAILY RELATIVE HUMIDITY</h6><p>Calculated at 2 m above ground and expressed in percent (%). Values are given as change from modelled baseline (1981-2000) climate.</p><h6>WIND SPEED</h6><p>Mean wind speed, in metres per second (m/sec) as measured at 10m above the ground. Values are given as change from modelled baseline (1981-2000) climate.</p>",
+				dsCsiro, null, DataSourceParameter.Display.DROPDOWN);		
+		DataSourceParameterOption csiroVariableTemperature = new DataSourceParameterOption("Temperature", "Temperature", csiroVariableParam, 1);
+		DataSourceParameterOption csiroVariaableWindSpeed = new DataSourceParameterOption("Wind Speed", "Wind Speed", csiroVariableParam, 2);
+		DataSourceParameterOption csiroVariableRainfall = new DataSourceParameterOption("Rainfall", "Rainfall", csiroVariableParam, 3);
+		DataSourceParameterOption csiroVariableHumidity = new DataSourceParameterOption("Relative Humidity", "Relative Humidity", csiroVariableParam, 4);
 		
-		DataSourceParameter param1b = new DataSourceParameter("Param 1B", "desc", ds1, null, DataSourceParameter.Display.RADIO);
-		DataSourceParameterOption option1b1 = new DataSourceParameterOption("Option 1B1", 1, param1b, 0);
-		DataSourceParameterOption option1b2 = new DataSourceParameterOption("Option 1B2", 1, param1b, 0);
-		DataSourceParameterOption option1b3 = new DataSourceParameterOption("Option 1B3", 1, param1b, 0);
-
-		DataSourceParameter param1c = new DataSourceParameter("Param 1C", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);
-		DataSourceParameterOption option1c1 = new DataSourceParameterOption("Option 1C1", 1, param1c, 0);
-		DataSourceParameterOption option1c2 = new DataSourceParameterOption("Option 1C2", 1, param1c, 0);
-		DataSourceParameterOption option1c3 = new DataSourceParameterOption("Option 1C3", 1, param1c, 0);
+		DataSourceParameter climateEmissionScnParam = new DataSourceParameter("Emission Scenario", "<p>The emission scenarios represent the future development of greenhouse gas emissions and are based on assumptions about economic, technological and population growth. The two emissions scenarios that are available here are from the 'A1 storyline' and were developed by the IPCC Special Report on Emissions Scenarios (SRES).</p><p>As a general guide:</p><p>Emission Scenario A1B: medium CO2 emissions, peaking around 2030</p><p>Emission Scenario A1FI: high CO2 emissions, increasing throughout the 21st century</p>", dsCsiro, null, DataSourceParameter.Display.RADIO);
+		DataSourceParameterOption mediumEmScn = new DataSourceParameterOption("Medium (A1B)", "A1B", climateEmissionScnParam, 1);
+		DataSourceParameterOption highEmScn = new DataSourceParameterOption("High (A1FI)", "A1FI", climateEmissionScnParam, 2);
+		
+		DataSourceParameter yearParam = new DataSourceParameter("Year", "<p>Time periods are expressed relative to the 1981-2000 baseline period and are centred on a given decade. For example, the 2030s time period refers to the period 2020-2039.</p> <p>Three future time periods are available: 2030, 2055 and 2070.</p>", dsCsiro, null, DataSourceParameter.Display.DROPDOWN);
+		DataSourceParameterOption year2030 = new DataSourceParameterOption("2030", "2030", yearParam, 1);
+		DataSourceParameterOption year2055 = new DataSourceParameterOption("2055", "2055", yearParam, 2);
+		DataSourceParameterOption year2070 = new DataSourceParameterOption("2070", "2070", yearParam, 3);
 		
 		
-		session.save(ds1);
-		session.save(param1a);
-		session.save(option1a1);
-		session.save(option1a2);
-		session.save(option1a3);
-		session.save(param1b);
-		session.save(option1b1);
-		session.save(option1b2);
-		session.save(option1b3);
-		session.save(param1c);
-		session.save(option1c1);
-		session.save(option1c2);
-		session.save(option1c3);
+		session.save(dsCsiro);
+		session.save(csiroVariableParam);
+		session.save(csiroVariableTemperature);
+		session.save(csiroVariaableWindSpeed);
+		session.save(csiroVariableRainfall);
+		session.save(csiroVariableHumidity);
+		session.save(climateEmissionScnParam);
+		session.save(mediumEmScn);
+		session.save(highEmScn);
+		session.save(yearParam);
+		session.save(year2030);
+		session.save(year2055);
+		session.save(year2070);
 				
 		// Data Source 2
-		List<DisplayType> displayTypesDS2 = new ArrayList<DisplayType>();
+		/*List<DisplayType> displayTypesDS2 = new ArrayList<DisplayType>();
 		displayTypesDS2.add(textDisplayType);
 		displayTypesDS2.add(tableDisplayType);
 		
-		DataSource ds2 = new DataSource("Data Source 2", null, null, displayTypesDS2);
+		CsiroDataSource ds2 = new CsiroDataSource("Data Source 2", null, null, displayTypesDS2);
 		
-		DataSourceParameter param2a = new DataSourceParameter("Param 2A", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);		
-		DataSourceParameterOption option2a1 = new DataSourceParameterOption("Option 2A1", 1, param2a, 0);
-		DataSourceParameterOption option2a2 = new DataSourceParameterOption("Option 2A2", 1, param2a, 0);
-		DataSourceParameterOption option2a3 = new DataSourceParameterOption("Option 2A3", 1, param2a, 0);
+		DataSourceParameter param2a = new DataSourceParameter("Param 2A", "desc", ds2, null, DataSourceParameter.Display.DROPDOWN);		
+		DataSourceParameterOption option2a1 = new DataSourceParameterOption("Option 2A1", "", param2a, 0);
+		DataSourceParameterOption option2a2 = new DataSourceParameterOption("Option 2A2", "", param2a, 0);
+		DataSourceParameterOption option2a3 = new DataSourceParameterOption("Option 2A3", "", param2a, 0);
 		
-		DataSourceParameter param2b = new DataSourceParameter("Param 2B", "desc", ds1, null, DataSourceParameter.Display.RADIO);
-		DataSourceParameterOption option2b1 = new DataSourceParameterOption("Option 2B1", 1, param2b, 0);
-		DataSourceParameterOption option2b2 = new DataSourceParameterOption("Option 2B2", 1, param2b, 0);
-		DataSourceParameterOption option2b3 = new DataSourceParameterOption("Option 2B3", 1, param2b, 0);
+		DataSourceParameter param2b = new DataSourceParameter("Param 2B", "desc", ds2, null, DataSourceParameter.Display.RADIO);
+		DataSourceParameterOption option2b1 = new DataSourceParameterOption("Option 2B1", "", param2b, 0);
+		DataSourceParameterOption option2b2 = new DataSourceParameterOption("Option 2B2", "", param2b, 0);
+		DataSourceParameterOption option2b3 = new DataSourceParameterOption("Option 2B3", "", param2b, 0);
 
-		DataSourceParameter param2c = new DataSourceParameter("Param 2C", "desc", ds1, null, DataSourceParameter.Display.DROPDOWN);
-		DataSourceParameterOption option2c1 = new DataSourceParameterOption("Option 2C1", 1, param2c, 0);
-		DataSourceParameterOption option2c2 = new DataSourceParameterOption("Option 2C2", 1, param2c, 0);
-		DataSourceParameterOption option2c3 = new DataSourceParameterOption("Option 2C3", 1, param2c, 0);
+		DataSourceParameter param2c = new DataSourceParameter("Param 2C", "desc", ds2, null, DataSourceParameter.Display.DROPDOWN);
+		DataSourceParameterOption option2c1 = new DataSourceParameterOption("Option 2C1", "", param2c, 0);
+		DataSourceParameterOption option2c2 = new DataSourceParameterOption("Option 2C2", "", param2c, 0);
+		DataSourceParameterOption option2c3 = new DataSourceParameterOption("Option 2C3", "", param2c, 0);
 		
 		session.save(ds2);
 		session.save(param2a);
@@ -225,35 +230,35 @@ public class TestDatabaseLoader {
 		session.save(param2c);
 		session.save(option2c1);
 		session.save(option2c2);
-		session.save(option2c3);
+		session.save(option2c3);*/
 		
 		
 		// Availability of data sources for each seaport
 		List<DataSource> dataSourcesAvailable = new ArrayList<DataSource>();
-		dataSourcesAvailable.add(ds1);
-		dataSourcesAvailable.add(ds2);
+		dataSourcesAvailable.add(dsCsiro);
+		//dataSourcesAvailable.add(ds2);
 		port1.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port1);
 		
 		dataSourcesAvailable = new ArrayList<DataSource>();
-		dataSourcesAvailable.add(ds1);
+		dataSourcesAvailable.add(dsCsiro);
 		port2.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port2);
 		
 		dataSourcesAvailable = new ArrayList<DataSource>();
-		dataSourcesAvailable.add(ds2);
+		dataSourcesAvailable.add(dsCsiro);
 		port3.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port3);
 		
 		dataSourcesAvailable = new ArrayList<DataSource>();
-		dataSourcesAvailable.add(ds1);
-		dataSourcesAvailable.add(ds2);
+		dataSourcesAvailable.add(dsCsiro);
+		//dataSourcesAvailable.add(ds2);
 		port4.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port4);
 		
 		dataSourcesAvailable = new ArrayList<DataSource>();
-		dataSourcesAvailable.add(ds1);
-		dataSourcesAvailable.add(ds2);
+		dataSourcesAvailable.add(dsCsiro);
+		//dataSourcesAvailable.add(ds2);
 		port5.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port5);		
 		
@@ -328,10 +333,10 @@ public class TestDatabaseLoader {
 		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 4)));
 	    DataElementCsiro deCsiro = new DataElementCsiro(date, "CSIRO Data Element Test", true, 0, DisplayType.TABLE, user1wb, csiroDataList);*/
 		List<DataSourceParameterOption> selectedOptions = new ArrayList<DataSourceParameterOption>();
-		selectedOptions.add(option1a3);
-		selectedOptions.add(option1b2);
-		selectedOptions.add(option1c1);
-	    DataElement deCsiro = new DataElement(date, "CSIRO Data Element Test", futureClimateCategory, user1wb, true, 1, ds1, selectedOptions, tableDisplayType);
+		selectedOptions.add(csiroVariableTemperature);
+		selectedOptions.add(mediumEmScn);
+		selectedOptions.add(year2055);
+	    DataElement deCsiro = new DataElement(date, "CSIRO Data Element Test", futureClimateCategory, user1wb, true, 1, dsCsiro, selectedOptions, tableDisplayType);
 	    session.save(deCsiro);
 	    
 	    // CMAR Data Element
@@ -340,12 +345,12 @@ public class TestDatabaseLoader {
 	    DataElementCmar deCmar = new DataElementCmar(date, "CMAR Data Element Test", true, 0, DisplayType.TABLE, user1wb, cmarDataList, true);
 	    session.save(deCmar);*/
 	    
-	    selectedOptions = new ArrayList<DataSourceParameterOption>();
+	    /*selectedOptions = new ArrayList<DataSourceParameterOption>();
 		selectedOptions.add(option2a2);
 		selectedOptions.add(option2b2);
 		selectedOptions.add(option2c2);
 	    DataElement deCmar = new DataElement(date, "CMAR Data Element Test", futureClimateCategory, user1wb, true, 2, ds2, selectedOptions, tableDisplayType);
-	    session.save(deCmar);
+	    session.save(deCmar);*/
 	    
 	    // Engineering Model Data Element
 	    /*DataElementEngineeringModel deEngModel = new DataElementEngineeringModel(date, "Data Element for " + engVar, true, 0, user1wb, engineeringModelDataList);

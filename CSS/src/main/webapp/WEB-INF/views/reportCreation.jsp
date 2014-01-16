@@ -14,16 +14,16 @@
 <%@ page language="java" import="edu.rmit.eres.seaports.model.User" %>
 
 <div class="grid_12">
-	<h2>New Workboard</h2>
+	<h2>New Report</h2>
 	
 	<c:set var="successMessage" scope="request" value="${successMessage}"/>
 	<c:set var="warningMessage" scope="request" value="${warningMessage}"/>
 	<c:set var="errorMessage" scope="request" value="${errorMessage}"/>
 	<jsp:include page="notifications.jsp" />
 	
-	<p class="hint"><i>You have no active workboard. Create a new workboard using the page below, or read the <a href="/public/guidelines#introduction" target="_blank">Climate Smart Seaports User Guide</a> for more information on how to use this tool.</i></p>
+	<!-- <p class="hint"><i>You have no active workboard. Create a new report using the page below, or read the <a href="/public/guidelines#introduction" target="_blank">Climate Smart Seaports User Guide</a> for more information on how to use this tool.</i></p> -->
 	
-	<form:form method="POST" action="/auth/workboard/create?username=${user.username}"  modelAttribute="userstory" >
+	<form:form method="POST" action="/auth/report/create"  modelAttribute="report" >
 	
 	<table class="form" width="100%">
 		<tr>
@@ -56,7 +56,7 @@
 						data-maphilight='{"strokeColor":"000000","fillColor":"0055A8","groupBy":"alt"}' />
 					<!-- Map has been generated using the software MapEdit v3.16 -->
 					<map name="nrm-clusters">	
-						<area class="mapArea" title="East Coast South" shape="poly" coords="565,279,568,281,571,281,574,281,575,279,579,279,581,278,581,283,582,287,581,289,580,292,578,294,579,299,577,302,578,304,576,306,577,307,574,311,573,315,574,318,573,321,572,326,570,331,566,332,566,336,566,339,563,342,560,345,556,345,552,351,549,358,549,360,547,361,545,364,543,365,539,368,535,369,531,371,528,371,527,373,526,377,524,377,524,373,523,370,521,368,524,367,527,367,527,365,529,363,528,360,530,358,530,353,531,351,529,348,529,346,531,345,534,345,534,345,534,343,525,336,527,334,531,329,533,329,537,330,541,329,546,327,550,324,553,324,554,322,550,318,550,314,551,313,552,311,553,309,553,304,556,301,558,297,559,296,559,291,559,287,557,284,561,282" />
+						<area class="mapArea" title="Fiji" shape="poly" coords="565,279,568,281,571,281,574,281,575,279,579,279,581,278,581,283,582,287,581,289,580,292,578,294,579,299,577,302,578,304,576,306,577,307,574,311,573,315,574,318,573,321,572,326,570,331,566,332,566,336,566,339,563,342,560,345,556,345,552,351,549,358,549,360,547,361,545,364,543,365,539,368,535,369,531,371,528,371,527,373,526,377,524,377,524,373,523,370,521,368,524,367,527,367,527,365,529,363,528,360,530,358,530,353,531,351,529,348,529,346,531,345,534,345,534,345,534,343,525,336,527,334,531,329,533,329,537,330,541,329,546,327,550,324,553,324,554,322,550,318,550,314,551,313,552,311,553,309,553,304,556,301,558,297,559,296,559,291,559,287,557,284,561,282" />
 				
 						<area class="mapArea" title="Southern Slopes Vic East" shape="poly" coords="544,364,540,367,538,369,536,368,532,370,528,371,526,377,524,377,524,381,523,384,523,387,524,388,524,390,522,391,522,395,523,397,520,396,517,394,515,392,511,388,509,386,508,387,509,389,507,392,506,394,505,397,506,399,503,401,500,402,497,405,495,407,494,407,493,405,490,403,486,403,483,405,480,407,479,409,480,411,478,411,476,411,475,412,475,414,472,414,470,415,471,416,473,418,472,421,470,423,466,424,465,425,466,426,469,427,472,429,472,430,474,430,476,430,476,432,477,434,480,435,482,433,481,431,484,431,484,429,486,428,488,426,490,423,495,420,500,417,509,415,515,415,523,415,525,414,528,412,530,412,531,409,531,406,529,402,531,398,533,393,534,392,533,391,534,387,537,382,539,379,541,378,543,377,543,375,542,372,544,369,544,367" />
 							

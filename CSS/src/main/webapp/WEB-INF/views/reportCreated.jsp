@@ -17,7 +17,7 @@
 		<h3>How to use your Workboard</h3>
 	
 		<div id="successMessage" class="message success">
-			<h5>Your Workboard has been created !</h5>
+			<h5>Your new report has been created !</h5>
 		</div>
 		
 		<p class="info-paragraph">The Workboard is where data can be collected and reviewed.</p>  
@@ -30,8 +30,8 @@
 	</center>
 	<br />
 	<div align="center">
-		<a href="/auth/workboard/my-workboard">
-			<button id="btnContinueToWorkboard" class="btn btn-icon btn-blue btn-arrow-right" >
+		<a href="/auth/report?id=${report.id}">
+			<button id="btnContinueToReport" class="btn btn-icon btn-blue btn-arrow-right" >
 				<span></span>Continue
 			</button>
 		</a>

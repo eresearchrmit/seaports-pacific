@@ -7,23 +7,17 @@
  */
 package edu.rmit.eres.seaports.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.NoResultException;
+import javax.validation.Valid;
 
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +35,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 
 import edu.rmit.eres.seaports.dao.*;
-import edu.rmit.eres.seaports.helpers.ElementCreationDateComparator;
 import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
-import edu.rmit.eres.seaports.helpers.EngineeringModelHelper;
+import edu.rmit.eres.seaports.helpers.FileTypeHelper;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
 import edu.rmit.eres.seaports.model.*;
 
@@ -69,63 +62,19 @@ public class WorkboardController {
 	private ElementCategoryDao elementCategoryDao;
 	
 	@Autowired
+	private DisplayTypeDao displayTypeDao;
+	
+	@Autowired
+	private DataSourceDao dataSourceDao;
+	
+	@Autowired
+	private DataSourceParameterOptionDao dataSourceParameterOptionDao;
+	
+	@Autowired
 	private ElementDao elementDao;
 
 	@Autowired
-	private AbsVariableDao absVariableDao;
-	
-	@Autowired
-	private AbsDataDao absDataDao;
-	
-	@Autowired
-	private BitreVariableCategoryDao bitreVariableCategoryDao;
-	
-	@Autowired
-	private BitreDataDao bitreDataDao;
-	
-	@Autowired
 	private CsiroDataDao csiroDataDao;
-	
-	@Autowired
-	private CmarDataDao cmarDataDao;
-	
-	@Autowired
-	private CsiroDataBaselineDao csiroDataBaselineDao;
-	
-	@Autowired
-	private PastDataDao pastDataDao;
-	
-	@Autowired
-	private AcornSatStationDao acornSatStationDao;
-	
-	@Autowired
-	private AcornSatDataDao acornSatDataDao;
-	
-	@Autowired
-	private EngineeringModelVariableDao engineeringModelVariableDao;
-	
-	@Autowired
-	private EngineeringModelAssetDao engineeringModelAssetDao;
-	
-	@Autowired
-	private EngineeringModelDataDao engineeringModelDataDao;
-	
-	@Autowired
-	private ClimateEmissionScenarioDao climateEmissionScenarioDao;
-	
-	@Autowired
-	private ClimateModelDao climateModelDao;
-	
-	@Autowired
-	private ClimateParamsDao climateParamsDao;
-	
-	@Autowired
-	private WeatherEventDao weatherEventDao;
-
-	@RequestMapping(value= "/report-created", method = RequestMethod.GET)
-	public String reportCreated(Model model) {
-		return "reportCreated";
-	}
 	
 	@RequestMapping(value= "/my-reports", method = RequestMethod.GET)
 	public String myReports(Model model) {
@@ -144,10 +93,10 @@ public class WorkboardController {
 			return "redirect:/accessDenied";
 		}
 	}
-	
+		
 	@RequestMapping(value= "/list", method = RequestMethod.GET)
 	public ModelAndView getReportList(@RequestParam(value="user",required=true) String username, Model model) {
-		logger.info("Inside getReportList");
+		logger.info("Inside getReportListForUser");
 		
 		ModelAndView mav = new ModelAndView("reportList");
 		try {
@@ -184,6 +133,16 @@ public class WorkboardController {
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			ModelAndView mav = ModelForReport(model, report);
+
+			// Adds empty elements to fill when user creates a new element
+			DataElement newDataElement = new DataElement();
+			mav.addObject("newdataelement", newDataElement);
+			InputElement newInputElement = new InputElement();
+			mav.addObject("newinputelement", newInputElement);
+			
+			return mav;
 		}
 		catch (IllegalArgumentException e) {
 			model.addAttribute("errorMessage", e.getMessage());
@@ -191,75 +150,53 @@ public class WorkboardController {
 		catch (NoResultException e) {
 			model.addAttribute("errorMessage", e.getMessage());
 		}
-		return ModelForReport(model, report);
+		
+		return ModelForReport(model, null);
 	}
 	
 	@RequestMapping(value= "/view", method = RequestMethod.GET)
-	public ModelAndView getReportView(@RequestParam(value="id",required=true) Integer id, Model model) {
-		logger.info("Inside getReportView");
-		
-		ModelAndView mav = getReport(id, model);
-		mav.setViewName("reportView");
-		return mav;
-	}
-	
-	@RequestMapping(value= "/upload", method = RequestMethod.POST)
-	public String uploadfileinWorkboard(
-			@RequestParam(value="file",required=true) MultipartFile uploadfile,
-			@RequestParam(value="id",required=true) Integer reportId, 
-			RedirectAttributes attributes) {
-		logger.info("Inside uploadfileinWorkBoard");
+	public ModelAndView viewReport(@RequestParam(value="id",required=true) Integer id, Model model) {
+		logger.info("Inside viewReport");
 		
 		Report report = null;
-        /*try {*/
-        	report = reportDao.find(reportId);
-        	
-        	if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+		try {
+			report = reportDao.find(id);
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
-        	
-            int lastIndex = uploadfile.getOriginalFilename().lastIndexOf('.');
-        	String fileName = uploadfile.getOriginalFilename().substring(0, lastIndex);
-            String fileExtension = uploadfile.getOriginalFilename().substring(lastIndex + 1);
-            
-            String contentType = uploadfile.getContentType();
-            String[] arrPlainTextFiletypes = {"text/plain", "application/txt", "browser/internal", "text/anytext", "widetext/plain", "widetext/paragraph"};
-            String[] arrJpegFiletypes = {"image/jpeg", "image/jpg", "image/jp_", "application/jpg", "application/x-jpg", "image/pjpeg", "image/pipeg", "image/vnd.swiftview-jpeg","image/x-xbitmap"};
-            String[] arrCsvFiletypes = {"text/comma-separated-values", "text/csv", "application/csv", "application/excel", "application/vnd.ms-excel", "application/vnd.msexcel"};
-            if(ArrayUtils.contains(arrPlainTextFiletypes, contentType) || ArrayUtils.contains(arrJpegFiletypes, contentType) || ArrayUtils.contains(arrCsvFiletypes, contentType)) {
-            	
-            	// TODO: Create a DataElementFile
-            	/*DisplayType displayType = DisplayType.PLAIN;
-            	if (ArrayUtils.contains(arrJpegFiletypes, contentType)) // File is a JPEG
-            		displayType = DisplayType.PICTURE;
-            	else if (ArrayUtils.contains(arrCsvFiletypes, contentType)) // File is a CSV
-            		displayType = DisplayType.TABLE;
-            	DataElementFile dataElement = new DataElementFile(new Date(), fileName, true, 0, displayType, report, fileExtension, uploadfile.getBytes());
-            	dataElementDao.save(dataElement);
-            	report.getDataElements().add(dataElement);*/
-            	
-            	attributes.addFlashAttribute("successMessage", MSG_FILE_UPLOAD_SUCCESS);
-            }
-            else
-            	attributes.addFlashAttribute("errorMessage", ERR_INVALID_FILETYPE);
-        /*}
-        catch (IOException e) {
-        	attributes.addFlashAttribute("errorMessage", ERR_FILE_UPLOAD);
-        }*/
-        
-		return "redirect:/auth/report?id=" + reportId + "#tabs-non-climate-context";
+		}
+		catch (IllegalArgumentException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+		}
+		catch (NoResultException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+		}
+		
+		ModelAndView mav = ModelForReport(model, report);
+		mav.setViewName("reportView");
+		
+		return mav;
+	}
+		
+	@RequestMapping(value="/create", method=RequestMethod.GET) 
+	public ModelAndView createReport(Model model) {
+		logger.info("Inside createReport");
+
+		return ModelForReportCreation(model, null);
 	}
 	
-	@RequestMapping(value="/create", method=RequestMethod.POST) 
-	public ModelAndView createReport(@ModelAttribute("userstory") Report report, Model model) {
-		logger.info("Inside createReport");
+	@RequestMapping(value="/create", method=RequestMethod.POST)
+	public ModelAndView createReport(@ModelAttribute("report") Report report, Model model) {
+		logger.info("Inside createReport - POST");
         
 		try {
 			User user = userDao.find(SecurityHelper.getCurrentlyLoggedInUsername());
-			Report currentReport = reportDao.getWorkboard(user);
+			model.addAttribute("user", user);
+			/*Report currentReport = reportDao.getWorkboard(user);
 			if (currentReport != null) {
 				model.addAttribute("warningMessage", WorkboardController.ERR_ALREADY_CURRENT_WORKBOARD);
 				return ModelForReport(model, currentReport);
-			}
+			}*/
 			
 			if (report.getSeaport() == null || report.getSeaport().getRegion() == null)
 				throw new IllegalArgumentException(WorkboardController.ERR_REGION_NOT_DEFINED);
@@ -277,6 +214,9 @@ public class WorkboardController {
 			report.setCreationDate(new Date());
 			reportDao.save(report);
 			
+			
+			model.addAttribute("report", report);
+			
 			return new ModelAndView("reportCreated");
 		}
 		catch (AccessDeniedException e) {
@@ -293,6 +233,50 @@ public class WorkboardController {
 		}
 		
 		return ModelForReportCreation(model, null);
+	}
+
+	@RequestMapping(value="/save", method=RequestMethod.POST) 
+	public String saveReport(
+			@RequestParam(value="comments",required=false) String[] updatedTexts, 
+			@Valid @ModelAttribute("report") Report updatedReport, 
+			RedirectAttributes attributes) {
+		logger.info("Inside saveReport");
+		
+		Report report = null;
+		try {
+			// Retrieve the original user story
+			report = reportDao.find(updatedReport.getId());
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			// Reorder the data elements in the user story
+			for (Element elem : report.getElements()) {
+				for (Element updatedDataElement : updatedReport.getElements()) {
+					if (elem.getId() == updatedDataElement.getId()) {
+						elem.setPosition(updatedDataElement.getPosition());
+						break;
+					}
+				}
+			}
+			// Save the user story after reordering
+			reportDao.save(report);
+			
+			Collections.sort(report.getElements(), new ElementPositionComparator());
+			
+			attributes.addFlashAttribute("successMessage", MSG_REPORT_SAVED);
+		}
+		catch (IllegalArgumentException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_SAVE_REPORT);
+		}
+		catch (NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_SAVE_REPORT);
+		}
+		
+		if (report != null)
+			return "redirect:/auth/report?id=" + report.getId() + "#tabs-summary";
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 
 	@RequestMapping(value = "/delete",method=RequestMethod.GET) 
@@ -317,12 +301,154 @@ public class WorkboardController {
 			model.addAttribute("errorMessage", e.getMessage());
 		}
 		return ("report");
-	}	
+	}
 	
-	@RequestMapping(value = "/deletedataelement",method=RequestMethod.GET) 
-	public String deleteDataElement(@RequestParam(value="dataelementid",required=true) Integer elementId, 
+	@RequestMapping(value = "/create-data-element",method=RequestMethod.POST) 
+	public String createDataElement(@ModelAttribute("newdataelement") DataElement dataElement, RedirectAttributes attributes, Model model) {
+		logger.info("Inside addDataElement");
+		
+		Report report = null;
+		try {
+			report = reportDao.find(dataElement.getReport().getId());
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+						
+			DisplayType displayType = displayTypeDao.find(dataElement.getDisplayType().getName());
+			ElementCategory category = elementCategoryDao.find(dataElement.getCategory().getName());
+			DataSource dataSource = dataSourceDao.find(dataElement.getDataSource().getName());
+			List<DataSourceParameterOption> options = new ArrayList<DataSourceParameterOption>();
+			for (DataSourceParameterOption selectedOption : dataElement.getSelectedOptions()) {
+				options.add(dataSourceParameterOptionDao.find(selectedOption.getName()));
+			}
+			String title = dataSource.getName() + " Data Element";
+			int insertPosition = dataElement.getPosition() + 1;
+			
+			reorderReportElementsAfterPosition(report, insertPosition);
+			
+			DataElement newElement = new DataElement(new Date(), title, category, report, dataElement.getIncluded(), insertPosition,  dataSource, options, displayType);
+			elementDao.save(newElement);
+						
+			// Redirects to the right tab of the report after creating the element, based on its category
+			attributes.addFlashAttribute("successMessage", MSG_ELEMENT_CREATED);
+			return "redirect:" + redirectToCategory(newElement);
+		}
+		catch (IllegalArgumentException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+		catch (NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+		
+		if (report != null)
+			return "redirect:/auth/report?id=" + report.getId();
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+		
+	@RequestMapping(value = "/create-text-element",method=RequestMethod.POST) 
+	public String createTextElement(@ModelAttribute("newinputelement") InputElement inputElement, 
+			@RequestParam(value="textContent",required=true) String textContent, 
+			RedirectAttributes attributes) {
+		logger.info("Inside addInputElement");
+		
+		Report report = null;
+		try {
+			report = reportDao.find(inputElement.getReport().getId());
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			ElementCategory category = elementCategoryDao.find(inputElement.getCategory().getName());
+			String title = "Analysis Text";
+			byte[] content = textContent.getBytes();
+			int insertPosition = inputElement.getPosition() + 1;
+			
+			reorderReportElementsAfterPosition(report, insertPosition);
+			
+			InputElement newElement = new InputElement(new Date(), title, category, report, inputElement.getIncluded(), insertPosition, inputElement.getContentType(), content);
+			elementDao.save(newElement);
+			
+			return "redirect:" + redirectToCategory(newElement);
+		}
+		catch (IllegalArgumentException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+		catch (NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+		
+		if (report != null)
+			return "redirect:/auth/report?id=" + report.getId();
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+	
+	@RequestMapping(value= "/create-file-element", method = RequestMethod.POST)
+	public String createFileElement(@ModelAttribute("newinputelement") InputElement inputElement, 
+			@RequestParam(value="file",required=true) MultipartFile uploadfile,
+			RedirectAttributes attributes) {
+		logger.info("Inside uploadfileinWorkBoard");
+		
+		Report report = null;
+        try {
+        	report = reportDao.find(inputElement.getReport().getId());
+        	
+        	if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+        	
+        	if (uploadfile == null || uploadfile.isEmpty())
+        		throw new FileUploadException();
+        	
+            int lastIndex = uploadfile.getOriginalFilename().lastIndexOf('.');
+        	String fileName = uploadfile.getOriginalFilename().substring(0, lastIndex);
+            String fileExtension = uploadfile.getOriginalFilename().substring(lastIndex + 1);
+            
+            if(FileTypeHelper.IsFileContentTypeAllowed(uploadfile)) {
+            	
+            	ElementCategory category = elementCategoryDao.find(inputElement.getCategory().getName());
+            	String title = fileName + "." + fileExtension;
+    			int insertPosition = inputElement.getPosition() + 1;
+    			
+    			reorderReportElementsAfterPosition(report, insertPosition);
+    			
+            	InputElement newElement = new InputElement(new Date(), title, category, report, inputElement.getIncluded(), insertPosition, uploadfile.getContentType(), uploadfile.getBytes());
+    			elementDao.save(newElement);
+            	
+            	attributes.addFlashAttribute("successMessage", MSG_FILE_UPLOAD_SUCCESS);
+            	
+            	return "redirect:" + redirectToCategory(newElement);
+            }
+            else
+            	attributes.addFlashAttribute("errorMessage", ERR_INVALID_FILETYPE);
+        }
+        catch (IOException | FileUploadException e) {
+        	attributes.addFlashAttribute("errorMessage", ERR_FILE_UPLOAD);
+        }
+        catch (NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+        
+		if (report != null)
+			return "redirect:/auth/report?id=" + report.getId();
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+	
+	private void reorderReportElementsAfterPosition(Report report, int insertPosition) {
+		// Increment the positions of all the elements after the new one
+		for (Element elem : report.getElements()) {
+			if (elem.getPosition() >= insertPosition)
+				elem.setPosition(elem.getPosition() + 1);
+		}
+		// Save the report after reordering
+		reportDao.save(report);
+	}
+	
+	@RequestMapping(value = "/delete-element",method=RequestMethod.GET) 
+	public String deleteElement(@RequestParam(value="id",required=true) Integer elementId, 
 			RedirectAttributes attributes, Model model) {
-		logger.info("Inside deleteDataElement");
+		logger.info("Inside deleteElement");
 		
 		try {
 			Element element = elementDao.find(elementId);
@@ -333,12 +459,22 @@ public class WorkboardController {
 			
 			// Delete the Data Element if it belongs to the user's report
 			if (report.getMode().equals("active")) {
+				
 				elementDao.delete(element);
+				
+				// Reorder the element in the report to keep consistent positions
 				report.getElements().remove(element);
-				attributes.addFlashAttribute("successMessage", MSG_DATA_ELEMENT_DELETED);
+				int removedPosition = element.getPosition();
+				for (Element elem : report.getElements()) {
+					if (elem.getPosition() >= removedPosition)
+						elem.setPosition(elem.getPosition() - 1);
+				}
+				reportDao.save(report);
+				
+				attributes.addFlashAttribute("successMessage", MSG_ELEMENT_DELETED);
 			}
 			else { // If the Data Element belongs to another report, don't delete
-				attributes.addFlashAttribute("errorMessage", ERR_DELETE_DATA_ELEMENT);
+				attributes.addFlashAttribute("errorMessage", ERR_DELETE_ELEMENT);
 			}
 			// Redirects to the right tab of the report after deletion based on the data element type
 			return "redirect:" + redirectToCategory(element);
@@ -346,7 +482,34 @@ public class WorkboardController {
 		catch (NoResultException e) {
 			attributes.addFlashAttribute("errorMessage", e.getMessage());
 		}
-		return ("redirect:/auth/report/list");
+		return ("redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername());
+	}
+	
+	@RequestMapping(value="/include-element", method=RequestMethod.GET) 
+	public String includeElementToReport(@RequestParam(value="id",required=true) Integer elementId, @RequestParam(value="included",required=true) Boolean included, RedirectAttributes attributes) {
+		logger.info("Inside includeElementToReport");
+		
+		Element element = null;
+		try {
+			element = elementDao.find(elementId);
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			element.setIncluded(included);
+			elementDao.save(element);
+		}
+		catch (IllegalArgumentException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+		catch (NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+ 		
+		if (element != null)
+			return "redirect:" + redirectToCategory(element);
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
 	@RequestMapping(value= "/lock", method = RequestMethod.GET)
@@ -357,16 +520,16 @@ public class WorkboardController {
 		logger.info("Inside changeReportPrivacy");
 		
 		try {
-			Report userStory= reportDao.find(id);
+			Report report= reportDao.find(id);
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
 			if (lock) // true == locked == private
-				userStory.setAccess("private");
+				report.setAccess("private");
 			else // false == unlocked == public
-				userStory.setAccess("public");
-			reportDao.save(userStory);
+				report.setAccess("public");
+			reportDao.save(report);
 		}
 		catch (IllegalArgumentException e) {
 			attributes.addFlashAttribute("errorMessage", ERR_SAVE_REPORT);
@@ -408,9 +571,9 @@ public class WorkboardController {
 		}
 
 		if (report != null)
-			return "redirect:/auth/userstory?id=" + report.getId();
+			return "redirect:/auth/report/view?id=" + report.getId();
 		else
-			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
 	private ModelAndView ModelForReport(Model model, Report report) {
@@ -428,21 +591,39 @@ public class WorkboardController {
 				// List of all the element categories
 		 		List<ElementCategory> allCategories = elementCategoryDao.getAll();
 		 		mav.addObject("allCategories", allCategories);
-				
+		 		
 				// Prepare the input elements
 				List<Element> elements = report.getElements();
 		 		for (Element element : elements) {
 		 			if (element.getClass().equals(InputElement.class)) {
 		 				((InputElement)element).generateStringContent();
 		 			}
-				}
+		 			else if (element.getClass().equals(DataElement.class)) {
+		 				DataElement de = ((DataElement)element);
+		 				
+		 				if (de.getDataSource() instanceof CsiroDataSource)
+		 				{
+		 					CsiroDataSource csiroDataSource = (CsiroDataSource)de.getDataSource();
+		 					csiroDataSource.init(csiroDataDao);
+		 					List<?> data = csiroDataSource.getData(de);
+		 					de.setData(data);
+		 				}
+		 				
+		 				// Instantiate the correct data source
+		 				/*String className = "edu.rmit.eres.seaports.model." + de.getDataSource().getName() + "DataSource";
+		 				Constructor<?> constructor = Class.forName(className).getDeclaredConstructor(de.getDataSource().getClass());
+		 				constructor.setAccessible(true);
+		 				CsiroDataSource ds = (CsiroDataSource) constructor.newInstance(new Object[] { de.getDataSource() });
+		 				ds.init(csiroDataDao);
+		 				List<?> data = ds.getData(de);
+		 				de.setData(data);*/
+		 			}
+		 		}
 		 		
 		 		mav.addObject("elements", elements);
 		 		
 		 		// Empty data element to use as a "New Data Element"
 		 		mav.addObject(new DataElement());
-		 		
-
 		
 		 		// Prepares the various Comboboxes for new data element creation
 		 		/*List<EngineeringModelVariable> chlorideEngineeringModelVariables = engineeringModelVariableDao.getAll("Chloride"); 
@@ -490,18 +671,6 @@ public class WorkboardController {
 	 * @return the address to which the page should be redirected
 	 */
 	private String redirectToCategory(Element element) {
-		
-		// TODO: redirect to the correct category tab
-		/*
-		if (dataElement.getClass().equals(DataElementAbs.class) || dataElement.getClass().equals(DataElementBitre.class) || dataElement.getClass().equals(DataElementFile.class))
-			return "/auth/workboard?user=" + SecurityHelper.getCurrentlyLoggedInUsername() + "#tabs-non-climate-context";
-		else if (dataElement.getClass().equals(DataElementPast.class) || dataElement.getClass().equals(DataElementAcornSat.class))
-			return "/auth/workboard?user=" + SecurityHelper.getCurrentlyLoggedInUsername() + "#tabs-observed-climate";
-		else if (dataElement.getClass().equals(DataElementCsiro.class) || dataElement.getClass().equals(DataElementCmar.class))
-			return "/auth/workboard?user=" + SecurityHelper.getCurrentlyLoggedInUsername() + "#tabs-future-climate";
-		else if (dataElement.getClass().equals(DataElementEngineeringModel.class) || dataElement.getClass().equals(DataElementVulnerability.class))
-			return "/auth/workboard?user=" + SecurityHelper.getCurrentlyLoggedInUsername() + "#tabs-applications";
-		*/
 		return "/auth/report?id=" + element.getReport().getId() + "#tabs-" + element.getCategory().getName().replace(' ', '-');
 	}
 	
@@ -513,29 +682,22 @@ public class WorkboardController {
 	public static final String ERR_REGION_NOT_DEFINED = "Please select a region and a seaport for your workboard";
 	public static final String ERR_PURPOSE_NOT_DEFINED = "Please describe the activity that leads you to use this application";
 	public static final String ERR_RETRIEVE_REPORT = "Could not retrieve the specified report";
-	public static final String ERR_DELETE_DATA_ELEMENT = "The Data Element could not be deleted";
-	public static final String ERR_FILE_UPLOAD = "Unable to upload the file to your workboard";
+	public static final String ERR_DELETE_ELEMENT = "The element could not be deleted";
+	public static final String ERR_FILE_UPLOAD = "Unable to upload the file to the report";
 	public static final String ERR_INVALID_FILETYPE = "This file format is not handled by the application (only text, csv and jpeg files are allowed).";
 	
-	public static final String MSG_ABS_DATA_ADDED = "The ABS data has been added successfully to your workboard";
-	public static final String MSG_BITRE_DATA_ADDED = "The Ports Australia data has been added successfully to your workboard";
-	public static final String MSG_PAST_DATA_ADDED = "The Past data has been added successfully to your workboard";
-	public static final String MSG_ACORNSAT_DATA_ADDED = "The BoM - ACORN-SAT data has been added successfully to your workboard";
-	public static final String MSG_CSIRO_DATA_ADDED = "The CSIRO data has been added successfully to your workboard";
-	public static final String MSG_CMAR_DATA_ADDED = "The CSIRO - CMAR data has been added successfully to your workboard";
-	public static final String MSG_VULNERABILITY_DATA_ADDED = "The Vulnerability has been added successfully to your workboard";
-	public static final String MSG_DATA_ELEMENT_DELETED = "The Data Element was deleted successfully from your Workboard";
-	public static final String MSG_WORKBOARD_SAVED = "Workboard saved";
-	public static final String MSG_FILE_UPLOAD_SUCCESS = "The file was uploaded successfully to your workboard";
-	public static final String MSG_ENG_DATA_ADDED = "The Engineering Model Data has been added successfully to your workboard";
+	public static final String MSG_ELEMENT_CREATED = "The element has been added successfully to your report";
+	public static final String MSG_ELEMENT_DELETED = "The element was deleted successfully from the report";
+	public static final String MSG_FILE_UPLOAD_SUCCESS = "The file was uploaded successfully to the report";
 	
+	public static final String MSG_ENG_DATA_ADDED = "The Engineering Model Data has been added successfully to your workboard";
 	public static final String ERR_UPLOAD_ENG_MODEL = "Unable to upload the engineering model data to your workboard";
 	public static final String ERR_NO_DATA_ENG_MODEL = "No data could be extracted from the provided Excel file";
 	public static final String ERR_NO_DATA_ENG_MODEL_EXAMPLE = "No example data found for the required variable";
 	public static final String ERR_INVALID_FILE_FORMAT = "Invalid file format. The type of the file you tried to upload is not allowed";
 	public static final String ERR_UPLOAD_NO_FILE = "No file received. Please make sure that you have chosen an Excel file to upload, or selected a pre-defined example.";
 	
-	public static final String MSG_REPORTSAVED = "The report has been saved successfully";
+	public static final String MSG_REPORT_SAVED = "The report has been saved successfully";
 	public static final String ERR_SAVE_REPORT = "Error saving the report. Please Try Again";
 	
 	public static final String ERR_PUBLISH_REPORT = "Error publishing the report. Please Try Again";

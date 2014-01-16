@@ -46,10 +46,7 @@ public class ReportController {
 	
 	@Autowired
 	private ElementDao elementDao;
-	
-	@Autowired
-	private CsiroDataBaselineDao csiroDataBaselineDao;
-	
+		
 	/*@RequestMapping(value= "/userstory-created", method = RequestMethod.GET)
 	public String workboardCreated(@RequestParam(value="id",required=true) Integer userstoryId, Model model) {
 		model.addAttribute("userstoryId", userstoryId);

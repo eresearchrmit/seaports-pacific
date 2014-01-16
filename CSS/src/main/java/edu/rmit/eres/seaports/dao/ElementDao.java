@@ -18,7 +18,6 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.helpers.EngineeringModelHelper;
 import edu.rmit.eres.seaports.model.*;
 
 /**
@@ -83,18 +82,37 @@ public class ElementDao {
 	}
 	
 	/**
+	 * Saves a given data element into the database, by adding it or updating it
+	 * @param element: the data element to save in the database
+	 * @return the saved data element
+	 */
+	@Transactional
+	public Element save(DataElement dataElement) throws IllegalArgumentException {
+		if (dataElement == null)
+			throw new IllegalArgumentException();
+		
+		if (dataElement.getId() == 0) {
+			entityManager.persist(dataElement);
+			return dataElement;
+		}
+		else {
+			entityManager.merge(dataElement);
+			return dataElement;
+		}		
+	}
+	
+	/**
 	 * Delete from the database the data element associated to the unique ID
 	 * @param id: the unique ID of the data element to delete
 	 */
 	@Transactional
 	public void delete(Element element) throws IllegalArgumentException {
 		if (element == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException();	
 		
-		// Delete the data element itself
 		Element elem = entityManager.find(Element.class, element.getId());
 		entityManager.remove(elem);
-		
+
 		// TODO: Delete the corresponding Eng Model Data
 		
 		// For Engineering Model Data Element, deletes the corresponding Engineering Model Data when it is not an example

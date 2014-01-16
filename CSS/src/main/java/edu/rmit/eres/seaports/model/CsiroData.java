@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * Class representing variation data from the dataset available from CSIRO. 
@@ -39,11 +38,31 @@ public class CsiroData
 	private int id;
     
 	/**
-	 * The parameters of the computed data (Region, Climate model, Emission Scenario)
+	 * The region to which the data is related
 	 */
 	@ManyToOne
-	@JoinColumn(name="climate_params_id")
-	private ClimateParams parameters;
+	@JoinColumn(name="region_id")
+	private Region region;
+	
+	/**
+	 * The climate model used to compute the data
+	 */
+	@ManyToOne
+	@JoinColumn(name="climate_model_id")
+	private ClimateModel model;
+	
+	/**
+	 * The name of the climate model
+	 */
+	@Column
+	private String modelName;
+	
+	/**
+	 * The CO2 emissions scenario
+	 */
+	@ManyToOne
+	@JoinColumn(name="climate_emission_scenario_id")
+	private ClimateEmissionScenario emissionScenario;
 
 	/**
 	 * The date when this data has been created
@@ -60,8 +79,8 @@ public class CsiroData
 	/**
 	 * The baseline value of the variable
 	 */
-	@Transient
-	private CsiroDataBaseline baseline;
+	@Column
+	private Double baseline;
 	
 	/**
 	 * The year for which year the data is computed
@@ -72,6 +91,7 @@ public class CsiroData
 	/**
 	 * The value of the variation of the variable
 	 */
+	@Column
 	private Double value;
 
 	/**
@@ -84,17 +104,24 @@ public class CsiroData
 	/**
 	 * Constructor of CsiroData
 	 * @param creationDate: the date when this data has been created
-	 * @param parameters: the parameters of the computed data
+	 * @param region: the region to which the data is related
+	 * @param model: the climate model used to compute the data
+	 * @param modelName: the name of the climate model
+	 * @param emissionScenario: the CO2 emissions scenario
 	 * @param variable: the variable that this data represents
 	 * @param year: the year for which the data is computed
 	 * @param value: the value of the data
 	 * @param picture: the picture representing the value
 	 */
-	public CsiroData(Date creationDate, ClimateParams parameters, CsiroVariable variable, int year, Double value) {
+	public CsiroData(Date creationDate, Region region, ClimateModel model, String modelName, ClimateEmissionScenario emissionScenario, CsiroVariable variable, int year, Double baseline, Double value) {
 		setCreationDate(creationDate);
-		setParameters(parameters);
+		setRegion(region);
+		setModel(model);
+		setModelName(modelName);
+		setEmissionScenario(emissionScenario);
 		setVariable(variable);
 		setYear(year);
+		setBaseline(baseline);
 		setValue(value);
 	}
 
@@ -123,19 +150,68 @@ public class CsiroData
 	}
 	
 	/**
-	 * Getter for the parameters of the computed data (Climate model, Emission Scenario, Assessment Year)
-	 * @return: the parameters of the computed data
+	 * Getter for the data's region
+	 * @return the region to which this data is related
 	 */
-	public ClimateParams getParameters() {
-		return parameters;
+	public Region getRegion() {
+		return this.region;
 	}
 	
 	/**
-	 * Setter for the parameters of the computed data (Climate model, Emission Scenario, Assessment Year)
-	 * @param parameters: the new parameters of the computed data
+	 * Setter for the data's region
+	 * @param region: the new region to which this data is related
 	 */
-	public void setParameters(ClimateParams parameters) {
-		this.parameters = parameters;
+	public void setRegion(Region region) {
+		this.region = region;
+	}
+	
+	/**
+	 * Getter for the climate model used to compute the data
+	 * @return the climate model used to compute the data
+	 */
+	public ClimateModel getModel() {
+		return this.model;
+	}
+	
+	/**
+	 * Setter for the climate model used to compute the data
+	 * @param modelName: the new climate model used to compute the data
+	 */
+	public void setModel(ClimateModel model) {
+		this.model = model;
+	}
+	
+	/**
+	 * Getter for the name of the climate model within the region
+	 * @return the name of the climate model within the region
+	 */
+	public String getModelName() {
+		return this.modelName;
+	}
+
+	/**
+	 * Setter for the name of the climate model within the region
+	 * @param modelName: the new name of the climate model within the region 
+	 */
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	
+	/**
+	 * Getter for the emission scenario
+	 * @return the emission scenario
+	 */
+	public ClimateEmissionScenario getEmissionScenario() {
+		return this.emissionScenario;
+	}
+	
+
+	/**
+	 * Setter for the emission scenario
+	 * @param emissionScenario: the new emission scenario
+	 */
+	public void setEmissionScenario(ClimateEmissionScenario emissionScenario) {
+		this.emissionScenario = emissionScenario;
 	}
 	
 	/**
@@ -158,7 +234,7 @@ public class CsiroData
 	 * Getter for the baseline value of the variable
 	 * @return: the current baseline value of the variable
 	 */
-	public CsiroDataBaseline getBaseline() {
+	public Double getBaseline() {
 		return baseline;
 	}
 	
@@ -166,7 +242,7 @@ public class CsiroData
 	 * Getter for the baseline value of the variable
 	 * @param value: the new baseline value of the variable
 	 */
-	public void setBaseline(CsiroDataBaseline baseline) {
+	public void setBaseline(Double baseline) {
 		this.baseline = baseline;
 	}
 	
@@ -200,5 +276,9 @@ public class CsiroData
 	 */
 	public void setValue(Double value) {
 		this.value = value;
+	}
+	
+	public String toString() {
+		return "Csiro Data: " + this.region.getName() + ", "+ this.modelName + "(" + this.model.getName() + "), " + this.emissionScenario.getName() + ", " + this.year + ", " + this.value;
 	}
 }

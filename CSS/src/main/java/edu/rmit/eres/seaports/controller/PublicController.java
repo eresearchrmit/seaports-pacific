@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.rmit.eres.seaports.dao.CsiroDataBaselineDao;
 import edu.rmit.eres.seaports.dao.UserDao;
 import edu.rmit.eres.seaports.dao.ReportDao;
 import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
@@ -53,10 +52,7 @@ public class PublicController {
 	
 	@Autowired
 	private ReportDao userStoryDao;
-	
-	@Autowired
-	private CsiroDataBaselineDao csiroDataBaselineDao;
-	
+		
 	private void tryGetLoggedInUser(Model model) {
 		try {
 			model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));

@@ -7,6 +7,8 @@
  */
 package edu.rmit.eres.seaports.dao;
 
+//import helpers.EngineeringModelHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +20,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.helpers.EngineeringModelHelper;
-import edu.rmit.eres.seaports.model.*;
+import edu.rmit.eres.seaports.model.Variable;
 
 /**
  * Data Access Object for the CSIRO variable
@@ -89,19 +90,18 @@ public class CsiroVariableDao {
 	 * Returns a list of all the different engineering model variables (static listing, not actually querying the database)
 	 * @return the list of all the different engineering model variables in the Database
 	 */
-	public List<Variable> getEngineeringModelVariables() {
+	/*public List<Variable> getEngineeringModelVariables() {
 		List<Variable> results = new ArrayList<Variable>();
 		
-		// TODO: Get the Engineering Model Variables list
-		/*List<Variable> allVars = getAll();
+		List<Variable> allVars = getAll();
 		for (Variable var : allVars) {
 			if (EngineeringModelHelper.ENGINEERING_MODEL_VARIABLES.containsKey("Chloride|" + var.getName())
 				|| EngineeringModelHelper.ENGINEERING_MODEL_VARIABLES.containsKey("Carbonation|" + var.getName()))
 				results.add(var);
-		}*/
+		}
 		
 		return results;
-	}
+	}*/
 	
 	// Information, success, warning and error messages
 	public static final String ERR_NO_RESULT = "No climate variable found corresponding to the specified name";

@@ -7,6 +7,8 @@
  */
 package edu.rmit.eres.seaports.controller;
 
+import java.util.Date;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -28,6 +30,8 @@ import edu.rmit.eres.seaports.controller.PublicController;
 import edu.rmit.eres.seaports.controller.ReportController;
 import edu.rmit.eres.seaports.controller.WorkboardController;
 import edu.rmit.eres.seaports.dao.ReportDao;
+import edu.rmit.eres.seaports.model.ElementCategory;
+import edu.rmit.eres.seaports.model.InputElement;
 import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.Seaport;
 import edu.rmit.eres.seaports.model.Report;
@@ -58,12 +62,20 @@ public class AnonymousControllerTest {
 	@Autowired
 	private  ReportDao userStoryDao;
 	
+	InputElement inputElement;
+	
 	/**
 	 * Method executed before starting the unit tests to prepared the data
 	 */
 	@Before
 	public void prepareData() {
 		SecurityContextHolder.getContext().setAuthentication(null);
+		
+		// Dummy Input Element to pass for file upload test
+		Report report = new Report();
+		report.setId(1);
+		inputElement = new InputElement(new Date(), null, new ElementCategory("Observed climate"), report, true, 1, null);
+		inputElement.setId(0);
 	}
 
 	/* --------------------------------------------------------------------- */
@@ -136,7 +148,7 @@ public class AnonymousControllerTest {
 	public void uploadfileinWorkboardTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		MockMultipartFile mockMultipartFileText = new MockMultipartFile("content", "test.css", "text/css", "Hello World".getBytes());
-		workboardController.uploadfileinWorkboard(mockMultipartFileText, 1, redirectAttributes);
+		workboardController.createFileElement(inputElement, mockMultipartFileText, redirectAttributes);
 	}
 
 	/*@Test(expected = AccessDeniedException.class)
@@ -195,7 +207,7 @@ public class AnonymousControllerTest {
 	public void deleteDataElementFromUserStoryTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		workboardController.deleteDataElement(1, redirectAttributes, model);
+		workboardController.deleteElement(1, redirectAttributes, model);
 	}
 	
 	

@@ -36,7 +36,7 @@
 	<c:set var="errorMessage" scope="request" value="${errorMessage}"/> 			
 	<jsp:include page="notifications.jsp" />
 	
-	<c:if test="${not empty reportsList}">
+	<c:if test="${not empty reportList}">
 		<table class="data display datatable" id="tblReportList">
 			<thead>
 				<tr>
@@ -48,7 +48,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${reportsList}" var="report" varStatus="status"> 
+				<c:forEach items="${reportList}" var="report" varStatus="status"> 
 				<tr>
 					<td><c:out value="${report.name}" /></td>
 					<td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>

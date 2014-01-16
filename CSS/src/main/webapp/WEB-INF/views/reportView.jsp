@@ -22,7 +22,7 @@
 
 <div class="grid_12">
 
-	<c:if test="${not empty userstory}">	
+	<c:if test="${not empty report}">	
 		<a href="javascript: window.print()" id="btnPrint" style="margin-right: 10px; float:right">
 			<button class="btnAddDataElement btn btn-icon btn-blue btn-print">
 				<span></span>Print
@@ -38,8 +38,8 @@
 		</c:if>
 		<div class="clear"></div>
 		<center>
-			<h2><c:out value="${userstory.name}" /></h2>
-			<h4><c:out value="${userstory.seaport.region.name}" /> region</h4>
+			<h2><c:out value="${report.name}" /></h2>
+			<h4><c:out value="${report.seaport.region.name}" /> region</h4>
 		</center>
 	</c:if>
 	
@@ -57,82 +57,51 @@
 		</div>
 	</c:if>
 	
-	<c:if test="${not empty userstory}">
-	<p class="report-content">${userstory.fullDescription}</p> 
+	<c:if test="${not empty report}">
+	<p class="report-content">${report.fullDescription}</p>
 	<br/><br/><br/>
 	
-	<c:if test="${not empty userstory.dataElements}">
+	<c:if test="${not empty report.elements}">
 	<div style="text-align:left; width:90%; margin-right:auto;margin-left:auto">	 	
 	 	<!-- Iteration on every element in the User Story -->
-	 	<c:forEach items="${userstory.dataElements}" var="dataelement" varStatus="status">
+	 	<c:forEach items="${report.elements}" var="element" varStatus="status">
 			
-			<c:set var="dataelement" scope="request" value="${dataelement}"/>
-	 		<c:set var="dataElementLoopIndex" scope="request" value="${status.index}"/>
+			<c:set var="element" scope="request" value="${element}"/>
+	 		<c:set var="elementLoopIndex" scope="request" value="${status.index}"/>
 	 			
-			<c:if test="${dataelement.included == true}">
-			
-				<!-- Text comment data element -->
-			 	<c:if test="${dataelement.class.simpleName == 'DataElementText'}">
-					<c:out value="${dataelement.text}" escapeXml="false" />
-               	</c:if>
-			
-				<%-- ABS Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementAbs'}">
- 					<jsp:include page="dataElementAbs.jsp" />
+			<c:if test="${element.included == true}">
+				<c:if test="${element.class.simpleName == 'DataElement'}">
+ 					DATA
  				</c:if>
- 				
- 				<%-- BITRE Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementBitre'}">
- 					<jsp:include page="dataElementBitre.jsp" />
- 				</c:if>
-			
-				<%-- Past Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementPast'}">
- 					<jsp:include page="dataElementPast.jsp" />
- 				</c:if>
- 				
- 				<%-- Acorn-Sat Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementAcornSat'}">
- 					<jsp:include page="dataElementAcornSat.jsp" />
- 				</c:if>
-				
-				<%-- CSIRO Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementCsiro'}">
- 					<jsp:include page="dataElementCsiro.jsp" />
- 				</c:if>
- 				
- 				<%-- CMAR Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementCmar'}">
- 					<jsp:include page="dataElementCmar.jsp" />
- 				</c:if>
- 				
- 				<%-- Engineering Model Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementEngineeringModel'}">
- 					<jsp:include page="dataElementEngineeringModel.jsp" />
- 				</c:if>
- 				
- 				<%-- Vulnerability Data Element --%>
- 				<c:if test="${dataelement.class.simpleName == 'DataElementVulnerability'}">
- 					<jsp:include page="dataElementVulnerability.jsp" />
- 				</c:if>
- 				
- 				<%-- File Data Element, display a picture if JPEG, textarea with content otherwise --%>
-				<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">
- 					<jsp:include page="dataElementFile.jsp" />
-				</c:if>
-				
+				<c:if test="${element.class.simpleName == 'InputElement'}">
+ 					<c:choose>
+						<c:when test="${element.contentType == 'jpg' || element.contentType == 'jpeg'}">
+							<ul class="prettygallery clearfix">
+								<li>
+									<a href="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" target="_blank" rel="prettyPhoto" title="${element.name}">
+										<img name="${element.name}" src="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" style="max-width:100%; max-height: 500px;" />
+									</a>
+						    	</li>
+							</ul>
+					    </c:when>
+					
+						<c:otherwise>
+							<c:out value="${element.stringContent}" escapeXml="false" />
+						</c:otherwise>
+					</c:choose>
+ 					</c:if>				
 				<br /><br /><br /><br />
-		</c:if>
+			</c:if>
 		</c:forEach>
 	</div>
-	<div class="report-license" style="margin: 0 25px">
+	<div class="report-license" style="margin: 25px 25px">
 		<div style="float:left">
 			<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/" id="lnkCCLicence" target="_blank">
 				<img src="<c:url value="/resources/img/help/cc-by-nc-nd.png" />" title="View the full licence statement" />
 			</a> 
 		</div>	
 		<div style="float:left; padding-left: 5px">
-			&copy; ${userstory.owner.firstname} ${userstory.owner.lastname} <fmt:formatDate value="${userstory.publishDate}" pattern="yyyy" />
+			&copy; ${report.owner.firstname} ${report.owner.lastname} <fmt:formatDate value="${report.publishDate}" pattern="yyyy" />
 			<br />
 			<a href="/public/terms-of-service#license" id="lnkLicence" target="_blank">This report is licensed under a Creative Commons Attribution license.</a><br />
 		</div>

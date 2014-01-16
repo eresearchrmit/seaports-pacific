@@ -18,7 +18,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.model.*;
+import edu.rmit.eres.seaports.model.ClimateEmissionScenario;
 
 /**
  * Data Access Object for the Climate Emission Scenario
