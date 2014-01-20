@@ -7,6 +7,7 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +27,8 @@ import org.hibernate.annotations.LazyCollectionOption;
  * @since 11th Jan. 2013
  */
 @Entity
-public class DataElement extends Element {
-	
+public class DataElement extends Element implements Serializable {
+
 	/**
 	 * The source providing data for this data element
 	 */

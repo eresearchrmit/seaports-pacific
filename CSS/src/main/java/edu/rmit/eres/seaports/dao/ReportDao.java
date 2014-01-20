@@ -21,7 +21,7 @@ import edu.rmit.eres.seaports.model.Report;
 import edu.rmit.eres.seaports.model.User;
 
 /**
- * Data Access Object for the user stories (Workboard and Reports)
+ * Data Access Object for the reports
  * @author Guillaume Prevost
  */
 @Repository
@@ -44,7 +44,7 @@ public class ReportDao {
 	public Report find(Integer id) throws NoResultException {
 		Report report = entityManager.find(Report.class, id);
 		if (report == null)
-			throw new NoResultException(ERR_NO_SUCH_USERSTORY);
+			throw new NoResultException(ERR_NO_SUCH_REPORT);
 		return report;
 	}
 	
@@ -200,7 +200,7 @@ public class ReportDao {
 	/**
 	 * Perform a query and check the result list is of the right type
 	 * @param query: the query to execute
-	 * @return the list of user stories returned by the query and checked
+	 * @return the list of reports returned by the query and checked
 	 */
 	private List<Report> performQueryAndCheckResultList(Query query) {
 		try {
@@ -217,5 +217,5 @@ public class ReportDao {
 	}
 	
 	// Information, success, warning and error messages
-	public static final String ERR_NO_SUCH_USERSTORY = "No report could be found with the specified parameters.";
+	public static final String ERR_NO_SUCH_REPORT = "No report could be found with the specified parameters.";
 }

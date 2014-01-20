@@ -27,7 +27,7 @@
 	
 	<li class="ic-browse${requestScope['javax.servlet.forward.servlet_path'] == '/public/reports/list' 
 		|| requestScope['javax.servlet.forward.servlet_path'] == '/public/reports/view' ? ' current' : ''}">
-		<a href="/public/reports/list"><span>Published Reports</span></a>
+		<a href="/public/published-report/list"><span>Published Reports</span></a>
 	</li>
 	
 	<li class="ic-info

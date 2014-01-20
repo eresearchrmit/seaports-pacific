@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CsiroVariable")
 public class CsiroVariable extends Variable {
+	
 	/**
 	 * Default constructor of CsiroVariable
 	 */

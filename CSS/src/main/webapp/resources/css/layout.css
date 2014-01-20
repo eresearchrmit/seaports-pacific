@@ -768,8 +768,6 @@ tr.even {
 tr.odd:hover, tr.even:hover { background:#f6f6f6; }
 tr.odd td, tr.even td{ padding-left:5px; }
 
-
-
 .clear {
 	clear: both;
 }
@@ -895,6 +893,25 @@ th.center, td.center {
 
 .gallery-sand .sorting{background-color:white !important;}
 
+.element-container {
+	text-align:left;
+	width:90%;
+	margin-right:auto;
+	margin-left:auto;
+}
+
+.element-container .element {
+	margin: 25px 0px;
+}
+
+.report-license {
+	margin: 25px 25px;
+}
+
+.report-license .license-text {
+	padding-left: 5px
+}
+
 img.dataelementIllustrationPicture {
 	margin-top:10px;
 	background:#E6F0F3;
@@ -916,6 +933,10 @@ p.report-content {
 p.info-paragraph {
 	text-align:justify;
 	font-size: 12pt;
+}
+
+.centered {
+	text-align:center;
 }
 
 .justified {

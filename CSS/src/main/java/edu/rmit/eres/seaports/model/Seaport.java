@@ -7,6 +7,7 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 @Table(name = "Seaport")
-public class Seaport {
+public class Seaport implements Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;
 	

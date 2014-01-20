@@ -7,37 +7,47 @@
  */
 package edu.rmit.eres.seaports.controller;
 
-import java.util.Date;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 
 import edu.rmit.eres.seaports.dao.*;
 import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
+import edu.rmit.eres.seaports.helpers.FileTypeHelper;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
 import edu.rmit.eres.seaports.model.*;
 
 @Controller
-@RequestMapping("auth/userstory")
+@RequestMapping("auth/report")
 public class ReportController {
-		
+	
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
-
+	
 	@Autowired
 	private UserDao userDao;
 	
@@ -45,22 +55,58 @@ public class ReportController {
 	private ReportDao reportDao;
 	
 	@Autowired
-	private ElementDao elementDao;
-		
-	/*@RequestMapping(value= "/userstory-created", method = RequestMethod.GET)
-	public String workboardCreated(@RequestParam(value="id",required=true) Integer userstoryId, Model model) {
-		model.addAttribute("userstoryId", userstoryId);
-		return "userstoryCreated";
-	}*/
+	private ReportPublicationDao reportPublicationDao;
 	
+	@Autowired
+	private RegionDao regionDao;
+	
+	@Autowired
+	private SeaportDao seaportDao;
+	
+	@Autowired
+	private ElementCategoryDao elementCategoryDao;
+	
+	@Autowired
+	private DisplayTypeDao displayTypeDao;
+	
+	@Autowired
+	private DataSourceDao dataSourceDao;
+	
+	@Autowired
+	private DataSourceParameterOptionDao dataSourceParameterOptionDao;
+	
+	@Autowired
+	private ElementDao elementDao;
+
+	@Autowired
+	private CsiroDataDao csiroDataDao;
+	
+	@RequestMapping(value= "/my-reports", method = RequestMethod.GET)
+	public String myReports(Model model) {
+		logger.info("Inside myReports");
+		
+		try {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserDetails userDetails = null;
+			if (principal instanceof UserDetails) {
+			  userDetails = (UserDetails) principal;
+			}
+			
+			return "redirect:/auth/report/list?user=" + userDetails.getUsername();
+		}
+		catch (NullPointerException ex) {
+			return "redirect:/accessDenied";
+		}
+	}
+		
 	@RequestMapping(value= "/list", method = RequestMethod.GET)
 	public ModelAndView getReportList(@RequestParam(value="user",required=true) String username, Model model) {
-		logger.info("Inside getReportList");
+		logger.info("Inside getReportListForUser");
 		
 		ModelAndView mav = new ModelAndView("reportList");
 		try {
-			User curentUser = userDao.find(SecurityHelper.getCurrentlyLoggedInUsername());
-			mav.addObject("user", curentUser);
+			User currentUser = userDao.find(SecurityHelper.getCurrentlyLoggedInUsername());
+			mav.addObject("user", currentUser);
 			
 			// Retrieve user
 			User user = userDao.find(username);
@@ -70,21 +116,23 @@ public class ReportController {
 			
 			// Retrieve user's Stories
 			List<Report> reportsList = reportDao.getReports(user);
-			mav.addObject("userStoriesList", reportsList);
+			mav.addObject("reportList", reportsList);
 			
 			// Define a title
-	 		model.addAttribute("listingTitle", "My Reports");
+			if (user.getUsername().equals(currentUser.getUsername()))
+				model.addAttribute("listingTitle", "My Reports");
+			else
+				model.addAttribute("listingTitle", user.getFirstname() + user.getLastname() + "'s Reports");
 		}
 		catch (NoResultException e) {
-			model.addAttribute("errorMessage", ERR_RETRIEVE_USERSTORY_LIST);
+			model.addAttribute("errorMessage", ERR_RETRIEVE_REPORT_LIST);
 		}
 
 		return mav;
 	}
 	
-	@ModelAttribute("userstory")
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView getReport(@RequestParam(value="id",required=true) Integer id, Model model) {
+	public ModelAndView getReport(@RequestParam(value="id",required=true) int id, Model model) {
 		logger.info("Inside getReport");
 		
 		Report report = null;
@@ -93,108 +141,124 @@ public class ReportController {
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			ModelAndView mav = ModelForReport(model, report);
+
+			// Adds empty elements to fill when user creates a new element
+			DataElement newDataElement = new DataElement();
+			mav.addObject("newdataelement", newDataElement);
+			InputElement newInputElement = new InputElement();
+			mav.addObject("newinputelement", newInputElement);
+			
+			return mav;
 		}
-		catch (IllegalArgumentException e) {
+		catch (IllegalArgumentException | NoResultException e) {
 			model.addAttribute("errorMessage", e.getMessage());
 		}
-		catch (NoResultException e) {
-			model.addAttribute("errorMessage", e.getMessage());
-		}
-		return ModelForReport(model, report);
+		
+		return ModelForReport(model, null);
 	}
 	
 	@RequestMapping(value= "/view", method = RequestMethod.GET)
-	public ModelAndView getReportView(@RequestParam(value="id",required=true) Integer id, Model model) {
-		logger.info("Inside getReportView");
+	public ModelAndView viewReport(@RequestParam(value="id",required=true) Integer id, Model model) {
+		logger.info("Inside viewReport");
 		
-		ModelAndView mav = getReport(id, model);
+		Report report = null;
+		try {
+			report = reportDao.find(id);
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+		}
+		catch (IllegalArgumentException | NoResultException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+		}
+		
+		ModelAndView mav = ModelForReport(model, report);
 		mav.setViewName("reportView");
+		
 		return mav;
 	}
-
-	@RequestMapping(value= "/lock", method = RequestMethod.GET)
-	public String changeReportPrivacy(
-			@RequestParam(value="id",required=true) Integer id, 
-			@RequestParam(value="lock",required=true) Boolean lock, 
-			RedirectAttributes attributes) {
-		logger.info("Inside getUserStoriesList !");
 		
-		try {
-			Report userStory= reportDao.find(id);
-			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
-    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
-			
-			if (lock) // true == locked == private
-				userStory.setAccess("private");
-			else // false == unlocked == public
-				userStory.setAccess("public");
-			reportDao.save(userStory);
-		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_SAVE_USERSTORY);
-		}
-		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_SAVE_USERSTORY);
-		}
-		return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
-	}
-
 	@RequestMapping(value="/create", method=RequestMethod.GET) 
-	public ModelAndView createReport(@RequestParam(value="id",required=true) Integer id, Model model) {
+	public ModelAndView createReport(Model model) {
 		logger.info("Inside createReport");
-		
-		Report userStory = null;
-		try {
-			// Retrieve the user story
-			userStory = reportDao.find(id);
-			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
-    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
-			
-			if (!(userStory.getMode().equals("published"))) {
-				userStory.setMode("passive");
-				reportDao.save(userStory);
-				
-				// Initial ordering of the data elements in the user story
-				int i = 1;
-				for (Element elem : userStory.getElements()) {
-					elem.setPosition(i);
-					i++;
-				}
-				reportDao.save(userStory);
-				model.addAttribute("userstory", userStory);
-				return new ModelAndView("userstoryCreated");
-			}
-			else
-				model.addAttribute("errorMessage", ERR_STORY_ALREADY_PUBLISHED);
-		}
-		catch (IllegalArgumentException e) {
-			model.addAttribute("errorMessage", ERR_SAVE_USERSTORY);
+
+		try {		
+			User user = userDao.find(SecurityHelper.getCurrentlyLoggedInUsername());
+			return ModelForReportCreation(model, user);
 		}
 		catch (NoResultException e) {
-			model.addAttribute("errorMessage", ERR_SAVE_USERSTORY);
+			model.addAttribute("errorMessage", e.getMessage());
 		}
-		return ModelForReport(model, userStory);
+		
+		return ModelForReportCreation(model, null);
 	}
 	
+	@RequestMapping(value="/create", method=RequestMethod.POST)
+	public ModelAndView createReport(@ModelAttribute("report") Report report, Model model) {
+		logger.info("Inside createReport - POST");
+        
+		try {
+			User user = userDao.find(SecurityHelper.getCurrentlyLoggedInUsername());
+			model.addAttribute("user", user);
+			/*Report currentReport = reportDao.getWorkboard(user);
+			if (currentReport != null) {
+				model.addAttribute("warningMessage", WorkboardController.ERR_ALREADY_CURRENT_WORKBOARD);
+				return ModelForReport(model, currentReport);
+			}*/
+			
+			if (report.getSeaport() == null || report.getSeaport().getRegion() == null)
+				throw new IllegalArgumentException(ReportController.ERR_REGION_NOT_DEFINED);
+			
+			if (report.getPurpose() == null || report.getPurpose().length() <= 0)
+				throw new IllegalArgumentException(ReportController.ERR_PURPOSE_NOT_DEFINED);
+			
+			Seaport seaport = seaportDao.find(report.getSeaport().getCode());
+			
+			report.setOwner(user);
+			report.setSeaport(seaport);
+			report.setMode("active");
+			report.setAccess("private");
+			report.setElements(new ArrayList<Element>());
+			report.setCreationDate(new Date());
+			reportDao.save(report);
+			
+			
+			model.addAttribute("report", report);
+			
+			return new ModelAndView("reportCreated");
+		}
+		catch (AccessDeniedException e) {
+			throw e;
+		}
+		catch (IllegalArgumentException | NoResultException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+		}
+		catch (Exception e) {
+			model.addAttribute("errorMessage", ERR_CREATE_REPORT + ". Details: " + e.getMessage());
+		}
+		
+		return ModelForReportCreation(model, null);
+	}
+
 	@RequestMapping(value="/save", method=RequestMethod.POST) 
 	public String saveReport(
 			@RequestParam(value="comments",required=false) String[] updatedTexts, 
-			@Valid @ModelAttribute("userstory") Report updatedReport, 
+			@Valid @ModelAttribute("report") Report updatedReport, 
 			RedirectAttributes attributes) {
 		logger.info("Inside saveReport");
 		
-		Report userStory = null;
+		Report report = null;
 		try {
 			// Retrieve the original user story
-			userStory = reportDao.find(updatedReport.getId());
+			report = reportDao.find(updatedReport.getId());
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
 			// Reorder the data elements in the user story
-			for (Element elem : userStory.getElements()) {
+			for (Element elem : report.getElements()) {
 				for (Element updatedDataElement : updatedReport.getElements()) {
 					if (elem.getId() == updatedDataElement.getId()) {
 						elem.setPosition(updatedDataElement.getPosition());
@@ -203,110 +267,176 @@ public class ReportController {
 				}
 			}
 			// Save the user story after reordering
-			reportDao.save(userStory);
+			reportDao.save(report);
 			
-			Collections.sort(userStory.getElements(), new ElementPositionComparator());
+			Collections.sort(report.getElements(), new ElementPositionComparator());
 			
-			// TODO: Update content of the text data elements if they have been changed
-			/*if (updatedTexts != null) {
-				int i = 0;
-				for (DataElement dataElement : userStory.getDataElements()) {
-					if (dataElement.getClass().equals(DataElementText.class)) {
-						DataElementText dataElementText = (DataElementText)(dataElement);
-						if (updatedTexts.length > i && updatedTexts[i] != null && !updatedTexts[i].equals(dataElementText.getText())) {
-							dataElementText.setText(updatedTexts[i]);
-							dataElementDao.save(dataElementText);
-						}
-						i++;
-					}
-				}
-			}*/
-			attributes.addFlashAttribute("successMessage", MSG_USERSTORY_SAVED);
+			attributes.addFlashAttribute("successMessage", MSG_REPORT_SAVED);
 		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_SAVE_USERSTORY);
-		}
-		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_SAVE_USERSTORY);
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_SAVE_REPORT);
 		}
 		
-		if (userStory != null)
-			return "redirect:/auth/userstory?id=" + userStory.getId();
+		if (report != null)
+			return "redirect:/auth/report?id=" + report.getId() + "#tabs-summary";
 		else
-			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
-	
+
 	@RequestMapping(value = "/delete",method=RequestMethod.GET) 
-	public String deleteReport(@RequestParam(value="id", required=true) Integer userStoryId, RedirectAttributes attributes) {
+	public String deleteReport(@RequestParam(value="id", required=true) Integer reportId, Model model) {
 		logger.debug("Inside deleteReport");
 		
 		try {
-			Report userStory = reportDao.find(userStoryId);
+			model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
 			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(userStory))) // Security: ownership check
-    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			Report report = reportDao.find(reportId);
 			
-			reportDao.delete(userStory);
-			attributes.addFlashAttribute("successMessage", MSG_USERSTORY_DELETED);
-		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_DELETE_USERSTORY);
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+				throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			User user = report.getOwner();
+			reportDao.delete(report); // Deletes the Report
+			
+			return "redirect:/auth/report/list?user=" + user.getUsername(); // returns to the list of reports
+			//return ModelForReportCreation(model, user); // Starts the creation of a new report
 		}
 		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_DELETE_USERSTORY);
+			model.addAttribute("errorMessage", ReportController.ERR_DELETE_REPORT);
 		}
-		
-		return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
-	}	
-
-	@RequestMapping(value="/addText", method=RequestMethod.POST) 
-	public String addTextToReport(@RequestParam(value="userStoryId",required=true) Integer id, 
-			@RequestParam(value="textContent",required=true) String textContent, 
-			@RequestParam(value="textInsertPosition",required=true) String insertTextAfter, RedirectAttributes attributes) {
-		logger.info("Inside saveReport");
+		return ("report");
+	}
+	
+	@RequestMapping(value = "/create-data-element",method=RequestMethod.POST) 
+	public String createDataElement(@ModelAttribute("newdataelement") DataElement dataElement, RedirectAttributes attributes, Model model) {
+		logger.info("Inside addDataElement");
 		
 		Report report = null;
 		try {
-			report = reportDao.find(id);
+			report = reportDao.find(dataElement.getReport().getId());
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+						
+			DisplayType displayType = displayTypeDao.find(dataElement.getDisplayType().getName());
+			ElementCategory category = elementCategoryDao.find(dataElement.getCategory().getName());
+			DataSource dataSource = dataSourceDao.find(dataElement.getDataSource().getName());
+			List<DataSourceParameterOption> options = new ArrayList<DataSourceParameterOption>();
+			for (DataSourceParameterOption selectedOption : dataElement.getSelectedOptions()) {
+				options.add(dataSourceParameterOptionDao.find(selectedOption.getName()));
+			}
+			String title = dataSource.getName() + " Data Element";
+			int insertPosition = dataElement.getPosition() + 1;
+			
+			reorderReportElementsAfterPosition(report, insertPosition);
+			
+			DataElement newElement = new DataElement(new Date(), title, category, report, true, insertPosition,  dataSource, options, displayType);
+			elementDao.save(newElement);
+						
+			// Redirects to the right tab of the report after creating the element, based on its category
+			attributes.addFlashAttribute("successMessage", MSG_ELEMENT_CREATED);
+			return "redirect:" + redirectToCategory(newElement);
+		}
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+		
+		if (report != null)
+			return "redirect:/auth/report?id=" + report.getId();
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+		
+	@RequestMapping(value = "/create-text-element",method=RequestMethod.POST) 
+	public String createTextElement(@ModelAttribute("newinputelement") InputElement inputElement, 
+			@RequestParam(value="textContent",required=true) String textContent, 
+			RedirectAttributes attributes) {
+		logger.info("Inside addInputElement");
+		
+		Report report = null;
+		try {
+			report = reportDao.find(inputElement.getReport().getId());
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			Integer newTextPosition = Integer.parseInt(insertTextAfter) + 1;
+			ElementCategory category = elementCategoryDao.find(inputElement.getCategory().getName());
+			String title = "Analysis Text";
+			byte[] content = textContent.getBytes();
+			int insertPosition = inputElement.getPosition() + 1;
 			
-			// Increment the positions of all data elements after the new one
-			int i = 0;
-			for (Element elem : report.getElements()) {
-				if (elem.getPosition() >= newTextPosition)
-					elem.setPosition(elem.getPosition() + 1);
-				i++;
-			}
-			// Save the user story after reordering
-			reportDao.save(report);
+			reorderReportElementsAfterPosition(report, insertPosition);
 			
-			// TODO: Add Text Data Element
-			/*DataElementText newTextItem = new DataElementText(new Date(), "Report Text", true, newTextPosition, DisplayType.PLAIN, userStory, textContent);
-			dataElementDao.save(newTextItem);*/
+			InputElement newElement = new InputElement(new Date(), title, category, report, true, insertPosition, "text/plain", content);
+			elementDao.save(newElement);
 			
-			attributes.addFlashAttribute("successMessage", MSG_TEXT_ADDED);
+			return "redirect:" + redirectToCategory(newElement);
 		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_ADD_TEXT);
-		}
-		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_ADD_TEXT);
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
 		}
 		
 		if (report != null)
-			return "redirect:/auth/userstory?id=" + report.getId();
+			return "redirect:/auth/report?id=" + report.getId();
 		else
-			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
-	@RequestMapping(value="/editText", method=RequestMethod.POST) 
-	public String editText(@RequestParam(value="dataElementId") Integer elementId,
-			@RequestParam(value="textContent") String textContent, RedirectAttributes attributes) {
-		logger.info("Inside editText");
+	@RequestMapping(value= "/create-file-element", method = RequestMethod.POST)
+	public String createFileElement(@ModelAttribute("newinputelement") InputElement inputElement, 
+			@RequestParam(value="file",required=true) MultipartFile uploadfile,
+			RedirectAttributes attributes) {
+		logger.info("Inside uploadfileinWorkBoard");
+		
+		Report report = null;
+        try {
+        	report = reportDao.find(inputElement.getReport().getId());
+        	
+        	if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+        	
+        	if (uploadfile == null || uploadfile.isEmpty())
+        		throw new FileUploadException();
+        	
+            int lastIndex = uploadfile.getOriginalFilename().lastIndexOf('.');
+        	String fileName = uploadfile.getOriginalFilename().substring(0, lastIndex);
+            String fileExtension = uploadfile.getOriginalFilename().substring(lastIndex + 1);
+            
+            if(FileTypeHelper.IsFileContentTypeAllowed(uploadfile)) {
+            	
+            	ElementCategory category = elementCategoryDao.find(inputElement.getCategory().getName());
+            	String title = fileName + "." + fileExtension;
+    			int insertPosition = inputElement.getPosition() + 1;
+    			
+    			reorderReportElementsAfterPosition(report, insertPosition);
+    			
+            	InputElement newElement = new InputElement(new Date(), title, category, report, true, insertPosition, uploadfile.getContentType(), uploadfile.getBytes());
+    			elementDao.save(newElement);
+            	
+            	attributes.addFlashAttribute("successMessage", MSG_FILE_UPLOAD_SUCCESS);
+            	
+            	return "redirect:" + redirectToCategory(newElement);
+            }
+            else
+            	attributes.addFlashAttribute("errorMessage", ERR_INVALID_FILETYPE);
+        }
+        catch (IOException | FileUploadException e) {
+        	attributes.addFlashAttribute("errorMessage", ERR_FILE_UPLOAD);
+        }
+        catch (NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+        
+		if (report != null)
+			return "redirect:/auth/report?id=" + report.getId();
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+	
+	@RequestMapping(value="/edit-display-type", method=RequestMethod.POST) 
+	public String editDisplayType(@RequestParam(value="elementId") Integer elementId,
+			@RequestParam(value="displayType") String displayTypeName, RedirectAttributes attributes) {
+		logger.info("Inside editDisplayType");
 		
 		Element element = null;
 		try {
@@ -316,61 +446,121 @@ public class ReportController {
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			// TODO: make changes to the content of the text element
-			/*if (dataElement instanceof DataElementText) {
-				DataElementText deText = (DataElementText)(dataElement);
-				deText.setText(textContent);
-				dataElementDao.save(deText);
-			}*/
-			attributes.addFlashAttribute("successMessage", MSG_TEXT_EDITED);
+			// Check that the element is an DataElement
+			if (element instanceof DataElement) {
+				DataElement dataElement = (DataElement)element;
+				
+				DisplayType displayType = displayTypeDao.find(displayTypeName);
+				dataElement.setDisplayType(displayType);
+				elementDao.save(dataElement);
+				
+				attributes.addFlashAttribute("successMessage", MSG_DISPLAY_TYPE_EDITED);
+			}
+			else
+				throw new IllegalArgumentException();
 		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_EDIT_TEXT);
-		}
-		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_EDIT_TEXT);
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_EDIT_DISPLAY_TYPE);
 		}
 		
 		if (element != null)
-			return "redirect:/auth/userstory?id=" + element.getReport().getId();
+			return "redirect:" + redirectToCategory(element);
 		else
-			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
-	@RequestMapping(value="/deleteText", method=RequestMethod.GET) 
-	public String removeTextFromReport(@RequestParam(value="text",required=true) Integer id, RedirectAttributes attributes) {
-		logger.info("Inside removeTextFromReport");
+	
+	private void reorderReportElementsAfterPosition(Report report, int insertPosition) {
+		// Increment the positions of all the elements after the new one
+		for (Element elem : report.getElements()) {
+			if (elem.getPosition() >= insertPosition)
+				elem.setPosition(elem.getPosition() + 1);
+		}
+		// Save the report after reordering
+		reportDao.save(report);
+	}
+	
+	@RequestMapping(value="/edit-text-element", method=RequestMethod.POST) 
+	public String editTextElement(@RequestParam(value="elementId") Integer elementId,
+			@RequestParam(value="textContent") String textContent, RedirectAttributes attributes) {
+		logger.info("Inside editTextElement");
 		
 		Element element = null;
 		try {
-			element = elementDao.find(id);
+			// Retrieve the data element
+			element = elementDao.find(elementId);
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			// TODO: Exception if the element isn't a text
-			//if (!(dataElement instanceof DataElementText))
-				//throw new IllegalArgumentException();
-			
-			elementDao.delete(element);
-			attributes.addFlashAttribute("successMessage", MSG_TEXT_REMOVED);
+			// Check that the element is an InputElement
+			if (element instanceof InputElement) {
+				InputElement inputElement = (InputElement)element;
+				// Check that the content type is plain text
+				if (FileTypeHelper.IsContentTypePlaintext(inputElement.getContentType())) {
+					inputElement.setStringContent(textContent);
+					elementDao.save(inputElement);
+					attributes.addFlashAttribute("successMessage", MSG_TEXT_EDITED);
+				}
+				else
+					throw new IllegalArgumentException();
+			}
+			else
+				throw new IllegalArgumentException();
 		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_REMOVE_TEXT);
-		}
-		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_REMOVE_TEXT);
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_EDIT_TEXT);
 		}
 		
 		if (element != null)
-			return "redirect:/auth/userstory?id=" + element.getReport().getId();
+			return "redirect:" + redirectToCategory(element);
 		else
-			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
-	@RequestMapping(value="/includeDataElement", method=RequestMethod.GET) 
-	public String includeDataElementToReport(@RequestParam(value="dataelement",required=true) Integer elementId, RedirectAttributes attributes) {
-		logger.info("Inside includeDataElementToReport");
+	@RequestMapping(value = "/delete-element",method=RequestMethod.GET) 
+	public String deleteElement(@RequestParam(value="id",required=true) Integer elementId, 
+			RedirectAttributes attributes, Model model) {
+		logger.info("Inside deleteElement");
+		
+		try {
+			Element element = elementDao.find(elementId);
+			Report report = element.getReport();
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+				throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			// Delete the Data Element if it belongs to the user's report
+			if (report.getMode().equals("active")) {
+				
+				elementDao.delete(element);
+				
+				// Reorder the element in the report to keep consistent positions
+				report.getElements().remove(element);
+				int removedPosition = element.getPosition();
+				for (Element elem : report.getElements()) {
+					if (elem.getPosition() >= removedPosition)
+						elem.setPosition(elem.getPosition() - 1);
+				}
+				reportDao.save(report);
+				
+				attributes.addFlashAttribute("successMessage", MSG_ELEMENT_DELETED);
+			}
+			else { // If the Data Element belongs to another report, don't delete
+				attributes.addFlashAttribute("errorMessage", ERR_DELETE_ELEMENT);
+			}
+			// Redirects to the right tab of the report after deletion based on the data element type
+			return "redirect:" + redirectToCategory(element);
+		}
+		catch (NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", e.getMessage());
+		}
+		return ("redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername());
+	}
+	
+	@RequestMapping(value="/include-element", method=RequestMethod.GET) 
+	public String includeElementToReport(@RequestParam(value="id",required=true) Integer elementId, @RequestParam(value="included",required=true) Boolean included, RedirectAttributes attributes) {
+		logger.info("Inside includeElementToReport");
 		
 		Element element = null;
 		try {
@@ -379,22 +569,117 @@ public class ReportController {
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			element.setIncluded(!element.getIncluded());
+			element.setIncluded(included);
 			elementDao.save(element);
 		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", e.getMessage());
-		}
-		catch (NoResultException e) {
+		catch (IllegalArgumentException | NoResultException e) {
 			attributes.addFlashAttribute("errorMessage", e.getMessage());
 		}
  		
 		if (element != null)
-			return "redirect:/auth/userstory?id=" + element.getReport().getId();
+			return "redirect:" + redirectToCategory(element);
 		else
-			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
+	@RequestMapping(value= "/lock", method = RequestMethod.GET)
+	public String changeReportPrivacy(
+			@RequestParam(value="id",required=true) Integer id, 
+			@RequestParam(value="lock",required=true) Boolean lock, 
+			RedirectAttributes attributes) {
+		logger.info("Inside changeReportPrivacy");
+		
+		try {
+			Report report= reportDao.find(id);
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			if (lock) // true == locked == private
+				report.setAccess("private");
+			else // false == unlocked == public
+				report.setAccess("public");
+			reportDao.save(report);
+		}
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_SAVE_REPORT);
+		}
+		
+		return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+
+	@RequestMapping(value = "/publish", method=RequestMethod.GET) 
+	public String publishReport(@RequestParam(value="id", required=true) Integer reportId, RedirectAttributes attributes) {
+		logger.debug("Inside publishReport");
+		
+		ReportPublication pub = null;
+		try {
+			Report report = reportDao.find(reportId);
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			report = this.prepareReportData(report);
+			
+			pub = new ReportPublication(report);
+			pub = reportPublicationDao.save(pub);
+			
+			attributes.addFlashAttribute("successMessage", MSG_REPORT_PUBLISHED);
+		}
+		catch (IllegalArgumentException | NoResultException | IOException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT);
+		}
+
+		if (pub != null)
+			return "redirect:/public/published-report/view?id=" + pub.getId();
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+	
+	private Report prepareReportData(Report report) {
+		List<Element> elements = report.getElements(); 		
+		if (elements != null) {
+ 			for (Element element : elements) {
+	 			if (element.getClass().equals(InputElement.class)) {
+	 				((InputElement)element).generateStringContent();
+	 			}
+	 			else if (element.getClass().equals(DataElement.class)) {
+	 				DataElement de = ((DataElement)element);
+	 				
+	 				/*if (de.getDataSource() instanceof CsiroDataSource)
+	 				{
+	 					CsiroDataSource csiroDataSource = (CsiroDataSource)de.getDataSource();
+	 					csiroDataSource.init(csiroDataDao);
+	 					de.setData(csiroDataSource.getData(de));
+	 					de.getDataSource().flush();
+	 				}*/
+	 				try {
+	 					// Instantiate the data source of the sub-type specified by the data source name
+	 					String className = "edu.rmit.eres.seaports.model." + WordUtils.capitalize(de.getDataSource().getName().toLowerCase()) + "DataSource";
+	 					Constructor<?> constructor = Class.forName(className).getDeclaredConstructor(DataSource.class);
+	 					constructor.setAccessible(true);
+	 					
+	 					// Cast to the correct specific data source type
+	 				    Class<? extends DataSource> dataSourceClass = Class.forName(className).asSubclass(DataSource.class);
+	 				    DataSource ds = dataSourceClass.cast(constructor.newInstance(new Object[] { de.getDataSource() }));
+	 				    
+	 					// Retrieves the data and set the field
+	 					ds.init(csiroDataDao);
+		 				List<?> data = ds.getData(de);
+		 				de.setData(data);
+		 				ds.flush();
+	 				}
+					catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException 
+							| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						e.printStackTrace();
+					}
+	 			}
+	 		}
+ 		}
+ 		return report;
+	}
+	
+	/*
 	@RequestMapping(value = "/publish", method=RequestMethod.GET) 
 	public String publishReport(@RequestParam(value="id", required=true) Integer reportId, RedirectAttributes attributes) {
 		logger.debug("Inside publishReport");
@@ -413,84 +698,119 @@ public class ReportController {
 								
 				reportDao.save(report);
 				
-				attributes.addFlashAttribute("successMessage", MSG_STORY_PUBLISHED);
+				attributes.addFlashAttribute("successMessage", MSG_REPORT_PUBLISHED);
 			}
 			else
-				attributes.addFlashAttribute("warningMessage", ERR_STORY_ALREADY_PUBLISHED);
+				attributes.addFlashAttribute("warningMessage", ERR_REPORT_ALREADY_PUBLISHED);
 		}
 		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_DELETE_USERSTORY);
+			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT);
 		}
 		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_DELETE_USERSTORY);
+			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT);
 		}
 
 		if (report != null)
-			return "redirect:/auth/userstory?id=" + report.getId();
+			return "redirect:/auth/report/view?id=" + report.getId();
 		else
-			return "redirect:/auth/userstory/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
+	*/
 	
-	public ModelAndView ModelForReport(Model model, Report report) {
-		logger.debug("Inside ModelForReport");
-
+	private ModelAndView ModelForReport(Model model, Report report) {
+		logger.info("Inside ModelForReport");
+		
 		model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
+		ModelAndView mav = new ModelAndView("report");
 		
 		if (report != null)
 		{
-			Collections.sort(report.getElements(), new ElementPositionComparator());
+			report = this.prepareReportData(report);
 			
-			List<Element> elements = report.getElements();
-	 		for (Element element : elements) {
-	 			// TODO: get values to plot
-	 			/*if (dataElement.getClass().equals(DataElementAbs.class)) {
-	 				List<AbsData> absDataList = ((DataElementAbs)dataElement).getAbsDataList();
-	 				for (AbsData data : absDataList) {
-	 					data.generateValues();
-	 				}
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementBitre.class)) {
-	 				List<BitreData> bitreDataList = ((DataElementBitre)dataElement).getBitreDataList();
-	 				for (BitreData data : bitreDataList) {
-	 					data.generateValues();
-	 				}
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementFile.class)) {
-	 				((DataElementFile)dataElement).generateStringContent();
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementCsiro.class)) {
-	 				for (CsiroData data : ((DataElementCsiro)dataElement).getCsiroDataList()) {
-	 					data.setBaseline(csiroDataBaselineDao.find(data.getParameters().getRegion(), data.getVariable()));
-	 				}
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementEngineeringModel.class)) {
-	 				List<EngineeringModelData> engineeringModelDataList = ((DataElementEngineeringModel)dataElement).getEngineeringModelDataList();
-	 				for (EngineeringModelData data : engineeringModelDataList) {
-	 					data.generateValues();
-	 				}
-	 			}*/
+			Collections.sort(report.getElements(), new ElementPositionComparator());
+			mav.addObject("report", report);
+			
+			try {
+				// List of all the element categories
+		 		List<ElementCategory> allCategories = elementCategoryDao.getAll();
+		 		mav.addObject("allCategories", allCategories);
+		 		
+		 		//mav.addObject("elements", report.getElements());
+		 		
+		 		// Empty data element to use as a "New Data Element"
+		 		mav.addObject(new DataElement());
+		 		
+		 		// List of seaports in the workboard's region
+		 		List<Seaport> regionSeaports = seaportDao.getAllInRegion(report.getSeaport().getRegion());
+		 		mav.addObject("regionSeaports", regionSeaports);
 			}
-			model.addAttribute("userstory", report);
+			catch (Exception e) {
+				model.addAttribute("errorMessage", e.getMessage());
+			}
 		}
-		return new ModelAndView("userstory");
+		
+		return mav;
+	}
+
+	private ModelAndView ModelForReportCreation(Model model, User user) {
+		logger.info("Inside ModelForReportCreation");
+		
+		ModelAndView mav = new ModelAndView("reportCreation");
+		try {
+			model.addAttribute("user", user);
+			
+			Report report = new Report();
+			report.setOwner(user);
+			report.setSeaport(new Seaport("", "", new Region("", "")));
+			mav.addObject("report", report);
+			
+			// List of all the seaports
+	 		List<Seaport> allSeaports = seaportDao.getAll();
+	 		mav.addObject("allSeaports", allSeaports);
+		}
+		catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+		}
+		return mav;
 	}
 	
-	public static final String ERR_ACCESS_DENIED = "You are not allowed to access this Story";
+	/**
+	 * Redirects to the right tab of the workboard after deletion based on the data element type
+	 * @param dataElement: the data element
+	 * @return the address to which the page should be redirected
+	 */
+	private String redirectToCategory(Element element) {
+		return "/auth/report?id=" + element.getReport().getId() + "#tabs-" + element.getCategory().getName().replace(' ', '-');
+	}
 	
-	public static final String ERR_RETRIEVE_USERSTORY_LIST = "Impossible to retrieve the list of your reports";
-	public static final String MSG_NO_USER_STORY = "There is no report to display";
-	public static final String MSG_USERSTORY_SAVED = "The report has been saved successfully";
-	public static final String ERR_SAVE_USERSTORY = "Error saving the report. Please Try Again";
-	public static final String MSG_USERSTORY_DELETED = "The report has been deleted successfully";
-	public static final String ERR_DELETE_USERSTORY = "Error deleting the report. Please Try Again";
+	public static final String ERR_ACCESS_DENIED = "You are not allowed to access this Report";
 	
-	public static final String MSG_TEXT_ADDED = "Text added successfully";
-	public static final String ERR_ADD_TEXT = "Error adding text. Please Try Again";
+	public static final String ERR_CREATE_REPORT = "An error happened while creating your report. Please try again";
+	public static final String ERR_DELETE_REPORT = "An error happened while creating your report. Please try again";
+	public static final String ERR_RETRIEVE_REPORT = "Could not retrieve the specified report";
+	public static final String ERR_RETRIEVE_REPORT_LIST = "Impossible to retrieve the list of your reports";
+	public static final String ERR_REGION_NOT_DEFINED = "Please select a region and a seaport for your report";
+	public static final String ERR_PURPOSE_NOT_DEFINED = "Please describe the activity that leads you to use this application";
+	
+	public static final String ERR_DELETE_ELEMENT = "The element could not be deleted";
+	public static final String ERR_FILE_UPLOAD = "Unable to upload the file to the report";
+	public static final String ERR_UPLOAD_NO_FILE = "No file received. Please make sure that you have chosen an Excel file to upload, or selected a pre-defined example.";
+	public static final String ERR_INVALID_FILETYPE = "This file format is not handled by the application (only text, csv and jpeg files are allowed).";
+	public static final String ERR_INVALID_FILE_FORMAT = "Invalid file format. The type of the file you tried to upload is not allowed";
+	
+	public static final String MSG_ELEMENT_CREATED = "The element has been added successfully to your report";
+	public static final String MSG_ELEMENT_DELETED = "The element was deleted successfully from the report";
+	public static final String MSG_FILE_UPLOAD_SUCCESS = "The file was uploaded successfully to the report";
+	
 	public static final String MSG_TEXT_EDITED = "Text edited successfully";
 	public static final String ERR_EDIT_TEXT = "Error editing the text. Please Try Again";
-	public static final String MSG_TEXT_REMOVED = "Text deleted successfully";
-	public static final String ERR_REMOVE_TEXT = "Error deleting the text. Please Try Again";
 	
-	public static final String MSG_STORY_PUBLISHED = "The report is now published. It appears publicly on this portal and will be listed on Reasearch Data Australia search results.";
-	public static final String ERR_STORY_ALREADY_PUBLISHED = "This report is already published";
+	public static final String MSG_DISPLAY_TYPE_EDITED = "Display type changed successfully";
+	public static final String ERR_EDIT_DISPLAY_TYPE = "Error changing the display type. Please Try Again";
+	
+	public static final String MSG_REPORT_SAVED = "The report has been saved successfully";
+	public static final String ERR_SAVE_REPORT = "Error saving the report. Please Try Again";
+	
+	public static final String MSG_REPORT_PUBLISHED = "The report is now published. It appears publicly on this portal and will be listed on Reasearch Data Australia search results.";
+	public static final String ERR_PUBLISH_REPORT = "Error publishing the report. Please Try Again";
 }

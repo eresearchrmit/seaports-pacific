@@ -7,6 +7,8 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ClimateModel")
-public class ClimateModel {
+public class ClimateModel implements Serializable {
 	
 	private static final long serialVersionUID = -1308795024262635690L;
 	

@@ -5,6 +5,9 @@
  This code is under the BSD license. See 'license.txt' for details.
  Project hosted at: https://code.google.com/p/climate-smart-seaports/
 --%>
+<%@page import="edu.rmit.eres.seaports.helpers.FileTypeHelper"%>
+<%@page import="edu.rmit.eres.seaports.model.Element"%>
+<%@page import="edu.rmit.eres.seaports.model.InputElement"%>
 <%@ page session="true"%>
 <%@ page language="java" %>
 <%@ page import="java.lang.*" %>
@@ -22,33 +25,33 @@
 <div class="grid_12">
 <c:if test="${not empty report}">
 	<%-- Titles --%>
-	<div style="margin-left: 20px; float:left">
+	<div class="floatleft" style="margin-left: 20px">
 		<h2><c:out value="${report.name}" /></h2>
 		<h4><c:out value="${report.seaport.region.name}" /> region - <c:out value="${report.seaport.name}" /></h4>
 	</div>
 	
 	<%-- Action buttons --%>
 	<div id="actionButtons">
-		<a class="lnkPublishReport" href="/auth/report/publish?id=${report.id}" style="margin-right: 10px; float:right">
+		<a id="lnkPublishReport" href="/auth/report/publish?id=${report.id}" class="floatright btn-margin">
 			<button id="btnConvertToUserStory" type="button" class="btn btn-icon btn-blue btn-globe" >
 				<span></span>Publish Report
 			</button>
 		</a>
 		
-		<a href="/auth/report/view?id=${report.id}" target="_blank" style="margin-right: 10px; float:right">
+		<a href="/auth/report/view?id=${report.id}" target="_blank" class="floatright btn-margin">
 			<button class="btnAddDataElement btn btn-icon btn-blue btn-doc" >
 				<span></span>Preview the report
 			</button>
 		</a>
 		
-		<a class="lnkDeleteReport" href="/auth/report/delete?id=${report.id}" style="margin-right: 10px; float:right">
+		<a id="lnkDeleteReport" href="/auth/report/delete?id=${report.id}" class="floatright btn-margin">
 			<button id="btnDeleteWorkboard" type="button" class="btn btn-icon btn-blue btn-cross" >
 				<span></span>Delete Report
 			</button>
 		</a>
 		
-		<a href="javascript: $('#reportOrderForm').submit();">
-			<button id="btnSaveReportOrder" type="button" class="btn btn-icon btn-grey btn-refresh" style="margin-right: 10px; float:right">
+		<a href="javascript: $('#reportOrderForm').submit();" class="floatright btn-margin">
+			<button id="btnSaveReportOrder" type="button" class="btn btn-icon btn-grey btn-refresh">
 				<span></span>Save order
 			</button>
 		</a>
@@ -58,13 +61,15 @@
 			<p>Are you sure you want to permanently delete this report ?</p> 
 		</div>
 		<div style="display:none" id="confirmConvertToUserStoryModalWindow" title="Publish this report ?">
-			<p>This report is about to be published. Once the report is published, it can't be modified.</p> 
+			<p>The current status of this report is about to be published. You won't be able to make further changes to the published version..</p> 
 			<p>Are you sure you want to publish this report now ?</p>
 		</div>
 		<div style="display:none" id="confirmDataElementDeletionModalWindow" title="Delete this element ?">
 			<p>Are you sure you want to delete this element from this report ?</p> 
 		</div>
 	</div>
+	
+	<%-- Script enabling the action buttons to stay always visible at the top of the page --%>
 	<script type="text/javascript">
 		var originalTop = $('#actionButtons').position().top;
 		$(window).scroll(function() {
@@ -142,7 +147,6 @@
 	</script>
 	
 	<c:set var="report" scope="request" value="${report}"/>
-	<c:set var="elements" scope="request" value="${elements}"/>
 	
 	<div id="tabs">
 		<%-- Header of tabs --%>
@@ -161,13 +165,12 @@
 			<div id="tabs-${categoryNameWithDashes}">
 			
 				<%-- Explanation text --%>
-				<c:set var="path" scope="request" value="${elements}"/>
 				<a href="#" id="helpTooltip-${categoryNameWithDashes}" class="helpTooltip" title="${category.helpText}">
 					<img src="<c:url value="/resources/img/icons/help.png" />">
 				</a>
 				
 				<%-- 'Add Element' button --%>
-				<div style="text-align:center">
+				<div class="centered">
 					<button id="btnOpenAddDataModalWindow${category.id}" type="button" class="btn btn-icon btn-blue btn-plus" >
 						<span></span>Add Data
 					</button>
@@ -197,7 +200,7 @@
 								<span></span>Add Text to report
 							</button>
 							
-							<div style="margin-right: 10px; float:right">
+							<div class="floatright btn-margin">
 								<span class="hint">Insert text after:</span>
 								<form:select id="cbbNewTextPosition" name="position" path="position">
 									<option value="0">[Insert in 1st position]</option>
@@ -241,8 +244,8 @@
 								<span></span>Add File
 							</button>
 							
-							<div style="margin-right: 10px; float:right">
-								<span class="hint">Insert text after:</span>
+							<div class="floatright btn-margin">
+								<span class="hint">Insert file after:</span>
 								<form:select id="cbbNewTextPosition" name="position" path="position">
 									<option value="0">[Insert in 1st position]</option>
 									<c:if test="${not empty report.elements}">
@@ -260,7 +263,6 @@
 				
 				<%-- Data Element Addition Modal Window --%>
 				<div id="addDataModalWindow${category.id}" class="box round first" title="New Element" style="display:none">
-					<div class="block">
 						<p><strong>1. Data Source:</strong></p>
 						<table width="auto" height="auto" class="form">
 							<tr>
@@ -333,9 +335,15 @@
 											</c:forEach>
 										</td>
 									</tr>
-									<tr>
-										<td>Insert element after:</td>
-										<td class="col2">
+								</table>
+								
+								<div style="margin-top: 40px">
+									<button type="button" class="btn btn-icon btn-blue btn-plus btn-small floatright" onclick="submit();" >
+										<span></span>Add ${datasource.name} Data
+									</button>
+									
+									<div class="floatright btn-margin">
+										<span class="hint">Insert file after:</span>
 										<form:select id="cbb${datasource.name}ElementPosition" name="position" path="position">
 											<option value="0">[Insert in 1st position]</option>
 											<c:if test="${not empty report.elements}">
@@ -346,12 +354,8 @@
 												</c:forEach>
 											</c:if>
 										</form:select>
-										</td>
-									</tr>
-								</table>
-								<button type="button" class="btn btn-icon btn-blue btn-plus" onclick="submit();" >
-									<span></span>Add ${datasource.name} Data
-								</button>
+									</div>
+								</div>
 							</form:form>
 						</div>
 					</c:forEach>
@@ -371,9 +375,9 @@
 						}, 0);
 					});
 					</script>
-					</div>
 				</div>
 				
+				<%-- Script enabling the dynamic forms based on Data Source --%>
 				<script type="text/javascript">
 				$(function () {						
 					// "Loading" message in the Engineering Model Data Element form
@@ -385,7 +389,7 @@
 					// Open the right modal window on click
 					setupDialogBox("addDataModalWindow${category.id}", "btnOpenAddDataModalWindow${category.id}");
 					setupDialogBox("addTextModalWindow${category.id}", "btnOpenAddTextModalWindow${category.id}");
-					setupDialogBox("addFileModalWindow${category.id}", "btnOpenAddFileModalWindow${category.id}");
+					setupDialogBox("addFileModalWindow${category.id}", "btnOpenAddFileModalWindow${category.id}");					
 				});
 				</script>
 				
@@ -393,11 +397,12 @@
 				
 				
 				<%-- Elements --%>
-				<c:if test="${not empty elements}">
-					<c:forEach items="${elements}" var="element" varStatus="status">
+				<c:if test="${not empty report.elements}">
+					<c:forEach items="${report.elements}" var="element" varStatus="status">
 						<c:if test="${element.category.name == category.name}">
+							<c:set var="element" scope="request" value="${element}"/>
 							<c:set var="categoryNotEmpty" scope="request" value="true"/>
-						
+							
 							<div class="box round${element.included == false ? ' box-disabled' : ''}">
 								<div class="box-header">
 								<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
@@ -409,48 +414,52 @@
 									</a>
 									<!-- 'Include/Exclude' button -->
 									<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
-										<button type="button" class="btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright" style="margin-right: 10px;">
+										<button type="button" class="btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
 											<span></span>${element.included == false ? 'Include' : 'Exclude'}
 										</button>
 									</a>
+									<!-- 'Edit text' button for plain text elements -->
+									<% Element element = (Element)(request.getAttribute("element"));
+										System.out.print(element.getClass().getName());
+										if (element instanceof InputElement) {
+											if (FileTypeHelper.IsContentTypePlaintext(((InputElement)element).getContentType())) { %>
+										<button id="btnOpenEditTextElementModalWindow" class="btn btn-small btn-icon btn-blue btn-edit floatright btn-margin btnEditText"
+										 onclick="$('#hdnTextElementToEditId').val(${element.id}); tinyMCE.get('txtElementToEditContent').setContent('${fn:escapeXml(element.escapedStringContent)}');">
+											<span></span>Edit text
+										</button>
+									<% 		}
+										} else if (element instanceof DataElement) { %>
+										<form:form id="editDataElementDisplayTypeForm${element.id}" method="post" action="/auth/report/edit-display-type" class="floatright btn-margin"> 
+											<input id="hdnDataElementToEditId" type="hidden" name="elementId" value="${element.id}" />
+											
+											<select name="displayType" onchange="submit();">
+												<option value="0">--- Change Display Type ---</option>
+												<c:forEach items="${element.dataSource.displayTypes}" var="displayType" varStatus="displayLoopStatus">
+													<option value="${displayType.name}" ${displayType.name == element.displayType.name ? ' selected' : ''} /> ${displayType.name}</option>
+												</c:forEach>
+											</select>
+										</form:form>
+									<% } %>
+	<%-- Modal window to edit display type --%>
+	<div id="editTextElementModalWindow" class="box round" title="Edit text" style="display:none; padding:0;">
+		<form:form id="editDisplayTypeForm" method="post" action="/auth/report/edit-display-type"> 
+			<input id="hdnDataElementToEditId" type="hidden" name="elementId" />
+			<c:forEach items="${datasource.displayTypes}" var="displayType" varStatus="displayLoopStatus">
+				<input type="radio" name="displayType" value="${displayType.name}" ${displayLoopStatus.first ? 'checked="checked"' : ''} /> ${displayType.name}
+			</c:forEach>
+			<div style="height: 50px">
+				<button type="button" class="btn btn-icon btn-blue btn-check btn-small floatright btn-margin" onclick="submit();" style="margin-top:20px">
+					<span></span>Save changes
+				</button>
+			</div>
+		</form:form>
+	</div>
 									<div class="clear"></div>
 								</div>
 								
 								<div class="box-content">
-									<c:if test="${element.class.simpleName == 'DataElement' && not empty element.data}">
-					 					<%-- Display the data element according to its data type and display type --%>
-					 					<c:choose>
-											<c:when test="${not empty element.data}">
-						 						<c:set var="element" value="${element}" scope="request" />
-						 						<c:set var="formattedDataSourceName" value="${fn:toUpperCase(fn:substring(element.dataSource.name, 0, 1))}${fn:toLowerCase(fn:substring(element.dataSource.name, 1,fn:length(element.dataSource.name)))}" />
-						 						<jsp:include page="dataElement${formattedDataSourceName}${element.displayType}.jsp" />
-					 						</c:when>
-				 							<c:otherwise>
-												<div id="warningMessage" class="message warning">
-													<h5>No Data</h5>
-													<p>No data corresponding to the selected settings.</p>
-												</div>
-											</c:otherwise>
-										</c:choose>
-					 				</c:if>
-									<c:if test="${element.class.simpleName == 'InputElement'}">
-					 					<c:choose>
-											<c:when test="${element.contentType == 'jpg' || element.contentType == 'jpeg'}">
-												<ul class="prettygallery clearfix">
-													<li>
-														<a href="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" target="_blank" rel="prettyPhoto" title="${element.name}">
-															<img name="${element.name}" src="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" style="max-width:100%; max-height: 500px;" />
-														</a>
-											    	</li>
-												</ul>
-										    </c:when>
-										
-											<c:otherwise>
-												<%-- <textarea name="elements[${status.index}].name" rows="12" disabled>${element.stringContent}</textarea> --%>
-												${element.stringContent}
-											</c:otherwise>
-										</c:choose>
-					 				</c:if>
+									<c:set var="element" scope="request" value="${element}" />
+									<jsp:include page="element.jsp" />
 								</div>
 							</div>
 							
@@ -481,7 +490,7 @@
 		
 		<%-- Summary tab --%>
 		<div id="tabs-summary">		
-			<c:if test="${not empty elements}">
+			<c:if test="${not empty report.elements}">
 			
 				<div id="msgTabSummary" class="message info">
 					<h5>Information</h5>
@@ -492,7 +501,7 @@
 	  				<form:input value="${report.id}" type="hidden" path="id" />
 		 			<ul id="sortable">
 		 	
-						<c:forEach items="${elements}" var="element" varStatus="status">
+						<c:forEach items="${report.elements}" var="element" varStatus="status">
 						<li class="sortableItem" id="element${element.id}">
 							<div class="box round${element.included == false ? ' box-disabled' : ''}">
 								<div class="box-header">
@@ -505,7 +514,7 @@
 									</a>
 									<!-- 'Include/Exclude' button -->
 									<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
-										<button type="button" class="btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright" style="margin-right: 10px;">
+										<button type="button" class="btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
 											<span></span>${element.included == false ? 'Include' : 'Exclude'}
 										</button>
 									</a>
@@ -517,40 +526,8 @@
 								<input type="hidden" name="elements[${status.index}].position" value="${element.position}" id="elements[${status.index}].position" class="dataElementPosition">
 								
 								<div class="box-content">
-									<c:if test="${element.class.simpleName == 'DataElement'}">
-					 					<%-- Display the data element according to its data type and display type --%>
-					 					<c:choose>
-											<c:when test="${not empty element.data}">
-						 						<c:set var="element" value="${element}" scope="request" />
-						 						<c:set var="formattedDataSourceName" value="${fn:toUpperCase(fn:substring(element.dataSource.name, 0, 1))}${fn:toLowerCase(fn:substring(element.dataSource.name, 1,fn:length(element.dataSource.name)))}" />
-						 						<jsp:include page="dataElement${formattedDataSourceName}${element.displayType}.jsp" />
-					 						</c:when>
-				 							<c:otherwise>
-												<div id="warningMessage" class="message warning">
-													<h5>No Data</h5>
-													<p>No data corresponding to the selected settings.</p>
-												</div>
-											</c:otherwise>
-										</c:choose>
-					 				</c:if>
-									<c:if test="${element.class.simpleName == 'InputElement'}">
-					 					<c:choose>
-											<c:when test="${element.contentType == 'jpg' || element.contentType == 'jpeg'}">
-												<ul class="prettygallery clearfix">
-													<li>
-														<a href="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" target="_blank" rel="prettyPhoto" title="${element.name}">
-															<img name="${element.name}" src="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" style="max-width:100%; max-height: 500px;" />
-														</a>
-											    	</li>
-												</ul>
-										    </c:when>
-										
-											<c:otherwise>
-												<%-- <textarea name="elements[${status.index}].name" rows="12" disabled>${element.stringContent}</textarea> --%>
-												${element.stringContent}
-											</c:otherwise>
-										</c:choose>
-					 				</c:if>
+									<c:set var="element" scope="request" value="${element}" />
+									<jsp:include page="element.jsp" />
 								</div>
 							</div>
 						</li>
@@ -562,7 +539,7 @@
 			<script type="text/javascript">
 				$(document).ready(function () {
 					
-					var draggedTextContent = null; 
+					var draggedTextContent = null;
 					
 					// Enables the sortable list
 					$( "#sortable" ).sortable({
@@ -596,7 +573,7 @@
 			</c:if>
 			
 			<%-- 'No element' message if report empty --%>
-			<c:if test="${empty elements}">
+			<c:if test="${empty report.elements}">
 				<div id="msgTabSummary" class="message info">
 					<h5>Information</h5>
 					<p><c:out value="There is no element in the report. Select category tabs and add elements to fill the report." /></p>
@@ -604,7 +581,7 @@
 			</c:if>
 			
 			<%-- Publish report button --%>
-			<div style="text-align:center">
+			<div class="centered">
 				<a class="lnkPublishReport" href="/auth/report/publish?id=${report.id}" >
 					<button id="btnPublishReport" type="button" class="btn btn-icon btn-blue btn-globe">
 						<span></span>Publish Report
@@ -624,26 +601,25 @@
 	<jsp:include page="notifications.jsp" />
 </c:if>
 
-	<div id="editTextDataElementModalWindow" class="box round" title="Edit text" style="display:none; padding:0;">
-		<form:form id="editTextForm" method="post" action="/auth/userstory/editText"> 
-			<input id="hdnTextDataElementToEditId" type="hidden" name="dataElementId" />
-			<textarea id="txtDataElementToEditContent" name="textContent" class="tinymce" rows="25">
+	<%-- Modal window to edit text --%>
+	<div id="editTextElementModalWindow" class="box round" title="Edit text" style="display:none; padding:0;">
+		<form:form id="editTextForm" method="post" action="/auth/report/edit-text-element"> 
+			<input id="hdnTextElementToEditId" type="hidden" name="elementId" />
+			<textarea id="txtElementToEditContent" name="textContent" class="tinymce" rows="25">
 			</textarea>
 			<div style="height: 50px">
-			<a href="javascript: $('#editTextForm').submit();" style="margin-right: 10px; margin-top:20px; float:right">
-				<button type="button" class="btn btn-icon btn-blue btn-check btn-small floatright">
+				<button type="button" class="btn btn-icon btn-blue btn-check btn-small floatright btn-margin" onclick="submit();" style="margin-top:20px">
 					<span></span>Save changes
 				</button>
-			</a>
 			</div>
 		</form:form>
 	</div>
-					
+	
+	<%-- Scripts enabling TinyMCE on every textarea --%>			
 	<script type="text/javascript" src="<c:url value="/resources/js/tiny_mce/tiny_mce.js" />"></script>
 	<script type="text/javascript">
 		$(document).ready(function () {
-			setupDialogBox("addTextDataElementModalWindow", "btnOpenAddTextDataElementModalWindow");
-			setupDialogBoxByClass("editTextDataElementModalWindow", "btnEditText");
+			setupDialogBoxByClass("editTextElementModalWindow", "btnEditText");
 			
 			tinyMCE.init({
 		        // General options

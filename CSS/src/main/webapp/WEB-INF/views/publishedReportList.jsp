@@ -22,32 +22,32 @@
 <div class="grid_12">
 	<h2>${listingTitle}</h2>
 	<c:choose> 
-	<c:when test="${not empty userStoriesList}">
-		<table class="data display datatable" id="tblUserStoryList">
+	<c:when test="${not empty publishedReports}">
+		<table class="data display datatable" id="tblPublishedReportList">
 			<thead>
 				<tr>
 					<th>Title</th>
 					<th>Author</th>
 					<th>Published on</th>
-					<th>NRM Region</th>
+					<th>Region</th>
 					<th>View</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${userStoriesList}" var="story" varStatus="status"> 
+				<c:forEach items="${publishedReports}" var="publishedReport" varStatus="status"> 
 				<tr>
-					<td><c:out value="${story.name}" /></td>
-					<td><a href="/public/user/${story.owner.username}" title="View profile">${story.owner.firstname} ${story.owner.lastname}</a></td>
-					<td><fmt:formatDate value="${story.publishDate}" pattern="dd MMM yyyy" /></td>
-					<td>${story.seaport.region.name}</td>
-					<td><a href="/public/reports/view?id=${story.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
+					<td><c:out value="${publishedReport.name}" /></td>
+					<td><a href="/public/user/${publishedReport.owner.username}" title="View profile">${publishedReport.owner.firstname} ${publishedReport.owner.lastname}</a></td>
+					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy" /></td>
+					<td>${publishedReport.report.seaport.region.name}</td>
+					<td><a href="/public/published-report/view?id=${publishedReport.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
 				</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 		<script type="text/javascript">
 			$(document).ready(function () {
-				$('#tblUserStoryList').dataTable();
+				$('#tblPublishedReportList').dataTable();
 			});
 	 	</script>
 	</c:when>

@@ -7,6 +7,8 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +21,7 @@ import javax.persistence.MappedSuperclass;
  * @since 20th Dec. 2012
  */
 @MappedSuperclass
-public abstract class Variable {
+public abstract class Variable implements Serializable {
 	
 	private static final long serialVersionUID = -1308795024262635690L;
 	

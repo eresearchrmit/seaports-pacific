@@ -7,6 +7,7 @@
  */
 package edu.rmit.eres.seaports.database;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -120,6 +121,7 @@ public class TestDatabaseLoader {
 		Report user1us3 = new Report("User 1 Story 3 (Published)", "Purpose", "published", "public", u1, port3, null);
 		user1us3.setCreationDate(date);
 		user1us3.setPublishDate(date);
+		user1us3.setElements(new ArrayList<Element>());
 		
 		Report user2wb = new Report("User 2 Workboard (Empty)", "Purpose", "active", "private", u2, port5, null);
 		user2wb.setCreationDate(date);
@@ -195,48 +197,11 @@ public class TestDatabaseLoader {
 		session.save(year2030);
 		session.save(year2055);
 		session.save(year2070);
-				
-		// Data Source 2
-		/*List<DisplayType> displayTypesDS2 = new ArrayList<DisplayType>();
-		displayTypesDS2.add(textDisplayType);
-		displayTypesDS2.add(tableDisplayType);
-		
-		CsiroDataSource ds2 = new CsiroDataSource("Data Source 2", null, null, displayTypesDS2);
-		
-		DataSourceParameter param2a = new DataSourceParameter("Param 2A", "desc", ds2, null, DataSourceParameter.Display.DROPDOWN);		
-		DataSourceParameterOption option2a1 = new DataSourceParameterOption("Option 2A1", "", param2a, 0);
-		DataSourceParameterOption option2a2 = new DataSourceParameterOption("Option 2A2", "", param2a, 0);
-		DataSourceParameterOption option2a3 = new DataSourceParameterOption("Option 2A3", "", param2a, 0);
-		
-		DataSourceParameter param2b = new DataSourceParameter("Param 2B", "desc", ds2, null, DataSourceParameter.Display.RADIO);
-		DataSourceParameterOption option2b1 = new DataSourceParameterOption("Option 2B1", "", param2b, 0);
-		DataSourceParameterOption option2b2 = new DataSourceParameterOption("Option 2B2", "", param2b, 0);
-		DataSourceParameterOption option2b3 = new DataSourceParameterOption("Option 2B3", "", param2b, 0);
-
-		DataSourceParameter param2c = new DataSourceParameter("Param 2C", "desc", ds2, null, DataSourceParameter.Display.DROPDOWN);
-		DataSourceParameterOption option2c1 = new DataSourceParameterOption("Option 2C1", "", param2c, 0);
-		DataSourceParameterOption option2c2 = new DataSourceParameterOption("Option 2C2", "", param2c, 0);
-		DataSourceParameterOption option2c3 = new DataSourceParameterOption("Option 2C3", "", param2c, 0);
-		
-		session.save(ds2);
-		session.save(param2a);
-		session.save(option2a1);
-		session.save(option2a2);
-		session.save(option2a3);
-		session.save(param2b);
-		session.save(option2b1);
-		session.save(option2b2);
-		session.save(option2b3);
-		session.save(param2c);
-		session.save(option2c1);
-		session.save(option2c2);
-		session.save(option2c3);*/
 		
 		
 		// Availability of data sources for each seaport
 		List<DataSource> dataSourcesAvailable = new ArrayList<DataSource>();
 		dataSourcesAvailable.add(dsCsiro);
-		//dataSourcesAvailable.add(ds2);
 		port1.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port1);
 		
@@ -252,13 +217,11 @@ public class TestDatabaseLoader {
 		
 		dataSourcesAvailable = new ArrayList<DataSource>();
 		dataSourcesAvailable.add(dsCsiro);
-		//dataSourcesAvailable.add(ds2);
 		port4.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port4);
 		
 		dataSourcesAvailable = new ArrayList<DataSource>();
 		dataSourcesAvailable.add(dsCsiro);
-		//dataSourcesAvailable.add(ds2);
 		port5.setDataSourcesAvailable(dataSourcesAvailable);
 		session.save(port5);		
 		
@@ -288,33 +251,25 @@ public class TestDatabaseLoader {
 	    date = new Date();
 	    String content = "This is a test for Data Element";
 	    InputElement ie1 = new InputElement(date, "Test 1", nonClimateCategory, user1wb, true, 1, "csv", content.getBytes());
-	    //DataElementFile de1 = new DataElementFile(date, "Test 1", true, 0, DisplayType.PLAIN, user1wb, "csv", content.getBytes());
 	   
 	    content = "This is the second test";
 	    InputElement ie2 = new InputElement(date, "Test 2", observedClimateCategory, user1wb, true, 1, "xml", content.getBytes());
-	    //DataElementFile de2 = new DataElementFile(date, "Test 2", true, 0, DisplayType.PLAIN, user1wb, "xml", content.getBytes());
 		
 	    content = "This is the third test";
 	    InputElement ie3 = new InputElement(date, "Test 3", futureClimateCategory, user1wb, true, 1, "txt", content.getBytes());
-	    //DataElementFile de3 = new DataElementFile(date, "Test 3", true, 0, DisplayType.PLAIN, user1wb, "txt", content.getBytes());
 		
 	    content = "User Story's Data Element content test";
 	    
 	    InputElement ie4 = new InputElement(date, "Test 4", nonClimateCategory, user1us1, true, 1, "txt", content.getBytes());
-	    //DataElementFile de4 = new DataElementFile(date, "Test 4", true, 1, DisplayType.PLAIN, user1us1, "txt", content.getBytes());
 	    
 	    InputElement text1 = new InputElement(date, "Comment text 1", nonClimateCategory, user1us1, true, 2, "txt", content.getBytes());
-	    //DataElementText text1 = new DataElementText(date, "Comment text 1", true, 2, DisplayType.PLAIN, user1us1, "This is a text comment");
 	    
 	    InputElement ie5 = new InputElement(date, "Test 5", applicationsCategory, user1us1, true, 3, "txt", content.getBytes());
-	    //DataElementFile de5 = new DataElementFile(date, "Test 5", true, 3, DisplayType.PLAIN, user1us1, "txt", content.getBytes());
 	    
 	    content = "This is a second text comment";
 	    InputElement text2 = new InputElement(date, "Comment text 2", futureClimateCategory, user1us1, true, 4, "txt", content.getBytes());
-	    //DataElementText text2 = new DataElementText(date, "Comment text 2", true, 4, DisplayType.PLAIN, user1us1, "This is a second text comment");
 		
 	    InputElement ie6 = new InputElement(date, "Test 6", applicationsCategory, user1us1, true, 5, "txt", content.getBytes());
-	    //DataElementFile de6 = new DataElementFile(date, "Test 6", true, 5, DisplayType.PLAIN, user1us2, "txt", content.getBytes());
 	    
 		session.save(ie1);
 		session.save(ie2);
@@ -326,12 +281,6 @@ public class TestDatabaseLoader {
 		session.save(ie6);
 
 		// CSIRO Data Element
-		/*ArrayList<CsiroData> csiroDataList = new ArrayList<CsiroData>();
-		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 1)));
-		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 2)));
-		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 3)));
-		csiroDataList.add((CsiroData)(session.get(CsiroData.class, 4)));
-	    DataElementCsiro deCsiro = new DataElementCsiro(date, "CSIRO Data Element Test", true, 0, DisplayType.TABLE, user1wb, csiroDataList);*/
 		List<DataSourceParameterOption> selectedOptions = new ArrayList<DataSourceParameterOption>();
 		selectedOptions.add(csiroVariableTemperature);
 		selectedOptions.add(mediumEmScn);
@@ -361,6 +310,14 @@ public class TestDatabaseLoader {
 	    session.save(we);
 	    session.save(new DataElementVulnerability(date, "Vulnerability Assessment", true, 0, DisplayType.GRAPH, user1wb, we));
 	    */
+	    
+	    
+	    try {
+			ReportPublication pub = new ReportPublication(user1us3);
+			session.save(pub);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	    
 		// Commit all the transaction
 		session.getTransaction().commit();

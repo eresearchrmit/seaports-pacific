@@ -7,6 +7,7 @@
  */
 package edu.rmit.eres.seaports.model ;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ import edu.rmit.eres.seaports.model.User;
  */
 @Entity
 @Table(name = "Report")
-public class Report {
+public class Report implements Serializable {
 	
 	private static final long serialVersionUID = -1308795024262635690L;
 	
@@ -335,52 +336,35 @@ public class Report {
 	 * @return a full summary of the report
 	 */
 	public String getFullDescription() {
-		String str = "";
+		
+		// Generates a string with the name the different data sources that have been added to the report
+		String dataSourcesUsed = "";
+		for (Element element : this.elements) {        	
+ 			if (element.getClass().equals(DataElement.class)) {
+ 				DataElement e = (DataElement)element;
+ 				String dataSourceName = e.getDataSource().getName() + " data";
+ 				if (!dataSourcesUsed.contains(dataSourceName))
+ 					dataSourcesUsed += dataSourceName + ", ";
+ 			}
+        }
         
-		// Generates a (string) list of the different types of data elements that have been added to the report
-		// TODO: Adapt this method to list the different data sources used
-		/*int i = 1;
-        for (DataElement dataElement : dataElements) {        	
- 			if (dataElement.getClass().equals(DataElementAbs.class) && !str.contains("ABS data")) {
- 				str += "ABS data|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementBitre.class) && !str.contains("Ports Australia data")) {
- 				str += "Ports Australia data|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementFile.class) && !str.contains("custom data")) {
- 				str += owner.getFirstname() + " " + owner.getLastname() + "'s custom data|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementPast.class) && !str.contains("CSIRO & BoM trend data")) {
- 				str += "CSIRO & BoM trend data|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementAcornSat.class) && !str.contains("measurements from ACORN-SAT stations")) {
- 				str += "measurements from ACORN-SAT stations|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementCmar.class) && !str.contains("CMAR future data")) {
- 				str += "CMAR future data|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementCsiro.class) && !str.contains("CSIRO future data")) {
- 				str += "CSIRO future data|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementEngineeringModel.class) && !str.contains("concrete deterioration")) {
- 				str += "concrete deterioration forecast model data|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementVulnerability.class) && !str.contains("vulnerability assessment")) {
- 				str += seaport.getName() + " vulnerability assessment|";
- 			}
- 			else if (dataElement.getClass().equals(DataElementText.class) && !str.contains("personal analysis")) {
- 				str += owner.getFirstname() + " " + owner.getLastname() + "'s personal analysis|";
- 			}
- 			i++;
-        }*/
-        str = str.replace("|", ", ");
-        str = str.replaceAll(", $", "");
+        if (!dataSourcesUsed.isEmpty())
+        	dataSourcesUsed += " and ";
+        dataSourcesUsed += owner.getFirstname() + " " + owner.getLastname() + "'s personal analysis.";
         
         return "This report was created in reference to " + seaport.getName() + " (" + seaport.getCode() 
-        + "), located in the ABC NRM region " + seaport.getRegion().getName() 
-		+ ". The report is composed of " + str + ". " + "It has been created by " + owner.getFirstname() 
+        + "), located in the " + seaport.getRegion().getName() + " region. "
+		+ "The report is composed of " + dataSourcesUsed + ". " + "It has been created by " + owner.getFirstname() 
 		+ " " + owner.getLastname() + " using the Climate Smart Seaports tool available at " 
 		+ RIFCSController.CSS_URL + ".";
+	}
+	
+	/**
+	 * Returns the HTML version of the report
+	 * @return an HTML version of the report
+	 */
+	public String getHtmlcontent() {
+		return "plop";
 	}
 	
 	public static long getSerialversionuid() {

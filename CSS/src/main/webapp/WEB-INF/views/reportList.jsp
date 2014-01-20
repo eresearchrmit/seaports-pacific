@@ -36,44 +36,55 @@
 	<c:set var="errorMessage" scope="request" value="${errorMessage}"/> 			
 	<jsp:include page="notifications.jsp" />
 	
-	<c:if test="${not empty reportList}">
-		<table class="data display datatable" id="tblReportList">
-			<thead>
-				<tr>
-					<th>Title</th>
-					<th>View</th>
-					<th>Edit</th>
-					<th>Publish</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${reportList}" var="report" varStatus="status"> 
-				<tr>
-					<td><c:out value="${report.name}" /></td>
-					<td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
-					<c:choose>
-						<c:when test="${report.mode == 'published'}">
-							<td></td>
-							<td>Published (<fmt:formatDate value="${report.publishDate}" pattern="dd MMM yyyy" />) <img src="<c:url value="/resources/img/icons/accept.png" />" /></td>
-							<td></td>
-	                 	</c:when>
-	                 	<c:otherwise>
-	                 		<td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/pencil.png" />" alt="Edit"/></a></td>
-	                 		<td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/world_go.png" />" alt="Publish"/></a></td>
-							<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
-	                 	</c:otherwise>
-					</c:choose>
-				</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-		<script type="text/javascript">
-			$(document).ready(function () {
-				$('#tblReportList').dataTable();
-			});
-	 	</script>
-	</c:if>
+	<c:choose> 
+		<c:when test="${not empty reportList}">
+			<table class="data display datatable" id="tblReportList">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>View</th>
+						<th>Edit</th>
+						<th>Publish</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${reportList}" var="report" varStatus="status"> 
+					<tr>
+						<td><c:out value="${report.name}" /></td>
+						<td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
+						<c:choose>
+							<c:when test="${report.mode == 'published'}">
+								<td></td>
+								<td>Published (<fmt:formatDate value="${report.publishDate}" pattern="dd MMM yyyy" />) <img src="<c:url value="/resources/img/icons/accept.png" />" /></td>
+								<td></td>
+		                 	</c:when>
+		                 	<c:otherwise>
+		                 		<td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/pencil.png" />" alt="Edit"/></a></td>
+		                 		<td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/world_go.png" />" alt="Publish"/></a></td>
+								<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
+		                 	</c:otherwise>
+						</c:choose>
+					</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			<script type="text/javascript">
+				$(document).ready(function () {
+					$('#tblReportList').dataTable();
+				});
+		 	</script>
+		</c:when>
+		<c:otherwise>
+			<p><i>You don't have any report.</i></p>
+			<p><i>Click on the 'New Report' button to start.</i></p>
+			<a class="lnkConvertToUserStory" href="/auth/report/create">
+				<button id="btnConvertToUserStory" type="button" class="btn btn-icon btn-blue btn-plus" >
+					<span></span>New Report
+				</button>
+			</a>
+		</c:otherwise>
+	</c:choose>
 
 	<div id="confirmUserStoryPublishModalWindow" title="Really publish this report ?" style="display:none">
 		<p class="message"><span class="error"><b>Publishing this report will automatically submit it to ANDS, and appear on Research Data Australia.</b></span></p>
