@@ -30,6 +30,11 @@ import org.hibernate.annotations.LazyCollectionOption;
 public class DataElement extends Element implements Serializable {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9021601215200076194L;
+
+	/**
 	 * The source providing data for this data element
 	 */
 	@ManyToOne
@@ -153,77 +158,7 @@ public class DataElement extends Element implements Serializable {
 	}
 	
 	public List<?> getData() {
-		return this.data;	
-		
-		/*try {
-		// Instantiate the data type of data source based on the name
-		String className = "edu.rmit.eres.seaports.model." + this.getDataSource().getName() + "DataSource";
-		//DataSource ds = (DataSource)(Class.forName(className).newInstance());
-			
-		Constructor<?> constructor = Class.forName(className).getDeclaredConstructor(this.getDataSource().getClass());
-		constructor.setAccessible(true);
-		DataSource ds = (DataSource) constructor.newInstance(new Object[] { this.getDataSource() });
-
-		
-		//CSIRODataSource ds = new CSIRODataSource(this.dataSource.getName(), this.dataSource.getParameters(), this.dataSource.getSeaports(), this.dataSource.getDisplayTypes());
-		List<?> data = ds.getData(this);*/
-			
-		/*for (Object row : data) {
-			CsiroData csiroData = (CsiroData)row;
-			String str = csiroData.getValue().toString();
-		}*/
-		/*
-		//CSIRODataSource ds = new CSIRODataSource(this.dataSource.getName(), this.dataSource.getParameters(), this.dataSource.getSeaports(), this.dataSource.getDisplayTypes());
-		//List<?> data = ds.getData(this);
-	
-		// Retrieves the data
-		//List<?> data = ds.getData(this.selectedOptions);
-		
-		/*for (Object row : data) {
-			CsiroData csiroData = (CsiroData)row;
-			String str = csiroData.getValue().toString();
-		}*/
-/*
-			return data;
-		} catch (NoSuchMethodException | SecurityException | ClassNotFoundException |
-				InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		return this.data;
 	}
 	
-	public String getHtml() {
-		
-		String res = "";
-		// Recap of selected options
-		for (DataSourceParameterOption opt : selectedOptions)
-			res += opt.getParameter().getName() + ": " + opt.getName() + opt.getValue() + "<br />";
-				
-		try {
-			// Instantiate the data type of data source based on the name
-			Class<?> cls = Class.forName("edu.rmit.eres.seaports.model." + this.dataSource.getName() + "DataSource");
-			Object instance = cls.newInstance();
-			DataSource ds = (DataSource)instance;
-			
-			// Retrieves the data
-			/*List<?> data = ds.getData(this.selectedOptions);
-			
-			// Format the data as a table
-			res += "<table>";
-			for (Object row : data) {
-				String str = row.toString();
-				res += "<tr><td>" + str + "</td></tr>";
-			}
-			res += "</table>";*/
-			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		
-		return res;
-	}
 }

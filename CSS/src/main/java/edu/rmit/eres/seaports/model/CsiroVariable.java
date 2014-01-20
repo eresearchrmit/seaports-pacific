@@ -19,6 +19,8 @@ import javax.persistence.Table;
 @Table(name = "CsiroVariable")
 public class CsiroVariable extends Variable {
 	
+	private static final long serialVersionUID = -2491294078433221153L;
+
 	/**
 	 * Default constructor of CsiroVariable
 	 */
