@@ -10,7 +10,9 @@ package edu.rmit.eres.seaports.database;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,11 +23,11 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 import edu.rmit.eres.seaports.model.*;
 
 /**
- * Class used to load CSIRO and CMAR dataset in the database
+ * Class used to load CSIRO Data Source in the database
  * @author Guillaume Prevost
  */
 @SuppressWarnings("deprecation")
-public class CsiroDataLoader {
+public class CsiroDataSourceLoader {
 
 	/**
 	 * 'Hotter & Drier' climate model string
@@ -48,7 +50,7 @@ public class CsiroDataLoader {
 	public static final String BASELINE = "Baseline";
 	
 	/**
-	 * Main method used to load CSIRO and CMAR data only.
+	 * Main method used to load  the CSIRO Data Source only.
 	 * On an existing database, this may duplicate data.
 	 * @param args: no parameters
 	 */
@@ -63,11 +65,89 @@ public class CsiroDataLoader {
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();	
 		
-		LoadCsiroData(session);
+		LoadCsiroDataSource(session);
 		
 		session.getTransaction().commit();
 	}
 	
+	/**
+	 * Loads the CSIRO Data Source in the database
+	 * @param session: the Hibernate Session object which takes care of persisting objects in the database
+	 */
+	public static void LoadCsiroDataSource(Session session)
+	{
+		// Loads the underlying Csiro dataset
+		CsiroDataSourceLoader.LoadCsiroData(session);
+		
+		
+		// Display Types offered buy this data source
+		DisplayType textDisplayType = (DisplayType)(session.get(DisplayType.class, 1));
+		DisplayType tableDisplayType = (DisplayType)(session.get(DisplayType.class, 3));
+		DisplayType pictureDisplayType = (DisplayType)(session.get(DisplayType.class, 5));
+		
+		List<DisplayType> displayTypesCsiro = new ArrayList<DisplayType>();
+		displayTypesCsiro.add(textDisplayType);
+		displayTypesCsiro.add(tableDisplayType);
+		displayTypesCsiro.add(pictureDisplayType);
+		
+		
+		// Data Source
+		CsiroDataSource dsCsiro = new CsiroDataSource("CSIRO", null, null, displayTypesCsiro);
+		
+		// Parameters Climate Variable, with options Temperature, Wind Speed, Rainfall and Relative Humidity
+		DataSourceParameter csiroVariableParam = new DataSourceParameter("Variable", "<h6>MEAN TEMPERATURE</h6><p>Mean air temperature in degrees Celsius (&#176;C) as measured at 2 m above ground. Values are given as change from modelled baseline (1981-2000) climate.</p><h6>RAINFALL</h6><p>Mean rainfall in millimetres (mm). Values are given as change from modelled baseline (1981-2000) climate.</p><h6>DAILY RELATIVE HUMIDITY</h6><p>Calculated at 2 m above ground and expressed in percent (%). Values are given as change from modelled baseline (1981-2000) climate.</p><h6>WIND SPEED</h6><p>Mean wind speed, in metres per second (m/sec) as measured at 10m above the ground. Values are given as change from modelled baseline (1981-2000) climate.</p>",
+				dsCsiro, null, DataSourceParameter.Display.DROPDOWN);		
+		session.save(csiroVariableParam);
+		DataSourceParameterOption csiroVariableTemperature = new DataSourceParameterOption("Temperature", "Temperature", csiroVariableParam, 1);
+		session.save(csiroVariableTemperature);
+		DataSourceParameterOption csiroVariableWindSpeed = new DataSourceParameterOption("Wind Speed", "Wind Speed", csiroVariableParam, 2);
+		session.save(csiroVariableWindSpeed);
+		DataSourceParameterOption csiroVariableRainfall = new DataSourceParameterOption("Rainfall", "Rainfall", csiroVariableParam, 3);
+		session.save(csiroVariableRainfall);
+		DataSourceParameterOption csiroVariableHumidity = new DataSourceParameterOption("Relative Humidity", "Relative Humidity", csiroVariableParam, 4);
+		session.save(csiroVariableHumidity);
+		
+		// Parameter Emission Scenario, with option Medium and High
+		DataSourceParameter climateEmissionScnParam = new DataSourceParameter("Emission Scenario", "<p>The emission scenarios represent the future development of greenhouse gas emissions and are based on assumptions about economic, technological and population growth. The two emissions scenarios that are available here are from the 'A1 storyline' and were developed by the IPCC Special Report on Emissions Scenarios (SRES).</p><p>As a general guide:</p><p>Emission Scenario A1B: medium CO2 emissions, peaking around 2030</p><p>Emission Scenario A1FI: high CO2 emissions, increasing throughout the 21st century</p>", 
+				dsCsiro, null, DataSourceParameter.Display.RADIO);
+		session.save(climateEmissionScnParam);
+		DataSourceParameterOption mediumEmScn = new DataSourceParameterOption("Medium (A1B)", "A1B", climateEmissionScnParam, 1);
+		session.save(mediumEmScn);
+		DataSourceParameterOption highEmScn = new DataSourceParameterOption("High (A1FI)", "A1FI", climateEmissionScnParam, 2);
+		session.save(highEmScn);
+		
+		// Parameter Year, with options 2030, 2055 and 2070
+		DataSourceParameter yearParam = new DataSourceParameter("Year", "<p>Time periods are expressed relative to the 1981-2000 baseline period and are centred on a given decade. For example, the 2030s time period refers to the period 2020-2039.</p> <p>Three future time periods are available: 2030, 2055 and 2070.</p>", 
+				dsCsiro, null, DataSourceParameter.Display.DROPDOWN);
+		session.save(yearParam);
+		DataSourceParameterOption year2030 = new DataSourceParameterOption("2030", "2030", yearParam, 1);
+		session.save(year2030);
+		DataSourceParameterOption year2055 = new DataSourceParameterOption("2055", "2055", yearParam, 2);
+		session.save(year2055);
+		DataSourceParameterOption year2070 = new DataSourceParameterOption("2070", "2070", yearParam, 3);
+		session.save(year2070);
+		
+		
+		// Availability of the data source for each seaport
+		List<Seaport> seaports = new ArrayList<Seaport>();
+		seaports.add((Seaport)(session.get(Seaport.class, "FJLEV")));
+		seaports.add((Seaport)(session.get(Seaport.class, "FJSUV")));
+		seaports.add((Seaport)(session.get(Seaport.class, "FJLTK")));
+		seaports.add((Seaport)(session.get(Seaport.class, "FJSVU")));
+		seaports.add((Seaport)(session.get(Seaport.class, "FJLBS")));
+		dsCsiro.setSeaports(seaports);
+		
+		
+		// Availability of data sources for each element category
+		List<ElementCategory> categories = new ArrayList<ElementCategory>();
+		categories.add((ElementCategory)(session.get(ElementCategory.class, 3))); // Category 3 = Future Climate
+		dsCsiro.setCategories(categories);
+		
+		
+		session.save(dsCsiro);
+	}
+	
+
 	/**
 	 * Loads the CSIRO and CMAR dataset in the database
 	 * @param session: the Hibernate Session object which takes care of persisting objects in the database

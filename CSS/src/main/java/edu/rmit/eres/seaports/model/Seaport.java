@@ -13,13 +13,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * Class representing an Australian seaport. It is related to the NRM region where it is located.
@@ -58,9 +54,7 @@ public class Seaport implements Serializable {
 	/**
 	 * The list of available data sources for this seaport
 	 */
-    @ManyToMany
-    @JoinTable(name="seaport_data_source_availability", joinColumns={@JoinColumn(name="seaport_code")}, inverseJoinColumns={@JoinColumn(name="data_source_id")})
-	@LazyCollection(value=LazyCollectionOption.FALSE)
+	@ManyToMany(mappedBy="seaports")
 	private List<DataSource> dataSourcesAvailable;
 	
 	/**

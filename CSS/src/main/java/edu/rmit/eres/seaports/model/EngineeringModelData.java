@@ -9,7 +9,6 @@ package edu.rmit.eres.seaports.model;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Column;
@@ -18,7 +17,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -31,8 +29,8 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "EngineeringModelData")
-public class EngineeringModelData
-{
+public class EngineeringModelData {
+	
 	private static final long serialVersionUID = -1308795024262635690L;
 	
 	public static final String PAIR_SEPARATOR = ";";
@@ -271,5 +269,9 @@ public class EngineeringModelData
 	@Override
 	public String toString() {
 		return (this.variable.getName() + "(" + this.variable.getUom() + ") " + this.data);
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

@@ -20,8 +20,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "EngineeringModelAsset")
-public class EngineeringModelAsset
-{
+public class EngineeringModelAsset {
+	
 	private static final long serialVersionUID = -1308795024262635690L;
 	
 	/**
@@ -362,5 +362,9 @@ public class EngineeringModelAsset
 	 */
 	public void setDbar(Double dbar) {
 		this.dbar = dbar;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

@@ -23,6 +23,24 @@
 	
 	<!-- <p class="hint"><i>You have no active workboard. Create a new report using the page below, or read the <a href="/public/guidelines#introduction" target="_blank">Climate Smart Seaports User Guide</a> for more information on how to use this tool.</i></p> -->
 	
+	<%-- 
+		ANDS GEOLOCATION WIDGET
+		http://researchdata.ands.org.au/developers/documentation/widgets/location_widget
+		
+		<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false&libraries=drawing&v=3"></script>
+		<script src='//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js'></script>
+		<script type="text/javascript" src="//researchdata.ands.org.au/apps/assets/location_capture_widget/js/location_capture_widget.js"></script>
+		<link rel="stylesheet" type="text/css" href="//researchdata.ands.org.au/apps/assets/location_capture_widget/css/location_capture_widget.css" />
+		
+		<div id="mapContainer"></div>
+		
+		<script type="text/javascript">
+		  $(document).ready(function() {
+			$("#mapContainer").ands_location_widget({target:'coordinates'});
+		  });
+		</script>
+	 --%>
+	
 	<form:form method="POST" action="/auth/report/create"  modelAttribute="report" >
 	
 	<table class="form" width="100%">

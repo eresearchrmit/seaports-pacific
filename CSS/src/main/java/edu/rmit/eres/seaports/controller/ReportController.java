@@ -243,10 +243,7 @@ public class ReportController {
 	}
 
 	@RequestMapping(value="/save", method=RequestMethod.POST) 
-	public String saveReport(
-			@RequestParam(value="comments",required=false) String[] updatedTexts, 
-			@Valid @ModelAttribute("report") Report updatedReport, 
-			RedirectAttributes attributes) {
+	public String saveReport(@Valid @ModelAttribute("report") Report updatedReport, RedirectAttributes attributes) {
 		logger.info("Inside saveReport");
 		
 		Report report = null;
@@ -284,27 +281,27 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/delete",method=RequestMethod.GET) 
-	public String deleteReport(@RequestParam(value="id", required=true) Integer reportId, Model model) {
+	public String deleteReport(@RequestParam(value="id", required=true) Integer reportId, RedirectAttributes attributes) {
 		logger.debug("Inside deleteReport");
-		
+				
 		try {
-			model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
+			//attributes.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
 			
 			Report report = reportDao.find(reportId);
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
 				throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			User user = report.getOwner();
+			String ownerUsername = report.getOwner().getUsername();
 			reportDao.delete(report); // Deletes the Report
 			
-			return "redirect:/auth/report/list?user=" + user.getUsername(); // returns to the list of reports
+			return "redirect:/auth/report/list?user=" + ownerUsername; // returns to the list of reports
 			//return ModelForReportCreation(model, user); // Starts the creation of a new report
 		}
-		catch (NoResultException e) {
-			model.addAttribute("errorMessage", ReportController.ERR_DELETE_REPORT);
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", ReportController.ERR_DELETE_REPORT);
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername(); // returns to the list of reports
 		}
-		return ("report");
 	}
 	
 	@RequestMapping(value = "/create-data-element",method=RequestMethod.POST) 
@@ -786,7 +783,7 @@ public class ReportController {
 	public static final String ERR_ACCESS_DENIED = "You are not allowed to access this Report";
 	
 	public static final String ERR_CREATE_REPORT = "An error happened while creating your report. Please try again";
-	public static final String ERR_DELETE_REPORT = "An error happened while creating your report. Please try again";
+	public static final String ERR_DELETE_REPORT = "An error happened while deleting your report. Please try again";
 	public static final String ERR_RETRIEVE_REPORT = "Could not retrieve the specified report";
 	public static final String ERR_RETRIEVE_REPORT_LIST = "Impossible to retrieve the list of your reports";
 	public static final String ERR_REGION_NOT_DEFINED = "Please select a region and a seaport for your report";

@@ -1,169 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.2" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="edu.rmit.eres.seaports.model.DataElement" project="CSS" 
     file="/CSS/src/main/java/edu/rmit/eres/seaports/model/DataElement.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="248" width="226" x="322" y="-81"/>    
+    <position height="352" width="231" x="517" y="571"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="2" language="java" name="edu.rmit.eres.seaports.model.DataElement.DisplayType" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElement.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="230" width="201" x="32" y="-67"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </enumeration>  
-  <class id="3" language="java" name="edu.rmit.eres.seaports.model.DataElementAbs" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementAbs.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="143" width="206" x="27" y="261"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+  <class id="2" language="java" name="edu.rmit.eres.seaports.model.InputElement" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/InputElement.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="350" width="436" x="41" y="571"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="edu.rmit.eres.seaports.model.DataElementAcornSat" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementAcornSat.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="139" width="254" x="544" y="278"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+  <class id="3" language="java" name="edu.rmit.eres.seaports.model.Element" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/Element.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="494" width="342" x="517" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="edu.rmit.eres.seaports.model.DataElementBitre" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementBitre.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="140" width="205" x="280" y="277"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+  <class id="4" language="java" name="edu.rmit.eres.seaports.model.ElementCategory" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/ElementCategory.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="404" width="296" x="788" y="571"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="edu.rmit.eres.seaports.model.DataElementCmar" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementCmar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="158" width="216" x="312" y="430"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+  <interface id="5" language="java" name="edu.rmit.eres.seaports.model.IDataSource" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/IDataSource.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="332" width="294" x="517" y="1015"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="edu.rmit.eres.seaports.model.DisplayType" project="CSS" 
+    file="/CSS/src/main/java/edu/rmit/eres/seaports/model/DisplayType.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="355" y="1173"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="edu.rmit.eres.seaports.model.DataElementCsiro" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementCsiro.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="139" width="218" x="8" y="433"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="edu.rmit.eres.seaports.model.DataElementEngineeringModel" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementEngineeringModel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="141" width="351" x="9" y="598"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="9" language="java" name="edu.rmit.eres.seaports.model.DataElementFile" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementFile.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="177" width="219" x="590" y="59"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="10" language="java" name="edu.rmit.eres.seaports.model.DataElementPast" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementPast.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="138" width="208" x="589" y="436"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="11" language="java" name="edu.rmit.eres.seaports.model.DataElementText" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementText.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="141" width="189" x="620" y="-119"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="12" language="java" name="edu.rmit.eres.seaports.model.DataElementVulnerability" project="CSS" 
-    file="/CSS/src/main/java/war/model/DataElementVulnerability.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="140" width="200" x="472" y="603"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <generalization id="13">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
+  <generalization id="7">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
   </generalization>  
-  <generalization id="14">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="15">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="16">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="17">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="19">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <association id="20">    
+  <association id="8">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="21" name="displayType">        
-        <position height="20" width="76" x="240" y="89"/>      
-      </attribute>      
-      <multiplicity id="22" minimum="0" maximum="1">        
-        <position height="18" width="27" x="292" y="74"/>      
-      </multiplicity>    
+      <attribute id="9" name="dataSource"/>      
+      <multiplicity id="10" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="23">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <nesting id="24">    
+  <association id="11">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="12" name="category"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="15" name="displayType"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="17">    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="2"/>  
-  </nesting>  
-  <generalization id="25">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="26">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="1"/>  
+    <end type="TARGET" refId="3"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    

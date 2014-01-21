@@ -35,7 +35,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 @Entity
 @Table(name = "DataSource")
 @DiscriminatorColumn(name = "type")
-public class DataSource implements Serializable {
+public class DataSource implements IDataSource, Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;
     
@@ -63,7 +63,7 @@ public class DataSource implements Serializable {
 	 * The list of engineering model data contained in this data element
 	 */
     @ManyToMany
-    @JoinTable(name="data_source_display_type", joinColumns={@JoinColumn(name="data_source_id")}, inverseJoinColumns={@JoinColumn(name="display_type_id")})
+    @JoinTable(name="data_source_display_types", joinColumns={@JoinColumn(name="data_source_id")}, inverseJoinColumns={@JoinColumn(name="display_type_id")})
 	@LazyCollection(value=LazyCollectionOption.FALSE)
 	private List<DisplayType> displayTypes;
 
@@ -71,7 +71,8 @@ public class DataSource implements Serializable {
 	/**
 	 * The list of seaports for which this data source is available
 	 */
-	@ManyToMany(targetEntity=Seaport.class, mappedBy="dataSourcesAvailable")
+    @ManyToMany
+    @JoinTable(name="data_source_seaports", joinColumns={@JoinColumn(name="data_source_id")}, inverseJoinColumns={@JoinColumn(name="seaport_code")})
 	@LazyCollection(value=LazyCollectionOption.FALSE)
 	private List<Seaport> seaports;
 	

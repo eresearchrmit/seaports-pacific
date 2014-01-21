@@ -171,4 +171,8 @@ public class ClimateParams {
 	public String toString() {
 		return new String(modelName + "(" + model + "), " + emissionScenario);
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

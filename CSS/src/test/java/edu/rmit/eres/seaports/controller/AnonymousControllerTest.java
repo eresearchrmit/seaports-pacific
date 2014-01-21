@@ -163,8 +163,8 @@ public class AnonymousControllerTest {
 
 	@Test(expected = AccessDeniedException.class)
 	public void deleteReportTest() {
-		ExtendedModelMap model = new ExtendedModelMap();
-		workboardController.deleteReport(1, model);
+		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+		workboardController.deleteReport(1, redirectAttributes);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
@@ -184,9 +184,8 @@ public class AnonymousControllerTest {
 	public void saveReportTest() {
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		Report refUserstory = userStoryDao.find(2);
-		String[] updatedTexts = new String[] {"Updated Text 1", "Updated Text 2"};
 		
-		reportController.saveReport(updatedTexts, refUserstory, redirectAttributes);
+		reportController.saveReport(refUserstory, redirectAttributes);
 	}
 		
 	@Test(expected = AccessDeniedException.class)

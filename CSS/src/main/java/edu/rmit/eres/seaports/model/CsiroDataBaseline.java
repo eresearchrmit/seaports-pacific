@@ -152,4 +152,8 @@ public class CsiroDataBaseline
 	public void setValue(Double value) {
 		this.value = value;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

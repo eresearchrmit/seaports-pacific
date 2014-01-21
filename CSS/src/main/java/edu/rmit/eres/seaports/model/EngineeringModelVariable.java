@@ -20,6 +20,8 @@ import javax.persistence.Table;
 @Table(name = "EngineeringModelVariable")
 public class EngineeringModelVariable extends Variable {
 	
+	private static final long serialVersionUID = 6736987999555096784L;
+	
 	/**
 	 * The category of the engineering model variable (Chloride oor Carbonation)
 	 */

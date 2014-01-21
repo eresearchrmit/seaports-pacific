@@ -206,7 +206,6 @@ public class CsiroData implements Serializable
 		return this.emissionScenario;
 	}
 	
-
 	/**
 	 * Setter for the emission scenario
 	 * @param emissionScenario: the new emission scenario

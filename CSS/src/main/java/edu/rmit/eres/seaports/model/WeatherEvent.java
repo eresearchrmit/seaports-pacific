@@ -282,6 +282,10 @@ public class WeatherEvent
 		return weatherEventConsequence;
 	}
 	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	// Information, success, warning and error messages 
 	public static final String ERR_INVALID_WEATHER_EVENT_TYPE = "Invalid weather event type";
 	public static final String ERR_CONSEQUENCE_RATING_OUT_OF_RANGE = "The rating of a consequence must be between 0 (none) and 5 (extreme)";

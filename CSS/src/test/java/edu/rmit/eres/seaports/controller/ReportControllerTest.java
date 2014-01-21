@@ -7,6 +7,8 @@
  */
 package edu.rmit.eres.seaports.controller;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import edu.rmit.eres.seaports.controller.ReportController;
 import edu.rmit.eres.seaports.dao.*;
+import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
 import edu.rmit.eres.seaports.model.*;
 import edu.rmit.eres.seaports.security.UserLoginService;
 
@@ -48,6 +51,9 @@ public class ReportControllerTest {
 	
 	@Autowired
 	private ReportDao reportDao;
+	
+	@Autowired
+	ReportPublicationDao reportPublicationDao;
 	
 	@Autowired
 	private ElementDao elementDao;
@@ -1091,39 +1097,7 @@ public class ReportControllerTest {
 	/* --------------------------------------------------------------------- */
 	/* ---------------------------- saveReport -------------------------- */
 	/* --------------------------------------------------------------------- */
-	
-	/**
-	 * saveReport should succeed
-	 */
-	@Test
-	public void saveReportUpdateTextsTest() {
-		SecurityContextHolder.setContext(securityContextUserLoggedIn);
 		
-		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		Integer id = 2;
-		Report refUserstory = reportDao.find(id);
-		Assert.assertEquals(5, refUserstory.getElements().size());
-		
-		String[] updatedTexts = new String[] {"Updated Text 1", "Updated Text 2"};
-		
-		reportController.saveReport(updatedTexts, refUserstory, redirectAttributes);
-		Assert.assertNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
-		
-		Report changedUserstory = reportDao.find(id);
-		Assert.assertEquals(5, changedUserstory.getElements().size());
-		
-		// TODO: create test texts to update before saving the report
-		/*DataElementText textItem = (DataElementText)(changedUserstory.getElements().get(1));
-		Assert.assertEquals(updatedTexts[0], textItem.getText());
-		DataElementText textItem2 = (DataElementText)(changedUserstory.getElements().get(3));
-		Assert.assertEquals(updatedTexts[1], textItem2.getText());*/
-		
-		// Set the texts back to what they were before the test
-		String[] refTexts = new String[] {"This is a text comment", "This is a second text comment"};
-		reportController.saveReport(refTexts, changedUserstory, redirectAttributes);
-		
-	}
-	
 	/**
 	 * saveReport should succeed
 	 */
@@ -1133,35 +1107,38 @@ public class ReportControllerTest {
 		
 		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 		Integer id = 2;
-		Report refUserstory = reportDao.find(id);
-		Assert.assertEquals(5, refUserstory.getElements().size());
-		
-		// Unchanged texts
-		String[] refTexts = new String[] {"This is a text comment", "This is a second text comment"};
-		
+		Report refReport = reportDao.find(id);
+		Assert.assertEquals(5, refReport.getElements().size());
+				
 		// Re-order the data elements
 		Report updatedReport = reportDao.find(id);
-		updatedReport.getElements().get(0).setPosition(4);
-		updatedReport.getElements().get(1).setPosition(3);
-		updatedReport.getElements().get(2).setPosition(1);
-		updatedReport.getElements().get(3).setPosition(2);
+		Collections.sort(updatedReport.getElements(), new ElementPositionComparator());
+		updatedReport.getElements().get(0).setPosition(5); // Id 4, position 1 -> position 5
+		updatedReport.getElements().get(1).setPosition(4); // Id 5, position 2 -> position 4
+		updatedReport.getElements().get(2).setPosition(3); // Id 6, position 3 -> position 3
+		updatedReport.getElements().get(3).setPosition(2); // Id 7, position 4 -> position 2
+		updatedReport.getElements().get(4).setPosition(1); // Id 8, position 5 -> position 1
 		
-		reportController.saveReport(refTexts, updatedReport, redirectAttributes);
+		reportController.saveReport(updatedReport, redirectAttributes);
 		Assert.assertNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
 		// Check that the data element order has been correctly changed
-		Report changedUserstory = reportDao.find(id);
-		Assert.assertEquals(5, changedUserstory.getElements().size());
-		Assert.assertEquals(4, changedUserstory.getElements().get(0).getPosition());
-		Assert.assertEquals(3, changedUserstory.getElements().get(1).getPosition());
-		Assert.assertEquals(1, changedUserstory.getElements().get(2).getPosition());
-		Assert.assertEquals(2, changedUserstory.getElements().get(3).getPosition());
+		Report changedReport = reportDao.find(id);
+		
+		Assert.assertEquals(5, changedReport.getElements().size());
+		Collections.sort(changedReport.getElements(), new ElementPositionComparator());
+		Assert.assertEquals(8, changedReport.getElements().get(0).getId());
+		Assert.assertEquals(7, changedReport.getElements().get(1).getId());
+		Assert.assertEquals(6, changedReport.getElements().get(2).getId());
+		Assert.assertEquals(5, changedReport.getElements().get(3).getId());
+		Assert.assertEquals(4, changedReport.getElements().get(4).getId());
 		
 		// Reset the order as i was before the test
 		updatedReport.getElements().get(0).setPosition(1);
 		updatedReport.getElements().get(1).setPosition(2);
 		updatedReport.getElements().get(2).setPosition(3);
 		updatedReport.getElements().get(3).setPosition(4);
-		reportController.saveReport(refTexts, updatedReport, redirectAttributes);
+		updatedReport.getElements().get(3).setPosition(5);
+		reportController.saveReport(updatedReport, redirectAttributes);
 	}
 	
 	/* --------------------------------------------------------------------- */
@@ -1183,7 +1160,7 @@ public class ReportControllerTest {
 		
 		String result = reportController.deleteReport(id, redirectAttributes);
 		Assert.assertNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
-		Assert.assertEquals("redirect:/auth/userstory/list?user=" + refReport.getOwner().getUsername(), result);
+		Assert.assertEquals("redirect:/auth/report/list?user=" + refReport.getOwner().getUsername(), result);
 		
 		/*try {
 			reportDao.find(id);
@@ -1206,7 +1183,7 @@ public class ReportControllerTest {
 		
 		String result = reportController.deleteReport(null, redirectAttributes);
 		Assert.assertNotNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
-		Assert.assertEquals("redirect:/auth/userstory/list?user=" + securityContextUserLoggedIn.getAuthentication().getName(), result);
+		Assert.assertEquals("redirect:/auth/report/list?user=" + securityContextUserLoggedIn.getAuthentication().getName(), result);
 		Assert.assertEquals(ReportController.ERR_DELETE_REPORT, redirectAttributes.getFlashAttributes().get("errorMessage"));
 	}
 	
@@ -1223,7 +1200,7 @@ public class ReportControllerTest {
 		
 		String result = reportController.deleteReport(id, redirectAttributes);
 		Assert.assertNotNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
-		Assert.assertEquals("redirect:/auth/userstory/list?user=" + securityContextUserLoggedIn.getAuthentication().getName(), result);
+		Assert.assertEquals("redirect:/auth/report/list?user=" + securityContextUserLoggedIn.getAuthentication().getName(), result);
 		Assert.assertEquals(ReportController.ERR_DELETE_REPORT, redirectAttributes.getFlashAttributes().get("errorMessage"));
 	}
 	
@@ -1290,25 +1267,47 @@ public class ReportControllerTest {
 		Report refReport = reportDao.find(id);
 		
 		// Check that the user story is private and in in 'passive' mode before the test
-		Assert.assertEquals("private", refReport.getAccess());
-		Assert.assertEquals("passive", refReport.getMode());
-		Assert.assertNull(refReport.getPublishDate());
+		//Assert.assertEquals("private", refReport.getAccess());
+		//Assert.assertEquals("passive", refReport.getMode());
+		//Assert.assertNull(refReport.getPublishDate());
 		
 		String result = reportController.publishReport(id, redirectAttributes);
 		Assert.assertNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
 		Assert.assertNull(redirectAttributes.getFlashAttributes().get("warningMessage"));
-		Assert.assertEquals("redirect:/auth/userstory?id=" + id, result);
+		Assert.assertTrue(result.startsWith("redirect:/public/published-report/view?id="));
+		
+		int publishedReportId = Integer.parseInt(result.split("=")[1]);
+		
 		
 		// Check the the User story is now public and published
-		refReport = reportDao.find(id);
-		Assert.assertEquals("public", refReport.getAccess());
-		Assert.assertEquals("published", refReport.getMode());
-		Assert.assertNotNull(refReport.getPublishDate());
+		ReportPublication publishedReport = reportPublicationDao.find(publishedReportId);
+		Assert.assertEquals(refReport.getName(), publishedReport.getName());
+		Assert.assertEquals(refReport.getOwner(), publishedReport.getOwner());
+		Assert.assertNotNull(publishedReport.getCreationDate());
+		Assert.assertNotNull(publishedReport.getContent());
+		
+		try {
+			Report report = publishedReport.getReport();
+			Assert.assertEquals(refReport.getId(), report.getId());
+			Assert.assertEquals(refReport.getName(), report.getName());
+			Assert.assertEquals(refReport.getSeaport().getCode(), report.getSeaport().getCode());
+			for (int i = 0; i < report.getElements().size(); i++) {
+				Assert.assertEquals(refReport.getElements().get(i).getId(), report.getElements().get(i).getId());
+			}			
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+		
+		//Assert.assertEquals("public", refReport.getAccess());
+		//Assert.assertEquals("published", refReport.getMode());
+		//Assert.assertNotNull(refReport.getPublishDate());
 		
 		// Reset the access to 'private' and the mode to 'passive' after the test
-		refReport.setAccess("private");
-		refReport.setMode("passive");
-		refReport.setPublishDate(null);
+		//refReport.setAccess("private");
+		//refReport.setMode("passive");
+		//refReport.setPublishDate(null);
+		
 		reportDao.save(refReport);
 	}
 
@@ -1325,7 +1324,7 @@ public class ReportControllerTest {
 		
 		String result = reportController.publishReport(id, redirectAttributes);
 		Assert.assertNotNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
-		Assert.assertEquals(ReportController.ERR_DELETE_REPORT, redirectAttributes.getFlashAttributes().get("errorMessage"));
-		Assert.assertEquals("redirect:/auth/userstory/list?user=" + securityContextUserLoggedIn.getAuthentication().getName(), result);
+		Assert.assertEquals(ReportController.ERR_PUBLISH_REPORT, redirectAttributes.getFlashAttributes().get("errorMessage"));
+		Assert.assertEquals("redirect:/auth/report/list?user=" + securityContextUserLoggedIn.getAuthentication().getName(), result);
 	}
 }

@@ -440,20 +440,6 @@
 											</select>
 										</form:form>
 									<% } %>
-	<%-- Modal window to edit display type --%>
-	<div id="editTextElementModalWindow" class="box round" title="Edit text" style="display:none; padding:0;">
-		<form:form id="editDisplayTypeForm" method="post" action="/auth/report/edit-display-type"> 
-			<input id="hdnDataElementToEditId" type="hidden" name="elementId" />
-			<c:forEach items="${datasource.displayTypes}" var="displayType" varStatus="displayLoopStatus">
-				<input type="radio" name="displayType" value="${displayType.name}" ${displayLoopStatus.first ? 'checked="checked"' : ''} /> ${displayType.name}
-			</c:forEach>
-			<div style="height: 50px">
-				<button type="button" class="btn btn-icon btn-blue btn-check btn-small floatright btn-margin" onclick="submit();" style="margin-top:20px">
-					<span></span>Save changes
-				</button>
-			</div>
-		</form:form>
-	</div>
 									<div class="clear"></div>
 								</div>
 								
