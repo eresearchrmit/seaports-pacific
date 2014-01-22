@@ -58,14 +58,16 @@ public class DataSourceParameterOptionDao {
 	 */
 	@Transactional
 	public DataSourceParameterOption find(String name) throws NoResultException {
+		if (name == null)
+			throw new IllegalArgumentException();
+		
 		try {
 			Query query = entityManager.createQuery("SELECT r FROM " + DataSourceParameterOptionDao.TABLE_NAME + " r WHERE r.name = :name");
 			query.setParameter("name", name);
 			DataSourceParameterOption option = (DataSourceParameterOption)(query.getSingleResult());
 			return option;
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			throw new NoResultException(ERR_NO_SUCH_OPTION);
 		}
 	}
@@ -78,40 +80,6 @@ public class DataSourceParameterOptionDao {
 	public List<DataSourceParameterOption> getAll() {
 		Query query = entityManager.createQuery("SELECT c FROM " + DataSourceParameterOptionDao.TABLE_NAME + " c");
 		return performQueryAndCheckResultList(query);		
-	}
-	
-	/**
-	 * Saves a given parameter's option into the database, by adding it or updating it
-	 * @param category: the parameter's option to save in the database
-	 * @return the saved parameter's option
-	 */
-	@Transactional
-	public DataSourceParameterOption save(DataSourceParameterOption option) throws IllegalArgumentException {
-		if (option == null)
-			throw new IllegalArgumentException();
-		
-		if (option.getId() == 0) {
-			entityManager.persist(option);
-			return option;
-		}
-		else {
-			entityManager.merge(option);
-			return option;
-		}
-	}
-	
-	/**
-	 * Delete from the database the parameter's option associated to the unique ID
-	 * @param id: the unique ID of the parameter's option to delete
-	 */
-	@Transactional
-	public void delete(DataSourceParameterOption option) throws IllegalArgumentException {
-		if (option == null)
-			throw new IllegalArgumentException();
-		
-		// Delete the data element itself
-		DataSourceParameterOption opt = entityManager.find(DataSourceParameterOption.class, option.getId());
-		entityManager.remove(opt);
 	}
 	
 	/**

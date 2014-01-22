@@ -115,7 +115,7 @@ public class ReportController {
 				throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
 			// Retrieve user's Stories
-			List<Report> reportsList = reportDao.getReports(user);
+			List<Report> reportsList = reportDao.getUserReports(user);
 			mav.addObject("reportList", reportsList);
 			
 			// Define a title
@@ -218,7 +218,6 @@ public class ReportController {
 			
 			report.setOwner(user);
 			report.setSeaport(seaport);
-			report.setMode("active");
 			report.setAccess("private");
 			report.setElements(new ArrayList<Element>());
 			report.setCreationDate(new Date());
@@ -516,8 +515,7 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value = "/delete-element",method=RequestMethod.GET) 
-	public String deleteElement(@RequestParam(value="id",required=true) Integer elementId, 
-			RedirectAttributes attributes, Model model) {
+	public String deleteElement(@RequestParam(value="id",required=true) Integer elementId, RedirectAttributes attributes, Model model) {
 		logger.info("Inside deleteElement");
 		
 		try {
@@ -527,9 +525,7 @@ public class ReportController {
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
 				throw new AccessDeniedException(ERR_ACCESS_DENIED);
 			
-			// Delete the Data Element if it belongs to the user's report
-			if (report.getMode().equals("active")) {
-				
+			try {	
 				elementDao.delete(element);
 				
 				// Reorder the element in the report to keep consistent positions
@@ -543,7 +539,7 @@ public class ReportController {
 				
 				attributes.addFlashAttribute("successMessage", MSG_ELEMENT_DELETED);
 			}
-			else { // If the Data Element belongs to another report, don't delete
+			catch (IllegalArgumentException e) {
 				attributes.addFlashAttribute("errorMessage", ERR_DELETE_ELEMENT);
 			}
 			// Redirects to the right tab of the report after deletion based on the data element type

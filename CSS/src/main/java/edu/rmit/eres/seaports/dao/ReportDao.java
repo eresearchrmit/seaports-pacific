@@ -53,19 +53,18 @@ public class ReportDao {
 	 * WARNING: the use of this method can be time and resource consuming !
 	 * @return the list of all the user reports in the database
 	 */
-	public List<Report> getAllStories() {
+	public List<Report> getAllReports() {
 		Query query = entityManager.createQuery("SELECT report FROM " + TABLE_NAME + " report");
 		return performQueryAndCheckResultList(query);
 	}
 	
 	/**
 	 * Retrieve all the published reports
-	 * @return the list of all the published reports
+	 * @return the list of all the public reports
 	 */
-	public List<Report> getAllPublishedStories() {		
-		Query query = entityManager.createQuery("SELECT report FROM " + TABLE_NAME + " report WHERE report.mode = :mode AND report.access = :access") ;
-		query.setParameter("access", "public");
-		query.setParameter("mode", "published");
+	public List<Report> getAllPublicReports() {		
+		Query query = entityManager.createQuery("SELECT report FROM " + TABLE_NAME + " report WHERE report.access = :access") ;
+		query.setParameter("access", "public"); // Only public reports
 		
 		return performQueryAndCheckResultList(query);
 	}
@@ -75,90 +74,50 @@ public class ReportDao {
 	 * @param user: the user to retrieve the reports of
 	 * @return the list of the user's reports
 	 */
-	public List<Report> getReports(User user) {		
-		Query query = entityManager.createQuery("SELECT us FROM " + TABLE_NAME + " us WHERE us.owner = :owner");
+	public List<Report> getUserReports(User user) {
+		if (user == null)
+			throw new IllegalArgumentException();
+		
+		Query query = entityManager.createQuery("SELECT report FROM " + TABLE_NAME + " report WHERE report.owner = :owner");
 		query.setParameter("owner", user); // Only of this user
 		
 		return performQueryAndCheckResultList(query);
 	}
 	
+	
 	/**
-	 * Retrieve all the stories belonging to a user
-	 * @param user: the user to retrieve the reports of
-	 * @return the list of the user's reports
+	 * Retrieve only the private reports belonging to a user
+	 * @param user: the user to retrieve the private reports
+	 * @return the list of the private reports of the given user
 	 */
-	public List<Report> getUserStories(User user) {		
-		Query query = entityManager.createQuery("SELECT us FROM " + TABLE_NAME + " us WHERE us.mode != :mode AND us.owner = :owner") ;
-		query.setParameter("mode", "active"); // All except active
+	public List<Report> getPrivateUserReports(User user) {
+		if (user == null)
+			throw new IllegalArgumentException();
+		
+		Query query = entityManager.createQuery("SELECT us FROM " + TABLE_NAME + " us WHERE us.access = :access AND us.owner = :owner") ;
+		query.setParameter("access", "private"); // Only private reports
 		query.setParameter("owner", user); // Only of this user
 		
 		return performQueryAndCheckResultList(query);
 	}
 	
+	
 	/**
-	 * Retrieve only the private stories belonging to a user
-	 * @param user: the user to retrieve the private stories
-	 * @return the list of the private stories of the given user
+	 * Retrieve only the private reports belonging to a user
+	 * @param user: the user to retrieve the public reports
+	 * @return the list of the public reports of the given user
 	 */
-	public List<Report> getPrivateUserStories(User user) {
-		Query query = entityManager.createQuery("SELECT us FROM " + TABLE_NAME + " us WHERE us.mode != :mode AND us.access = :access AND us.owner = :owner") ;
-		query.setParameter("access", "private"); // Only Private
-		query.setParameter("mode", "active"); // All except active
+	public List<Report> getPublicUserReports(User user) {		
+		if (user == null)
+			throw new IllegalArgumentException();
+		
+		Query query = entityManager.createQuery("SELECT us FROM " + TABLE_NAME + " us WHERE us.access = :access AND us.owner = :owner") ;
+		query.setParameter("access", "public"); // Only public reports
 		query.setParameter("owner", user); // Only of this user
 		
 		return performQueryAndCheckResultList(query);
 	}
-	
-	/**
-	 * Retrieve only the private stories belonging to a user
-	 * @param user: the user to retrieve the public stories
-	 * @return the list of the public stories of the given user
-	 */
-	public List<Report> getPublicUserStories(User user) {		
-		Query query = entityManager.createQuery("SELECT us FROM " + TABLE_NAME + " us WHERE us.mode != :mode AND us.access = :access AND us.owner = :owner") ;
-		query.setParameter("access", "public"); // Only public
-		query.setParameter("mode", "active"); // All except active
-		query.setParameter("owner", user); // Only of this user
-		
-		return performQueryAndCheckResultList(query);
-	}
-	
-	/**
-	 * Retrieve only the stories belonging to a user that he has decided to publish
-	 * @param user: the user to retrieve the published stories
-	 * @return the list of the published stories of the given user
-	 */
-	public List<Report> getPublishedUserStories(User user) {		
-		Query query = entityManager.createQuery("SELECT us FROM " + TABLE_NAME + " us WHERE us.mode != :mode AND us.access = :access AND us.owner = :owner") ;
-		query.setParameter("access", "public");
-		query.setParameter("mode", "published");
-		query.setParameter("owner", user);
-		
-		return performQueryAndCheckResultList(query);
-	}
-	
-	/**
-	 * Retrieve the Workboard (the only story in 'active' mode) of a user
-	 * @param user: the user to retrieve the workboard of
-	 * @return the Workboard of the given user
-	 */
-	public Report getWorkboard(User user) {		
-		Report workboard = null;
-		try {
-			Query query = entityManager.createQuery("SELECT u FROM " + TABLE_NAME + " u WHERE u.mode = :mode AND u.owner = :owner") ;
-			query.setParameter("mode", "active"); // Only the active one
-			query.setParameter("owner", user);
 			
-			workboard = (Report)(query.getSingleResult());
-			return workboard;
-		}
-		catch (NoResultException e) {
-			return workboard;
-		}
-		catch (Exception e) {
-			return workboard;
-		}
-	}
 	
 	/**
 	 * Save a report in the database. Adds it if it doesn't exist or update it
@@ -169,9 +128,7 @@ public class ReportDao {
 	public Report save(Report report) throws IllegalArgumentException {
 		if (report == null || report.getName() == null || report.getName().isEmpty())
 			throw new IllegalArgumentException();
-				
-		if (report.getMode() == null)
-			report.setMode("active");
+
 		if (report.getAccess() == null)
 			report.setAccess("private");
 		
@@ -196,6 +153,7 @@ public class ReportDao {
 		report = entityManager.find(Report.class, report.getId());
 		entityManager.remove(report);
 	}
+	
 
 	/**
 	 * Perform a query and check the result list is of the right type

@@ -56,6 +56,9 @@ public class DisplayTypeDao {
 	 */
 	@Transactional
 	public DisplayType find(String name) throws NoResultException {
+		if (name == null)
+			throw new IllegalArgumentException();
+		
 		try {
 			Query query = entityManager.createQuery("SELECT r FROM " + TABLE_NAME + " r WHERE r.name = :name");
 			query.setParameter("name", name);

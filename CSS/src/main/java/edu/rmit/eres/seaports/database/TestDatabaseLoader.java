@@ -54,9 +54,20 @@ public class TestDatabaseLoader {
 		session.beginTransaction();	
 
 		
-		// Loads the regions and seaports
-		RegionsLoader.LoadRegions(session);
+		// Regions
+		Region r1 = new Region("Region 1", "176.284180,-15.891800 -178.046875,-15.891800 -178.046875,-20.070571 176.284180,-20.070571");
+		Region r2 = new Region("Region 2", "");
+		session.save(r1);
+		session.save(r2);
 		
+		// Seaports
+		Seaport port1 = new Seaport("CODE1", "Port 1", r1, "City 1");
+		Seaport port2 = new Seaport("CODE2", "Port 2", r1, "City 2");
+		Seaport port3 = new Seaport("CODE3", "Port 3", r1, "City 3");
+		session.save(port1);
+		session.save(port2);
+		session.save(port3);
+				
 		// Loads the element categories
 		CategoriesLoader.LoadCategories(session);
 		
@@ -73,9 +84,6 @@ public class TestDatabaseLoader {
 		ElementCategory observedClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 2));
 		ElementCategory futureClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 3));
 		ElementCategory applicationsCategory = (ElementCategory)(session.get(ElementCategory.class, 4));
-		// Retrieves the created seaports
-		Seaport port3 = (Seaport)(session.get(Seaport.class, "FJLTK"));
-		Seaport port5 = (Seaport)(session.get(Seaport.class, "FJLBS"));
 		// Retrieves the created  data sources
 		DataSource dsCsiro = (DataSource)(session.get(DataSource.class, 1)); // ID 1 = CSIRO
 		// Retrieves the created display types
@@ -108,24 +116,23 @@ public class TestDatabaseLoader {
 		try { date = dateFormatter.parse("2013-04-10"); } catch (ParseException e) {}
 		
 		// Add Reports
-		Report user1wb = new Report("User 1 Workboard", "Purpose", "active", "private", u1, port3, null);
+		Report user1wb = new Report("User 1 Workboard", "Purpose", "private", u1, port1, null);
 		user1wb.setCreationDate(date);
 		
-		Report user1us1 = new Report("User 1 Story 1", "Purpose", "passive", "private", u1, port5, null);
+		Report user1us1 = new Report("User 1 Story 1", "Purpose", "private", u1, port2, null);
 		user1us1.setCreationDate(date);
 		
-		Report user1us2 = new Report("User 1 Story 2 (Public)", "Purpose", "passive", "public", u1, port3, null);
+		Report user1us2 = new Report("User 1 Story 2 (Public)", "Purpose", "public", u1, port1, null);
 		user1us2.setCreationDate(date);
 		
-		Report user1us3 = new Report("User 1 Story 3 (Published)", "Purpose", "published", "public", u1, port3, null);
+		Report user1us3 = new Report("User 1 Story 3 (Published)", "Purpose", "public", u1, port1, null);
 		user1us3.setCreationDate(date);
-		user1us3.setPublishDate(date);
 		user1us3.setElements(new ArrayList<Element>());
 		
-		Report user2wb = new Report("User 2 Workboard (Empty)", "Purpose", "active", "private", u2, port5, null);
+		Report user2wb = new Report("User 2 Workboard (Empty)", "Purpose", "private", u2, port2, null);
 		user2wb.setCreationDate(date);
 		
-		Report user2us = new Report("User 2 Story (Empty)", "Purpose", "passive", "private", u2, port3, null);
+		Report user2us = new Report("User 2 Story (Empty)", "Purpose", "private", u2, port1, null);
 		user2us.setCreationDate(date);
 		
 		session.save(user1wb);

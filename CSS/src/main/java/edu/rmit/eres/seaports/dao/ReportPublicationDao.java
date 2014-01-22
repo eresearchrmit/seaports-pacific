@@ -54,7 +54,7 @@ public class ReportPublicationDao {
 	 * WARNING: the use of this method can be time and resource consuming !
 	 * @return the list of all the report publications in the database
 	 */
-	public List<ReportPublication> getAllReportPublication() {
+	public List<ReportPublication> getAllReportPublications() {
 		Query query = entityManager.createQuery("SELECT publication FROM " + TABLE_NAME + " publication");
 		return performQueryAndCheckResultList(query);
 	}
@@ -64,7 +64,10 @@ public class ReportPublicationDao {
 	 * @param user: the user to retrieve the report publications of
 	 * @return the list of the user's report publications
 	 */
-	public List<ReportPublication> getReports(User user) {		
+	public List<ReportPublication> getReportPublications(User user) throws IllegalArgumentException {		
+		if (user == null)
+			throw new IllegalArgumentException();
+		
 		Query query = entityManager.createQuery("SELECT publication FROM " + TABLE_NAME + " publication WHERE publication.owner = :owner");
 		query.setParameter("owner", user); // Only of this user
 		

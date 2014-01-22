@@ -42,7 +42,7 @@ public class RIFCSController {
 	        rifcs.addRegistryObject(createRMITPartyRIFCS());
 	        
 	        List<User> users = new ArrayList<User>();
-	        List<ReportPublication> publishedReports = reportPublicationDao.getAllReportPublication();
+	        List<ReportPublication> publishedReports = reportPublicationDao.getAllReportPublications();
 	        for (ReportPublication publishedReport : publishedReports) {
 	        	if (!users.contains(publishedReport.getOwner()))
 	        	{

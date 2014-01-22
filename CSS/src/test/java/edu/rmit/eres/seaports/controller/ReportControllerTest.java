@@ -65,6 +65,7 @@ public class ReportControllerTest {
 	SecurityContext securityContextUserLoggedInNoWB;
 	SecurityContext securityContextAdminLoggedIn;
 	InputElement inputElement;
+	Seaport seaportForTest;
 	
 	/**
 	 * Method executed before starting the unit tests to prepared the data
@@ -93,6 +94,8 @@ public class ReportControllerTest {
 		report.setId(1);
 		inputElement = new InputElement(new Date(), null, new ElementCategory("Observed climate"), report, true, 1, null);
 		inputElement.setId(0);
+		
+		seaportForTest = new Seaport("CODE1", "Port 1", new Region("Region 1", ""));
 	}
 	
 	/* --------------------------------------------------------------------- */
@@ -174,13 +177,13 @@ public class ReportControllerTest {
 		
 		Assert.assertEquals("My Reports", model.get("listingTitle"));
 		
-		// Check that the result is a list of User Stories and that they are all passive or published
+		// Check that the result is a list of report and that they are all passive or published
 		@SuppressWarnings("unchecked")
-		List<Object> resUserStoriesList = (List<Object>)(result.getModelMap().get("reportList"));
-		for (Object obj : resUserStoriesList) {
+		List<Object> resReportsList = (List<Object>)(result.getModelMap().get("reportList"));
+		for (Object obj : resReportsList) {
 			if (obj instanceof Report) {
-				Report us = (Report)obj;
-				Assert.assertTrue(us.getMode().equals("active") || us.getMode().equals("passive") || us.getMode().equals("published"));
+				Report report = (Report)obj;
+				Assert.assertNotNull(report);
 			}
 			else
 				Assert.fail();
@@ -1007,7 +1010,7 @@ public class ReportControllerTest {
 		
 		ExtendedModelMap model = new ExtendedModelMap();
 		Report refReport = new Report();
-		refReport.setSeaport(new Seaport("FJLEV", "Levuka", new Region("Fiji", "")));
+		refReport.setSeaport(seaportForTest);
 		refReport.setPurpose("Activity description");
 		refReport.setName("addWorkBoardTest");
 		ModelAndView result = reportController.createReport(refReport, model);
@@ -1052,27 +1055,6 @@ public class ReportControllerTest {
 		Assert.assertNotNull(result);
 		Assert.assertTrue(redirectAttributes.getFlashAttributes().containsKey("errorMessage"));
 		Assert.assertEquals(ElementDao.ERR_NO_SUCH_ELEMENT, redirectAttributes.getFlashAttributes().get("errorMessage"));
-	}
-	
-	
-	/**
-	 * deleteDataElementTest : Delete should fail since because the data element belongs to a user story (i.e. not workboard)
-	 */
-	@Test
-	public void deleteDataElementFromReportTest() {
-		SecurityContextHolder.setContext(securityContextUserLoggedIn);
-		
-		ExtendedModelMap model = new ExtendedModelMap();
-		RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-		
-		int id = 4; // ID of the data element to delete
-		String result = reportController.deleteElement(id, redirectAttributes, model);
-		
-		// Check the success message
-		Assert.assertNotNull(result);
-		Assert.assertFalse(redirectAttributes.getFlashAttributes().containsKey("successMessage"));
-		Assert.assertTrue(redirectAttributes.getFlashAttributes().containsKey("errorMessage"));
-		Assert.assertEquals(ReportController.ERR_DELETE_ELEMENT, redirectAttributes.getFlashAttributes().get("errorMessage"));
 	}
 	
 	/**

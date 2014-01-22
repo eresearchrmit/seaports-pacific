@@ -60,15 +60,6 @@ public class Report implements Serializable {
 	private String purpose;
 	
 	/**
-	 * The mode of the report. It can be 'active', 'passive' or 'published'.
-	 * Active: there is only one active report per user, it is considered as its 'Workboard'. The user can add and remove data elements form the report.
-	 * Passive: the report is being edited by the user
-	 * Published: nothing can be modified by the user as the story is published. 
-	 */
-	@Column
-	private String mode;
-	
-	/**
 	 * The level of privacy for this report. It can be private or public.
 	 * Private: only the owner can view the report
 	 * Public: everyone can view the report
@@ -104,12 +95,6 @@ public class Report implements Serializable {
 	private Date creationDate;
 	
 	/**
-	 * The date when the report has been published
-	 */
-	@Column
-	private Date publishDate;
-	
-	/**
 	 * Default constructor of report
 	 */
 	public Report() {
@@ -120,15 +105,13 @@ public class Report implements Serializable {
 	 * Constructor of report specifying all its fields
 	 * @param name: the name of the report
 	 * @param purpose: the purpose of the report
-	 * @param mode: the mode of the report
 	 * @param access: the level of privacy for this report
 	 * @param owner: the user who created the report
 	 * @param seaport: the seaport to which the user stories is related
 	 */
-	public Report(String name, String purpose, String mode, String access, User owner, Seaport seaport) {
+	public Report(String name, String purpose, String access, User owner, Seaport seaport) {
 		setName(name);
 		setPurpose(purpose);
-		setMode(mode);
 		setAccess(access);
 		setOwner(owner);
 		setSeaport(seaport);
@@ -140,16 +123,14 @@ public class Report implements Serializable {
 	 * Constructor of report specifying all its fields
 	 * @param name: the name of the report
 	 * @param purpose: the purpose of the report
-	 * @param mode: the mode of the report
 	 * @param access: the level of privacy for this report
 	 * @param owner: the user who created the report
 	 * @param seaport: the seaport to which the user stories is related
 	 * @param elements: the list of data elements contained in the report
 	 */
-	public Report(String name, String purpose, String mode, String access, User owner, Seaport seaport, List<Element> elements) {
+	public Report(String name, String purpose, String access, User owner, Seaport seaport, List<Element> elements) {
 		setName(name);
 		setPurpose(purpose);
-		setMode(mode);
 		setAccess(access);
 		setOwner(owner);
 		setSeaport(seaport);
@@ -222,25 +203,6 @@ public class Report implements Serializable {
 	}
 	
 	/**
-	 * Getter for the mode of the report
-	 * @return The current mode of the report
-	 */
-	public String getMode() {
-		return this.mode;
-	}
-	
-	/**
-	 * Setter for the mode of the report
-	 * Active: there is only one active report per user, it is considered as its 'Workboard'. The user can add and remove data elements form the report.
-	 * Passive: the report is being edited by the user
-	 * Published: nothing can be modified by the user as the story is published. 
-	 * @param mode: The new mode of the report
-	 */
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
-	
-	/**
 	 * Getter for the privacy level of the report
 	 * @return The current privacy level of the report
 	 */
@@ -304,22 +266,6 @@ public class Report implements Serializable {
 	 */
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
-	}
-	
-	/**
-	 * Getter for the report publish date
-	 * @return The date when the report was published
-	 */
-	public Date getPublishDate() {
-		return this.publishDate;
-	}
-	
-	/**
-	 * Setter for the report publish date
-	 * @param publishDate: the new date when the report was published
-	 */
-	public void setPublishDate(Date publishDate) {
-		this.publishDate = publishDate;
 	}
 	
 	/**

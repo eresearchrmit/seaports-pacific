@@ -56,14 +56,16 @@ public class DataSourceDao {
 	 */
 	@Transactional
 	public DataSource find(String name) throws NoResultException {
+		if (name == null)
+			throw new IllegalArgumentException();
+		
 		try {
 			Query query = entityManager.createQuery("SELECT r FROM " + TABLE_NAME + " r WHERE r.name = :name");
 			query.setParameter("name", name);
 			DataSource dataSource = (DataSource)(query.getSingleResult());
 			return dataSource;
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			throw new NoResultException(ERR_NO_RESULT);
 		}
 	}

@@ -48,20 +48,12 @@ public class DisplayType implements Serializable {
 	 */
 	@ManyToMany(mappedBy="displayTypes")
 	private List<DataSource> dataSourcesList;
-	
-	/**
-	 *  A list of data elements using this display type
-	 */
-	/*@OneToMany(targetEntity=DataElement.class, mappedBy="displayType",cascade=CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<DataElement> dataElementsList;*/
-	
+		
 	/**
 	 * Default constructor of display type
 	 */
 	public DisplayType() {
 		this.dataSourcesList = new ArrayList<DataSource>();
-		//this.dataElementsList = new ArrayList<DataElement>();
 	}
 
 	/**
@@ -71,20 +63,7 @@ public class DisplayType implements Serializable {
 	public DisplayType(String name) {
 		setName(name);
 		this.dataSourcesList = new ArrayList<DataSource>();
-		//this.dataElementsList = new ArrayList<DataElement>();
 	}
-	
-	/**
-	 * Constructor of display type specifying all its fields
-	 * @param name: the name of the display type
-	 * @param dataSourcesList: the list of data sources using this display type
-	 * @param dataElementsList: the list of data elements using this display type
-	 */
-	/*public DisplayType(String name, List<DataSource> dataSourcesList, List<DataElement> dataElementsList) {
-		setName(name);
-		setDataSourcesList(dataSourcesList);
-		setDataElementsList(dataElementsList);
-	}*/
 	
 	/**
 	 * Getter for the unique ID of the display type
@@ -133,22 +112,6 @@ public class DisplayType implements Serializable {
 	public void setDataSourcesList(List<DataSource> dataSourcesList) {
 		this.dataSourcesList = dataSourcesList;
 	}
-	
-	/**
-	 * Getter for the list of data elements using this display type
-	 * @return the current list of data elements using this display type
-	 */
-	/*public List<DataElement> getDataElementsList() {
-		return this.dataElementsList;
-	}*/
-	
-	/**
-	 * Setter for the list of data elements using this display type
-	 * @param name: the new list of data elements using this display type
-	 */
-	/*public void setDataElementsList(List<DataElement> dataElementsList) {
-		this.dataElementsList = dataElementsList;
-	}*/
 	
 	/**
 	 * String representation of the Display Type

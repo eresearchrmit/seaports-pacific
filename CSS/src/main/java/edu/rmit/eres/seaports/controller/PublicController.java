@@ -117,7 +117,7 @@ public class PublicController {
 		ModelAndView mav = new ModelAndView("publishedReportList");
 		try {
 			// Retrieve all published reports
-			List<ReportPublication> publishedReports = reportPublicationDao.getAllReportPublication();
+			List<ReportPublication> publishedReports = reportPublicationDao.getAllReportPublications();
 			mav.addObject("publishedReports", publishedReports);
 				
 			model.addAttribute("listingTitle", "Published Reports");

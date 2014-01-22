@@ -54,7 +54,7 @@ public class ElementDao {
 	 * @return the list of elements of the given report
 	 */
 	@Transactional
-	public List<Element> getElements(Report report) {
+	public List<Element> getElements(Report report) {		
 		Query query = entityManager.createQuery("SELECT elem FROM " + ElementDao.TABLE_NAME + " elem WHERE elem.report = :report ");
 		query.setParameter("report", report);
 		
@@ -98,7 +98,7 @@ public class ElementDao {
 		else {
 			entityManager.merge(dataElement);
 			return dataElement;
-		}		
+		}
 	}
 	
 	/**
@@ -112,23 +112,6 @@ public class ElementDao {
 		
 		Element elem = entityManager.find(Element.class, element.getId());
 		entityManager.remove(elem);
-
-		// TODO: Delete the corresponding Eng Model Data
-		
-		// For Engineering Model Data Element, deletes the corresponding Engineering Model Data when it is not an example
-		/*if (dataElement instanceof DataElementEngineeringModel) {
-			List<EngineeringModelData> dataList = ((DataElementEngineeringModel)dataElement).getEngineeringModelDataList();
-			EngineeringModelAsset asset = dataList.get(0).getAsset();
-			
-			if (asset.getId() > EngineeringModelHelper.ENGINEERING_MODEL_EXAMPLE_ASSETS_COUNT) {
-				for (EngineeringModelData data : dataList) {
-					data = entityManager.find(EngineeringModelData.class, data.getId());
-					entityManager.remove(data);
-				}
-				asset = entityManager.find(EngineeringModelAsset.class, asset.getId());
-				entityManager.remove(asset);
-			}
-		}*/
 	}
 	
 	/**

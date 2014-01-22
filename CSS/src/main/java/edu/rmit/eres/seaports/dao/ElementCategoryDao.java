@@ -57,14 +57,16 @@ public class ElementCategoryDao {
 	 */
 	@Transactional
 	public ElementCategory find(String name) throws NoResultException {
+		if (name == null)
+			throw new IllegalArgumentException();
+		
 		try {
 			Query query = entityManager.createQuery("SELECT r FROM " + TABLE_NAME + " r WHERE r.name = :name");
 			query.setParameter("name", name);
 			ElementCategory elementCategory = (ElementCategory)(query.getSingleResult());
 			return elementCategory;
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			throw new NoResultException(ERR_NO_SUCH_ELEMENT_CATEGORY);
 		}
 	}
@@ -86,7 +88,7 @@ public class ElementCategoryDao {
 	 */
 	@Transactional
 	public ElementCategory save(ElementCategory category) throws IllegalArgumentException {
-		if (category == null)
+		if (category == null || category.getName() == null || category.getName().isEmpty())
 			throw new IllegalArgumentException();
 		
 		if (category.getId() == 0) {

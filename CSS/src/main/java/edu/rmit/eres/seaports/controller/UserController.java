@@ -110,7 +110,7 @@ public class UserController {
 		
 		try {
 			// Retrieve the required user's profile
-			User user = userDao.loadUserByName(username);
+			User user = userDao.find(username);
 			
 			model.addAttribute("userProfile", user);
 		}
