@@ -62,6 +62,7 @@ public class DatabaseLoader {
 		
 		// Loads the various data sources
 		CsiroDataSourceLoader.LoadCsiroDataSource(session);
+		CmarDataSourceLoader.LoadCmarDataSource(session);
 		
 		
 		

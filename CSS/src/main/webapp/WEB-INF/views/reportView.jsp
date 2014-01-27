@@ -78,7 +78,7 @@
 				</a> 
 			</div>	
 			<div class="floatleft license-text">
-				&copy; ${report.owner.firstname} ${report.owner.lastname} <fmt:formatDate value="${report.publishDate}" pattern="yyyy" />
+				&copy; ${report.owner.firstname} ${report.owner.lastname}
 				<br />
 				<a href="/public/terms-of-service#license" id="lnkLicence" target="_blank">This report is licensed under a Creative Commons Attribution license.</a><br />
 			</div>

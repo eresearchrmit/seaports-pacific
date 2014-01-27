@@ -116,6 +116,7 @@
 	
 	<%-- Script enabling the tabs --%>
 	<script type="text/javascript">
+	
 		$(function() {
 			$("#tabs").tabs({
 				activate: function(event, ui) {
@@ -133,10 +134,10 @@
 					    location.hash = tabHash;
 
 					// Triggered to resize the Highcharts graphs to a % of the width of the tab
-					$(window).resize(); 
+					$(window).resize();
 				}
 			});
-
+			
 			setupConfirmBox("confirmConvertToUserStoryModalWindow", "lnkPublishReport");
 			setupConfirmBox("confirmWorkboardDeletionModalWindow", "lnkDeleteReport");
 			setupConfirmBox("confirmDataElementDeletionModalWindow", "lnkDeleteElement");
@@ -280,7 +281,7 @@
 					<p>
 					
 					<c:forEach items="${category.dataSourcesAvailable}" var="datasource" varStatus="dsLoopStatus">
-						<div id="addElementForm${category.id}" class="elementForm">
+						<div id="addElementForm${category.id}-${datasource.name}" class="elementForm">
 							<form:form method="post" action="/auth/report/create-data-element?id=${report.id}#tabs-${categoryNameWithDashes}" modelAttribute="newdataelement">
 								<%--<form:input id="txtElementName" path="name" style="width:300px" />--%>
 								
@@ -300,8 +301,10 @@
 											
 											</td>
 											<td class="col2">
-												<form:select id="cbb${datasource.name}Param${parameter.name}" path="selectedOptions[${parameterLoopStatus.index}].name" multiple="false">
-													<form:options items="${parameter.options}" />
+												<form:select id="cbb${datasource.name}Param${parameter.name}" path="selectedOptions[${parameterLoopStatus.index}].id" multiple="false">
+													<c:forEach items="${parameter.options}" var="option">
+														<form:option value="${option.id}" >${option.name}</form:option>
+													</c:forEach>
 												</form:select>
 											</td>
 										</tr>
@@ -368,7 +371,7 @@
 								var selectedValue = $('select#cbbDataSource${category.id}').val();
 								
 								if (selectedValue != "none")
-									$("#addElementForm${category.id}").show();
+									$("#addElementForm${category.id}-" + selectedValue).show();
 								
 								$("#addDataModalWindow${category.id}").dialog('option', 'position', 'center');
 							});

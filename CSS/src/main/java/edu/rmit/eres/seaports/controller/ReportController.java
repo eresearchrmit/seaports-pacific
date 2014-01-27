@@ -81,6 +81,9 @@ public class ReportController {
 	@Autowired
 	private CsiroDataDao csiroDataDao;
 	
+	@Autowired
+	private CmarDataDao cmarDataDao;
+	
 	@RequestMapping(value= "/my-reports", method = RequestMethod.GET)
 	public String myReports(Model model) {
 		logger.info("Inside myReports");
@@ -319,7 +322,7 @@ public class ReportController {
 			DataSource dataSource = dataSourceDao.find(dataElement.getDataSource().getName());
 			List<DataSourceParameterOption> options = new ArrayList<DataSourceParameterOption>();
 			for (DataSourceParameterOption selectedOption : dataElement.getSelectedOptions()) {
-				options.add(dataSourceParameterOptionDao.find(selectedOption.getName()));
+				options.add(dataSourceParameterOptionDao.find(selectedOption.getId()));
 			}
 			String title = dataSource.getName() + " Data Element";
 			int insertPosition = dataElement.getPosition() + 1;
@@ -657,10 +660,20 @@ public class ReportController {
 	 				    DataSource ds = dataSourceClass.cast(constructor.newInstance(new Object[] { de.getDataSource() }));
 	 				    
 	 					// Retrieves the data and set the field
-	 					ds.init(csiroDataDao);
-		 				List<?> data = ds.getData(de);
-		 				de.setData(data);
-		 				ds.flush();
+	 				   if (ds instanceof CsiroDataSource)
+	 						ds.init(csiroDataDao);
+	 				   if (ds instanceof CmarDataSource)
+	 						ds.init(cmarDataDao);
+		 				
+	 				   try {
+	 					   List<?> data = ds.getData(de);
+	 					   de.setData(data);
+	 				   }
+	 				   catch (NoResultException e)
+	 				   {
+	 					  e.printStackTrace();
+	 				   }
+	 				   ds.flush();
 	 				}
 					catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException 
 							| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

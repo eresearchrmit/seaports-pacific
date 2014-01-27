@@ -15,8 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -62,8 +60,7 @@ public class ElementCategory implements Serializable {
 	/**
 	 * The list of available data sources for this category
 	 */
-    @ManyToMany
-    @JoinTable(name="category_data_source_availability", joinColumns={@JoinColumn(name="element_category_id")}, inverseJoinColumns={@JoinColumn(name="data_source_id")})
+	@ManyToMany(targetEntity=DataSource.class, mappedBy="categories")
 	@LazyCollection(value=LazyCollectionOption.FALSE)
 	private List<DataSource> dataSourcesAvailable;
 	

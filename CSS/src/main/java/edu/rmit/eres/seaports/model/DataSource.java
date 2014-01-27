@@ -79,7 +79,9 @@ public class DataSource implements IDataSource, Serializable {
 	/**
 	 * The list of element categories for which this data source is available
 	 */
-	@ManyToMany(targetEntity=ElementCategory.class, mappedBy="dataSourcesAvailable")
+    @ManyToMany
+    @JoinTable(name="data_source_element_category", joinColumns={@JoinColumn(name="data_source_id")}, inverseJoinColumns={@JoinColumn(name="element_category_id")})
+	@LazyCollection(value=LazyCollectionOption.FALSE)
 	private List<ElementCategory> categories;
 	
 	/**

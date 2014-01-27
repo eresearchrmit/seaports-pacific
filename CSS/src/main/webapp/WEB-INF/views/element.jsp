@@ -21,7 +21,15 @@
 			<c:when test="${not empty element.data}">
 				<c:set var="element" value="${element}" scope="request" />
 				<c:set var="formattedDataSourceName" value="${fn:toUpperCase(fn:substring(element.dataSource.name, 0, 1))}${fn:toLowerCase(fn:substring(element.dataSource.name, 1,fn:length(element.dataSource.name)))}" />
-				<jsp:include page="dataElement${formattedDataSourceName}${element.displayType}.jsp" />
+				<c:catch var="e">
+				    <jsp:include page="dataElement${formattedDataSourceName}${element.displayType}.jsp" />
+				</c:catch>
+				<c:if test="${!empty e}">
+				   <div id="warningMessage" class="message warning">
+						<h5>Display error</h5>
+						<p>Display error for this display type: ${e}.</p>
+					</div>
+				</c:if>
 			</c:when>
 			<c:otherwise>
 				<div id="warningMessage" class="message warning">

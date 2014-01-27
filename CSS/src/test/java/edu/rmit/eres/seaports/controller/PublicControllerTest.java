@@ -28,7 +28,7 @@ import edu.rmit.eres.seaports.model.Report;
 import edu.rmit.eres.seaports.model.ReportPublication;
 
 /**
- * 
+ * This test class holds the unit tests regarding the publicly available pages and actions
  * @author Guillaume Prevost
  */
 @ContextConfiguration("/test-context.xml")

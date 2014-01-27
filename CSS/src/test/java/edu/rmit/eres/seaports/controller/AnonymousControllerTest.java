@@ -48,6 +48,9 @@ import edu.rmit.eres.seaports.model.Report;
 public class AnonymousControllerTest {
 
 	@Autowired
+	private UserController userController;
+	
+	@Autowired
 	private PublicController publicController;
 	
 	@Autowired
@@ -113,7 +116,7 @@ public class AnonymousControllerTest {
 		Assert.assertTrue(result.hasView());
 		Assert.assertEquals("publishedReportList", result.getViewName());
 	}
-	
+		
 	@Test
 	public void viewPublishedReportTest() {
 		ExtendedModelMap model = new ExtendedModelMap();

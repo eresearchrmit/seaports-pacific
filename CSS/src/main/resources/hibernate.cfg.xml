@@ -35,10 +35,12 @@
 		<mapping class="edu.rmit.eres.seaports.model.InputElement" />
 		<mapping class="edu.rmit.eres.seaports.model.ElementCategory" />
 		<mapping class="edu.rmit.eres.seaports.model.DataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.CsiroDataSource" />
 		<mapping class="edu.rmit.eres.seaports.model.DataSourceParameter" />
 		<mapping class="edu.rmit.eres.seaports.model.DataSourceParameterOption" />
 		<mapping class="edu.rmit.eres.seaports.model.DisplayType" />
+		
+		<mapping class="edu.rmit.eres.seaports.model.CsiroDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.CmarDataSource" />
 		
 		<mapping class="edu.rmit.eres.seaports.model.Region" />
 		<mapping class="edu.rmit.eres.seaports.model.Seaport" />
@@ -47,6 +49,7 @@
 		<mapping class="edu.rmit.eres.seaports.model.ClimateEmissionScenario" />
 		<mapping class="edu.rmit.eres.seaports.model.CsiroVariable" />
 		<mapping class="edu.rmit.eres.seaports.model.CsiroData" />
+		<mapping class="edu.rmit.eres.seaports.model.CmarData" />
 		
     </session-factory>
 </hibernate-configuration>

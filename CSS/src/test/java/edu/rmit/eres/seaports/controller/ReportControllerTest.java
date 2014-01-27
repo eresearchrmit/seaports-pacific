@@ -38,7 +38,7 @@ import edu.rmit.eres.seaports.model.*;
 import edu.rmit.eres.seaports.security.UserLoginService;
 
 /**
- * This test class holds the unit tests regarding the workboards (user stories) retrieval, privacy, and actions
+ * This test class holds the unit tests regarding the reports retrieval, privacy, and actions
  * @author Guillaume Prevost
  */
 @ContextConfiguration("/test-context.xml")

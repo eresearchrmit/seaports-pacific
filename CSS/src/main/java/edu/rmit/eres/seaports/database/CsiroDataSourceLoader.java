@@ -80,7 +80,7 @@ public class CsiroDataSourceLoader {
 		CsiroDataSourceLoader.LoadCsiroData(session);
 		
 		
-		// Display Types offered buy this data source
+		// Display Types offered by this data source
 		DisplayType textDisplayType = (DisplayType)(session.get(DisplayType.class, 1));
 		DisplayType tableDisplayType = (DisplayType)(session.get(DisplayType.class, 3));
 		DisplayType pictureDisplayType = (DisplayType)(session.get(DisplayType.class, 5));
@@ -185,12 +185,10 @@ public class CsiroDataSourceLoader {
 		CsiroVariable ws = new CsiroVariable("Wind speed", "WS", "Forecasted wind speed", "km/h");
 		CsiroVariable rf = new CsiroVariable("Rainfall", "RF", "Forecasted rain fall", "mm/y");
 		CsiroVariable rh = new CsiroVariable("Relative humidity", "RH", "Forecasted relative humidity", "%");
-		CsiroVariable slr = new CsiroVariable("Sea Level Rise", "SLR", "Forecasted sea level rise", "mm");
 		session.save(te);
 		session.save(ws);
 		session.save(rf);
 		session.save(rh);
-		session.save(slr);
 		
 		DateFormat dateFormatter = new SimpleDateFormat("F");
 		Date dateCsiroData = null;
