@@ -35,7 +35,7 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${publishedReports}" var="publishedReport" varStatus="status"> 
-				<tr>
+				<tr onclick="document.location.href = '/public/published-report/view?id=${publishedReport.id}'" class="clickable">
 					<td><c:out value="${publishedReport.name}" /></td>
 					<td><a href="/public/user/${publishedReport.owner.username}" title="View profile">${publishedReport.owner.firstname} ${publishedReport.owner.lastname}</a></td>
 					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy" /></td>

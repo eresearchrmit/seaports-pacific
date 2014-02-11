@@ -106,6 +106,15 @@ public class PublicController {
 	}
 	
 	/**
+	 * Displays the Guidelines page
+	 */
+	@RequestMapping(value = {"/public/help"}, method = RequestMethod.GET)
+	public ModelAndView help(Model model) {		
+		tryGetLoggedInUser(model);
+		return new ModelAndView("help");
+	}
+	
+	/**
 	 * Listing of all the published reports
 	 */
 	@RequestMapping(value = {"/public/published-report/list"}, method = RequestMethod.GET)

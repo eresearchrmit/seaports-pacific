@@ -61,7 +61,7 @@
 			<p>Are you sure you want to permanently delete this report ?</p> 
 		</div>
 		<div style="display:none" id="confirmConvertToUserStoryModalWindow" title="Publish this report ?">
-			<p>The current status of this report is about to be published. You won't be able to make further changes to the published version..</p> 
+			<p>The current status of this report is about to be published. You will be able to make further changes to the report but not the published version.</p> 
 			<p>Are you sure you want to publish this report now ?</p>
 		</div>
 		<div style="display:none" id="confirmDataElementDeletionModalWindow" title="Delete this element ?">

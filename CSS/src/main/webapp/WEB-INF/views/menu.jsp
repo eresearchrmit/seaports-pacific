@@ -31,8 +31,8 @@
 	</li>
 	
 	<li class="ic-info
-		${requestScope['javax.servlet.forward.servlet_path'] == '/public/guidelines' ? ' current' : ''}">
-		<a href="/public/guidelines" target="_blank"><span>Guidelines</span></a>
+		${requestScope['javax.servlet.forward.servlet_path'] == '/public/help' ? ' current' : ''}">
+		<a href="/public/help"><span>Help</span></a>
 	</li>
 	
 	<sec:authorize access="hasRole('ROLE_ADMIN')">

@@ -121,6 +121,10 @@ public class ReportController {
 			List<Report> reportsList = reportDao.getUserReports(user);
 			mav.addObject("reportList", reportsList);
 			
+			// Retrieve user's published reports
+			List<ReportPublication> publishedReports = reportPublicationDao.getReportPublications(user);
+			mav.addObject("publishedReports", publishedReports);
+			
 			// Define a title
 			if (user.getUsername().equals(currentUser.getUsername()))
 				model.addAttribute("listingTitle", "My Reports");
@@ -623,7 +627,7 @@ public class ReportController {
 			attributes.addFlashAttribute("successMessage", MSG_REPORT_PUBLISHED);
 		}
 		catch (IllegalArgumentException | NoResultException | IOException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT);
+			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT + "(" + e.getMessage() + ")");
 		}
 
 		if (pub != null)
@@ -817,6 +821,6 @@ public class ReportController {
 	public static final String MSG_REPORT_SAVED = "The report has been saved successfully";
 	public static final String ERR_SAVE_REPORT = "Error saving the report. Please Try Again";
 	
-	public static final String MSG_REPORT_PUBLISHED = "The report is now published. It appears publicly on this portal and will be listed on Reasearch Data Australia search results.";
+	public static final String MSG_REPORT_PUBLISHED = "The report is now published. It appears publicly on this portal and will be listed on Reasearch Data Australia search results";
 	public static final String ERR_PUBLISH_REPORT = "Error publishing the report. Please Try Again";
 }

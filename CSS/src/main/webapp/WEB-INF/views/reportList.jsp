@@ -53,18 +53,9 @@
 					<tr>
 						<td><c:out value="${report.name}" /></td>
 						<td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
-						<c:choose>
-							<c:when test="${report.mode == 'published'}">
-								<td></td>
-								<td>Published (<fmt:formatDate value="${report.publishDate}" pattern="dd MMM yyyy" />) <img src="<c:url value="/resources/img/icons/accept.png" />" /></td>
-								<td></td>
-		                 	</c:when>
-		                 	<c:otherwise>
-		                 		<td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/pencil.png" />" alt="Edit"/></a></td>
-		                 		<td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/world_go.png" />" alt="Publish"/></a></td>
-								<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
-		                 	</c:otherwise>
-						</c:choose>
+		                <td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/pencil.png" />" alt="Edit"/></a></td>
+		                <td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/world_go.png" />" alt="Publish"/></a></td>
+						<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
 					</tr>
 					</c:forEach>
 				</tbody>
@@ -85,10 +76,45 @@
 			</a>
 		</c:otherwise>
 	</c:choose>
+	
+	<h2>My Published Reports</h2>
+	<c:choose> 
+	<c:when test="${not empty publishedReports}">
+		<table class="data display datatable" id="tblPublishedReportList">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Author</th>
+					<th>Published on</th>
+					<th>Region</th>
+					<th>View</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${publishedReports}" var="publishedReport" varStatus="status"> 
+				<tr onclick="document.location.href = '/public/published-report/view?id=${publishedReport.id}'" class="clickable">
+					<td><c:out value="${publishedReport.name}" /></td>
+					<td><a href="/public/user/${publishedReport.owner.username}" title="View profile">${publishedReport.owner.firstname} ${publishedReport.owner.lastname}</a></td>
+					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy (HH:mm:ss)" /></td>
+					<td>${publishedReport.report.seaport.region.name}</td>
+					<td><a href="/public/published-report/view?id=${publishedReport.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
+				</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('#tblPublishedReportList').dataTable();
+			});
+	 	</script>
+	</c:when>
+	<c:otherwise>
+		<i>There is no published report available.</i>
+	</c:otherwise>
+	</c:choose>
 
 	<div id="confirmUserStoryPublishModalWindow" title="Really publish this report ?" style="display:none">
-		<p class="message"><span class="error"><b>Publishing this report will automatically submit it to ANDS, and appear on Research Data Australia.</b></span></p>
-		<p class="message"><span class="error"><b>Once published, a report cannot be edited, deleted or made private again.</b></span></p>
+		<p class="message"><span class="error"><b>Publishing this report will make the current version of this report public, available for anyone to read.</b></span></p>
 		<p>Are you sure you want to publish this report ?</p> 
 	</div>
 	<div id="confirmUserStoryDeletionModalWindow" title="Permanently delete the report ?" style="display:none">

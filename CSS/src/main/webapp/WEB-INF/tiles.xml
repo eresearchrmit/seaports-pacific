@@ -46,6 +46,11 @@
 		<put-attribute name="body" value="/WEB-INF/views/guidelines.jsp" />
 	</definition>
 	
+	<definition name="help" extends="public.base.definition">
+		<put-attribute name="title" value="Help - Climate Smart Seaports" />
+		<put-attribute name="body" value="/WEB-INF/views/help.jsp" />
+	</definition>
+	
 	<definition name="register" extends="public.base.definition">
 		<put-attribute name="title" value="Sign Up - Climate Smart Seaports" />
 		<put-attribute name="body" value="/WEB-INF/views/register.jsp" />
@@ -99,16 +104,6 @@
 		<put-attribute name="sidemenu" value="/WEB-INF/views/reportToolbox.jsp" />
         <put-attribute name="body" value="/WEB-INF/views/report.jsp" />
 	</definition>
-	
-	<!--<definition name="userstory" extends="base.definition">
-		<put-attribute name="title" value="Report - Climate Smart Seaports" />
-		<put-attribute name="body" value="/WEB-INF/views/userstory.jsp" />
-	</definition>-->
-	
-	<!--<definition name="userstoryCreated" extends="base.definition">
-		<put-attribute name="title" value="Report created - Climate Smart Seaports" />
-        <put-attribute name="body" value="/WEB-INF/views/userstoryCreated.jsp" />
-	</definition>-->
 	
 	<definition name="reportList" extends="base.definition">
 		<put-attribute name="title" value="Reports - Climate Smart Seaports" />

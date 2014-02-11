@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 import org.hibernate.annotations.Type;
 
@@ -31,8 +32,10 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "CmarData")
-public class CmarData
-{	
+public class CmarData implements Serializable
+{
+	private static final long serialVersionUID = -7141765080300638805L;
+
 	/**
 	 * The unique ID of the CMAR Data
 	 */

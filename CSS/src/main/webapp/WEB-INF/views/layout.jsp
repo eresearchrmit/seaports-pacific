@@ -49,7 +49,7 @@
 			<a href="http://www.rmit.edu.au/research/eres" title="RMIT University" target="_blank"><img src="<c:url value="/resources/img/theme/rmit-logo-white.png" />" alt="RMIT University" /></a>
 		</div>
 		<div class="floatright no-print" style="margin-top:5px">
-			<a href="http://www.ands.org.au/" title="Australian National Data Service" target="_blank"><img src="<c:url value="/resources/img/theme/ands-logo-white.png" />" alt="ANDS" /></a>
+			<a href="http://www.usaid.gov/" title="United States Agency for International Development" target="_blank"><img src="<c:url value="/resources/img/theme/usaid-logo-white.png" />" alt="USAID" /></a>
 		</div>
     </div>
     <div id="site_info">
