@@ -272,7 +272,7 @@
 									<select id="cbbDataSource${category.id}" name="dataSource">
 										<option value="none">- Select Data Source -</option>
 										<c:forEach items="${category.dataSourcesAvailable}" var="datasource" varStatus="dsLoopStatus">
-											<option value="${datasource.name}">${datasource.name}</option>
+											<option value="${fn:replace(datasource.name, ' ', '-')}">${datasource.displayName}</option>
 										</c:forEach>
 									</select>
 								</td>
@@ -281,7 +281,7 @@
 					<p>
 					
 					<c:forEach items="${category.dataSourcesAvailable}" var="datasource" varStatus="dsLoopStatus">
-						<div id="addElementForm${category.id}-${datasource.name}" class="elementForm">
+						<div id="addElementForm${category.id}-${fn:replace(datasource.name, ' ', '-')}" class="elementForm">
 							<form:form method="post" action="/auth/report/create-data-element?id=${report.id}#tabs-${categoryNameWithDashes}" modelAttribute="newdataelement">
 								<%--<form:input id="txtElementName" path="name" style="width:300px" />--%>
 								
@@ -290,22 +290,35 @@
 								<form:hidden id="hdnDataElementDataSource" path="dataSource.name" value="${datasource.name}" />
 								<form:hidden id="hdnDataElementReport" path="report.id" value="${report.id}" />
 								
-								<p><strong>2. ${datasource.name} Element Options:</strong></p>
+								<p><strong>2. ${datasource.displayName} Element Options:</strong></p>
 								
 								<table width="auto" height="auto" class="form">
 									<c:forEach items="${datasource.parameters}" var="parameter" varStatus="parameterLoopStatus">
 										<tr>
-											<td>
+											<td class="top">
 												${parameter.name}&nbsp;
 												<a href="#" class="helpTooltip" title="<p>${parameter.description}</p>"><img src="<c:url value="/resources/img/icons/help.png" />" alt="Help" /></a>:
-											
 											</td>
 											<td class="col2">
-												<form:select id="cbb${datasource.name}Param${parameter.name}" path="selectedOptions[${parameterLoopStatus.index}].id" multiple="false">
-													<c:forEach items="${parameter.options}" var="option">
-														<form:option value="${option.id}" >${option.name}</form:option>
+											<c:choose>
+												<c:when test="${parameter.display.text == 'dropdown'}">
+													<form:select id="cbb${datasource.name}Param${parameter.name}" path="selectedOptions[${parameterLoopStatus.index}].id" multiple="false">
+														<c:forEach items="${parameter.options}" var="option">
+															<form:option value="${option.id}" >${option.name}</form:option>
+														</c:forEach>
+													</form:select>
+												</c:when>
+												<c:when test="${parameter.display.text == 'radio'}">
+													<c:forEach items="${parameter.options}" var="option" varStatus="optionLoopStatus">
+														<input type="radio" name="selectedOptions[${parameterLoopStatus.index}].id" value="${option.id}" ${optionLoopStatus.first ? 'checked="checked"' : ''} /> ${option.name}
 													</c:forEach>
-												</form:select>
+												</c:when>
+												<c:when test="${parameter.display.text == 'text'}">
+													<c:forEach items="${parameter.options}" var="option">
+														<textarea id="txtOption${option.id}" name="selectedOptions[${parameterLoopStatus.index}].value" rows="5" class="small" ></textarea>
+													</c:forEach>
+												</c:when>
+											</c:choose>
 											</td>
 										</tr>
 									</c:forEach>
@@ -342,7 +355,7 @@
 								
 								<div style="margin-top: 40px">
 									<button type="button" class="btn btn-icon btn-blue btn-plus btn-small floatright" onclick="submit();" >
-										<span></span>Add ${datasource.name} Data
+										<span></span>Add ${datasource.displayName} Data
 									</button>
 									
 									<div class="floatright btn-margin">
@@ -481,6 +494,8 @@
 		<div id="tabs-summary">		
 			<c:if test="${not empty report.elements}">
 			
+				<c:set var="category" scope="request" value="summary"/>
+			
 				<div id="msgTabSummary" class="message info">
 					<h5>Information</h5>
 					<p><c:out value="All your selected data is presented in this section." /></p>
@@ -612,7 +627,8 @@
 			
 			tinyMCE.init({
 		        // General options
-		        mode : "textareas",
+		        mode : "specific_textareas",
+        		editor_selector : "tinymce",
 		        theme : "advanced",
 		        plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 		

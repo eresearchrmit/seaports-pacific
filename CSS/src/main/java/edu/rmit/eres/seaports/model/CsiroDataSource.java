@@ -38,13 +38,14 @@ public class CsiroDataSource extends DataSource implements Serializable {
 	}
 	
 	/**
-	 * Constructor of data source specifying all its fields
+	 * Constructor of data source specifying all its fields but the display type
 	 * @param name: the name of the data source
+	 * @param displayName: the display name of the data source
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 */
-	public CsiroDataSource(String name, List<DataSourceParameter> parameters, List<Seaport> seaports) {
-		super(name, parameters, seaports);
+	public CsiroDataSource(String name, String displayName, List<DataSourceParameter> parameters, List<Seaport> seaports) {
+		super(name, displayName, parameters, seaports);
 	}
 	
 	/**
@@ -57,12 +58,13 @@ public class CsiroDataSource extends DataSource implements Serializable {
 	/**
 	 * Constructor of data source specifying all its fields
 	 * @param name: the name of the data source
+	 * @param displayName: the display name of the data source
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 * @param displayTypes: the display types available for this data source
 	 */
-	public CsiroDataSource(String name, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
-		super(name, parameters, seaports, displayTypes);
+	public CsiroDataSource(String name, String displayName, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
+		super(name, displayName, parameters, seaports, displayTypes);
 	}
 	
 	@Override

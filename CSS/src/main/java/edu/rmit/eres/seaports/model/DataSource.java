@@ -51,6 +51,12 @@ public class DataSource implements IDataSource, Serializable {
 	 */
 	@Column
     private String name;
+	
+	/**
+	 * The display name of the data source
+	 */
+	@Column
+    private String displayName;
 
 	/**
 	 * A list of the parameters for this data source
@@ -104,11 +110,13 @@ public class DataSource implements IDataSource, Serializable {
 	/**
 	 * Constructor of data source specifying all its fields
 	 * @param name: the name of the data source
+	 * @param displayName: the display name of the data source
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 */
-	public DataSource(String name, List<DataSourceParameter> parameters, List<Seaport> seaports) {
+	public DataSource(String name, String displayName, List<DataSourceParameter> parameters, List<Seaport> seaports) {
 		setName(name);
+		setDisplayName(displayName);
 		setParameters(parameters);
 		setSeaports(seaports);
 	}
@@ -116,12 +124,14 @@ public class DataSource implements IDataSource, Serializable {
 	/**
 	 * Constructor of data source specifying all its fields
 	 * @param name: the name of the data source
+	 * @param displayName: the display name of the data source
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 * @param displayTypes: the display types available for this data source
 	 */
-	public DataSource(String name, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
+	public DataSource(String name, String displayName, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
 		setName(name);
+		setDisplayName(displayName);
 		setParameters(parameters);
 		setSeaports(seaports);
 		setDisplayTypes(displayTypes);
@@ -165,6 +175,22 @@ public class DataSource implements IDataSource, Serializable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * Getter for the display name of the data source
+	 * @return the current display name of the data source
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+	
+	/**
+	 * Setter for the display name of the data source
+	 * @param name: the new display name of the data source
+	 */
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 	
 	/**

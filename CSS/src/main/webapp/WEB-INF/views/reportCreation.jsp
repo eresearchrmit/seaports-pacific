@@ -67,7 +67,7 @@
 			</td>
 			<td></td>
 		</tr>
-		<tr>
+		<tr>		
 			<td colspan="3" style="vertical-align:center">
 				<div id="map-container" style="">
 				    <img class="south-pacific-map" src="<c:url value="/resources/img/data/south-pacific-regions-map.png" />" width="1017" height="496" 
@@ -78,6 +78,9 @@
 						<area class="mapArea" shape="poly" title="Papua New Guinea" data-maphilight='{"fillColor":"00FF00"}' coords="231,188, 243,181, 275,173, 301,183, 323,178, 337,183, 349,202, 361,208, 399,214, 425,212, 443,221 ,448,232, 450,240, 406,248, 373,270, 368,280, 398,322, 393,339, 365,347, 341,345, 286,322, 270,296, 262,294, 242,293, 223,309, 214,307, 233,290, 232,226, 237,209" />
 					</map>
 				</div>
+				<a href="#" class="helpTooltip" title="<p>The Flanders Marine Institute manages Marine Regions, but is aware that it is not complete and undoubtedly contains errors. The Flanders Marine Institute cannot be made responsible for any errors or misuse of data contained in this register. Comments from our users are more than welcome, so if you come across any error or incomplete information or you are willing to contribute to this initiative please contact us.</p><p>The data is provided 'as is', and no warranty express, implied or otherwise is offered as to the data's accuracy. The developers do not imply any opinion concerning the legal status of any country, territory or area, or concerning the delimitation of its frontiers or boundaries. The data can be used for educational, scientific or research purposes but should not be used for legal, commercial/economical (exploration of natural resources) or navigational purposes.</p><p>Anyone can download this data but it is for the sole use of the organisation or individual downloading the data. The geodata may not be redistributed without the permission of the Flanders Marine Institute (VLIZ). The geodata may be used in a Value-Added Software Application (like webservices), on condition that the Flanders Marine Institute is acknowledged as the source of the data. Redistribution rights are granted for hard-copy renditions or static, electronic map images (e.g. jpeg, gif, etc.) that are plotted, printed or publicly displayed with reference to the Flanders Marine Institute. For redistribution rights of derived products, please contact us. You can contact us at <a href='mailto:info@marineregions.org'>info@marineregions.org</a></p><p>The database can be cited as follows: Claus S., De Hauwere N., Vanhoorne B., Hernandez F., Mees J. (Flanders Marine Institute) (2014). Marineregions.org. Accessed at <a href='http://www.marineregions.org'>http://www.marineregions.org</a> on 2014-02-24.</p><p>The map has been adjusted by the CSIRO to better fit the needs of the The Pacific Climate Change Science Program Climate Futures <a href='http://www.pacificclimatefutures.net/main/'>http://www.pacificclimatefutures.net/main/</a>">
+					&copy; Flanders Marine Institute and CSIRO
+				</a>
 			</td>
 		</tr>
 		<tr>

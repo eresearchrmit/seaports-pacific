@@ -52,7 +52,7 @@ public class RegionsLoader {
 		// Regions
 		Region r1 = new Region("Fiji", "176.284180,-15.891800 -178.046875,-15.891800 -178.046875,-20.070571 176.284180,-20.070571");
 		Region r2 = new Region("Papua New Guinea", "");
-		Region r3 = new Region("Vaunuatu", "");
+		Region r3 = new Region("Vanuatu", "");
 		Region r4 = new Region("Tonga", "");
 		Region r5 = new Region("American Samoa", "");
 		Region r6 = new Region("Wallis and Futuna", "");
@@ -68,20 +68,25 @@ public class RegionsLoader {
 		session.save(r8);
 		
 		// Seaports (as found on http://www.searates.com)
-		Seaport port1 = new Seaport("FJLEV", "Levuka", r1, "Levuka");
-		Seaport port2 = new Seaport("FJSUV", "Suva", r1, "Suva");
-		Seaport port3 = new Seaport("FJLTK", "Lautoka", r1, "Lautoka");
-		Seaport port4 = new Seaport("FJSVU", "Savu Savu", r1, "Savu Savu");
-		Seaport port5 = new Seaport("FJLBS", "Lambasa", r1, "Lambasa");		
+		Seaport port1 = new Seaport("FJSUV", "Suva", r1, "Suva");
+		Seaport port2 = new Seaport("FJLTK", "Lautoka", r1, "Lautoka");
+		Seaport port3 = new Seaport("FJMAL", "Malau", r1, "Malau");
+		Seaport port4 = new Seaport("FJLEV", "Levuka", r1, "Levuka");
+		Seaport port5 = new Seaport("FJWAI", "Wairiki", r1, "Wairiki");
+		
+		//Seaport port4 = new Seaport("FJSVU", "Savu Savu", r1, "Savu Savu");
+		//Seaport port5 = new Seaport("FJLBS", "Lambasa", r1, "Lambasa");
+		
 		session.save(port1);
 		session.save(port2);
 		session.save(port3);
 		session.save(port4);
 		session.save(port5);
 		
-		Seaport port6 = new Seaport("PGATP", "Aitape", r2, "Aitape");
-		Seaport port7 = new Seaport("PGGUR", "Alotau", r2, "Alotau");
-		Seaport port8 = new Seaport("PGBAA", "Bialla", r2, "Bialla");
+		Seaport port6 = new Seaport("PGGUR", "Alotau", r2, "Alotau");
+		Seaport port7 = new Seaport("PGATP", "Aitape", r2, "Aitape");
+		Seaport port8 = new Seaport("PGBUA", "Buka", r2, "Buka");
+		//Seaport port8 = new Seaport("PGBAA", "Bialla", r2, "Bialla");
 		Seaport port9 = new Seaport("PGDAU", "Daru", r2, "Daru");
 		Seaport port10 = new Seaport("PGKVG", "Kavieng", r2, "Kavieng");
 		Seaport port11 = new Seaport("PGKIE", "Kieta", r2, "Kieta");
@@ -92,7 +97,7 @@ public class RegionsLoader {
 		Seaport port16 = new Seaport("PGROR", "Oro Bay", r2, "Buna");		
 		Seaport port17 = new Seaport("PGPOM", "Port Moresby", r2, "Port Moresby");
 		Seaport port18 = new Seaport("PGRAB", "Rabaul", r2, "Rabaul");
-		Seaport port19 = new Seaport("PGSQT", "Samarai", r2, "Samarai");
+		//Seaport port19 = new Seaport("PGSQT", "Samarai", r2, "Samarai");
 		Seaport port20 = new Seaport("PGVAI", "Vanimo", r2, "Vanimo");
 		Seaport port21 = new Seaport("PGWWK", "Wewak", r2, "Wewak");
 		session.save(port6);
@@ -108,7 +113,7 @@ public class RegionsLoader {
 		session.save(port16);
 		session.save(port17);
 		session.save(port18);
-		session.save(port19);
+		//session.save(port19);
 		session.save(port20);
 		session.save(port21);
 		

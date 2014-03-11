@@ -310,7 +310,7 @@ public class ReportController {
 		}
 	}
 	
-	@RequestMapping(value = "/create-data-element",method=RequestMethod.POST) 
+	@RequestMapping(value = "/create-data-element", method=RequestMethod.POST) 
 	public String createDataElement(@ModelAttribute("newdataelement") DataElement dataElement, RedirectAttributes attributes, Model model) {
 		logger.info("Inside addDataElement");
 		
@@ -326,16 +326,17 @@ public class ReportController {
 			DataSource dataSource = dataSourceDao.find(dataElement.getDataSource().getName());
 			List<DataSourceParameterOption> options = new ArrayList<DataSourceParameterOption>();
 			for (DataSourceParameterOption selectedOption : dataElement.getSelectedOptions()) {
-				options.add(dataSourceParameterOptionDao.find(selectedOption.getId()));
+				if (selectedOption.getId() > 0)
+					options.add(dataSourceParameterOptionDao.find(selectedOption.getId()));
 			}
-			String title = dataSource.getName() + " Data Element";
+			String title = dataSource.getDisplayName() + " Data Element";
 			int insertPosition = dataElement.getPosition() + 1;
 			
 			reorderReportElementsAfterPosition(report, insertPosition);
 			
 			DataElement newElement = new DataElement(new Date(), title, category, report, true, insertPosition,  dataSource, options, displayType);
 			elementDao.save(newElement);
-						
+			
 			// Redirects to the right tab of the report after creating the element, based on its category
 			attributes.addFlashAttribute("successMessage", MSG_ELEMENT_CREATED);
 			return "redirect:" + redirectToCategory(newElement);
@@ -627,13 +628,35 @@ public class ReportController {
 			attributes.addFlashAttribute("successMessage", MSG_REPORT_PUBLISHED);
 		}
 		catch (IllegalArgumentException | NoResultException | IOException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT + "(" + e.getMessage() + ")");
+			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT + " (" + e.getMessage() + ")");
 		}
 
 		if (pub != null)
 			return "redirect:/public/published-report/view?id=" + pub.getId();
 		else
 			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
+	
+	@RequestMapping(value = "/unpublish", method=RequestMethod.GET) 
+	public String unpublishReport(@RequestParam(value="id", required=true) Integer reportPublicationId, RedirectAttributes attributes) {
+		logger.debug("Inside unpublishReport");
+		
+		try {
+			ReportPublication publishedReport = reportPublicationDao.find(reportPublicationId);
+			Report report = publishedReport.getReport();
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
+			reportPublicationDao.delete(publishedReport);
+			
+			attributes.addFlashAttribute("successMessage", MSG_REPORT_UNPUBLISHED);
+		}
+		catch (IllegalArgumentException | NoResultException | IOException | ClassNotFoundException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_UNPUBLISH_REPORT + " (" + e.getMessage() + ")");
+		}
+
+		return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
 	private Report prepareReportData(Report report) {
@@ -668,13 +691,12 @@ public class ReportController {
 	 						ds.init(csiroDataDao);
 	 				   if (ds instanceof CmarDataSource)
 	 						ds.init(cmarDataDao);
-		 				
+	 				   
 	 				   try {
 	 					   List<?> data = ds.getData(de);
 	 					   de.setData(data);
 	 				   }
-	 				   catch (NoResultException e)
-	 				   {
+	 				   catch (NoResultException e) {
 	 					  e.printStackTrace();
 	 				   }
 	 				   ds.flush();
@@ -821,6 +843,8 @@ public class ReportController {
 	public static final String MSG_REPORT_SAVED = "The report has been saved successfully";
 	public static final String ERR_SAVE_REPORT = "Error saving the report. Please Try Again";
 	
-	public static final String MSG_REPORT_PUBLISHED = "The report is now published. It appears publicly on this portal and will be listed on Reasearch Data Australia search results";
+	public static final String MSG_REPORT_PUBLISHED = "The report is now published and appears publicly on this portal";
 	public static final String ERR_PUBLISH_REPORT = "Error publishing the report. Please Try Again";
+	public static final String MSG_REPORT_UNPUBLISHED = "The report was unpublished successfully";
+	public static final String ERR_UNPUBLISH_REPORT = "Error unpublishing the report. Please Try Again";
 }

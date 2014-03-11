@@ -12,23 +12,30 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <c:if test="${not empty element.data}">
+	
+	<c:set var="mapId" scope="request" value="${fn:replace(element.category.name, ' ', '')}"/>
+	<c:if test="${not empty category}">
+		<c:set var="mapId" scope="request" value="${category}"/>
+	</c:if>
+
 	<script type="text/javascript">
-		var map${element.id};
+		var map${mapId}${element.id};
 		var mapBounds${element.id};
 		
 		// Initialize the map
-		function initializeMap${element.id}() {
+		function initializeMap${mapId}${element.id}() {
 		
 			var mapOptions = {
 				mapTypeControlOptions: {
 					mapTypeIds: [google.maps.MapTypeId.TERRAIN]
 				},
 				mapTypeId: google.maps.MapTypeId.TERRAIN
+				
 			};
 			
-			map = new google.maps.Map(document.getElementById('map-canvas-${element.id}'), mapOptions);
+			map = new google.maps.Map(document.getElementById('map-${mapId}-canvas-${element.id}'), mapOptions);
 		
-			var str = "https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=terrain&sensor=false";
+			<%--var str = "https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=terrain&sensor=false";--%>
 			
 			var image = '<c:url value="/resources/img/icons/transparent.png" />';
 		    var bounds = new google.maps.LatLngBounds();
@@ -48,28 +55,27 @@
 				     });
 					bounds.extend(marker.position);
 					
-					
-					str += "&markers=size:mid%7Ccolor:blue%7C${entry.key.x},${entry.key.y}";
+					<%--str += "&markers=size:mid%7Ccolor:blue%7C${entry.key.x},${entry.key.y}"; --%>
 				</c:forEach>
 			</c:forEach>
 			map.setCenter(bounds.getCenter());
 			map.fitBounds(bounds);
 			
-			$("#map-picture-${element.id}").attr("src", str);
+			<%--$("#map-${mapId}-picture-${element.id}").attr("src", str);--%>
 			
 			mapBounds${element.id} = bounds;
-			map${element.id} = map;
+			map${mapId}${element.id} = map;
 		}
 				
-		google.maps.event.addDomListener(window, 'load', initializeMap${element.id});
+		google.maps.event.addDomListener(window, 'load', initializeMap${mapId}${element.id});
 		
 		// Refresh the map when changing tabs, if there are tabs
 		$(function() {
 			if ($("#tabs").length) {
 				$("#tabs").on( "tabsactivate", function(event, ui){
-					google.maps.event.trigger(map${element.id}, 'resize');
-					map${element.id}.setCenter(mapBounds${element.id}.getCenter());
-					map${element.id}.fitBounds(mapBounds${element.id});
+					google.maps.event.trigger(map${mapId}${element.id}, 'resize');
+					map${mapId}${element.id}.setCenter(mapBounds${element.id}.getCenter());
+					map${mapId}${element.id}.fitBounds(mapBounds${element.id});
 				});
 			}
 		});
@@ -78,9 +84,9 @@
 	<c:set var="firstDataRow" value="${element.data[0]}" />
 	<p style="margin-top:10px; text-align:center; font-weight"><b>Average ${firstDataRow.variable.name} for the ${firstDataRow.region.name} region under a ${firstDataRow.emissionScenario.description} (${firstDataRow.emissionScenario.name}) emissions scenario.</b></p>
 	
-	<div id="map-canvas-${element.id}" class="cmarMap"></div>
+	<div id="map-${mapId}-canvas-${element.id}" class="cmarMap"></div>
 	
-	<img id="map-picture-${element.id}" class="map-pic" src="" />
+	<%--<img id="map-${mapId}-picture-${element.id}" class="map-pic" src="" /> --%>
 	
 	<br />
 	<i class="credits">Data provided by CSIRO Marine and Atmospheric Research on <fmt:formatDate value="${firstDataRow.creationDate}" pattern="dd MMM yyyy" /> was the best available to date.</i>

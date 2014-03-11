@@ -1306,7 +1306,8 @@ public class ReportControllerTest {
 		
 		String result = reportController.publishReport(id, redirectAttributes);
 		Assert.assertNotNull(redirectAttributes.getFlashAttributes().get("errorMessage"));
-		Assert.assertEquals(ReportController.ERR_PUBLISH_REPORT, redirectAttributes.getFlashAttributes().get("errorMessage"));
+		String errorMsg = (String)redirectAttributes.getFlashAttributes().get("errorMessage");
+		Assert.assertTrue(errorMsg.startsWith(ReportController.ERR_PUBLISH_REPORT));
 		Assert.assertEquals("redirect:/auth/report/list?user=" + securityContextUserLoggedIn.getAuthentication().getName(), result);
 	}
 }

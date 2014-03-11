@@ -42,8 +42,8 @@
 				<thead>
 					<tr>
 						<th>Title</th>
-						<th>View</th>
 						<th>Edit</th>
+						<th>Preview</th>
 						<th>Publish</th>
 						<th>Delete</th>
 					</tr>
@@ -52,9 +52,9 @@
 					<c:forEach items="${reportList}" var="report" varStatus="status"> 
 					<tr>
 						<td><c:out value="${report.name}" /></td>
-						<td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
-		                <td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/pencil.png" />" alt="Edit"/></a></td>
-		                <td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/world_go.png" />" alt="Publish"/></a></td>
+						<td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/report_edit.png" />" alt="Edit"/></a></td>
+		                <td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/report.png" />" alt="View" /></a></td>
+		                <td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/report_go.png" />" alt="Publish"/></a></td>
 						<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
 					</tr>
 					</c:forEach>
@@ -84,20 +84,20 @@
 			<thead>
 				<tr>
 					<th>Title</th>
-					<th>Author</th>
-					<th>Published on</th>
 					<th>Region</th>
+					<th>Published on</th>
 					<th>View</th>
+					<th>Unpublish</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${publishedReports}" var="publishedReport" varStatus="status"> 
-				<tr onclick="document.location.href = '/public/published-report/view?id=${publishedReport.id}'" class="clickable">
+				<tr>
 					<td><c:out value="${publishedReport.name}" /></td>
-					<td><a href="/public/user/${publishedReport.owner.username}" title="View profile">${publishedReport.owner.firstname} ${publishedReport.owner.lastname}</a></td>
-					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy (HH:mm:ss)" /></td>
 					<td>${publishedReport.report.seaport.region.name}</td>
-					<td><a href="/public/published-report/view?id=${publishedReport.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
+					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy (HH:mm:ss)" /></td>
+					<td><a href="/public/published-report/view?id=${publishedReport.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/report.png" />" alt="View" /></a></td>
+					<td><a href="/auth/report/unpublish?id=${publishedReport.id}" class="lnkUnpublishReport" title="Unpublish this Report"><img src="<c:url value="/resources/img/icons/report_delete.png" />" alt="Unpublish" /></a></td>
 				</tr>
 				</c:forEach>
 			</tbody>
@@ -113,16 +113,21 @@
 	</c:otherwise>
 	</c:choose>
 
-	<div id="confirmUserStoryPublishModalWindow" title="Really publish this report ?" style="display:none">
+	<div id="confirmReportPublishModalWindow" title="Really publish this report ?" style="display:none">
 		<p class="message"><span class="error"><b>Publishing this report will make the current version of this report public, available for anyone to read.</b></span></p>
 		<p>Are you sure you want to publish this report ?</p> 
 	</div>
-	<div id="confirmUserStoryDeletionModalWindow" title="Permanently delete the report ?" style="display:none">
+	<div id="confirmReportUnpublishModalWindow" title="Unpublish the report ?" style="display:none">
+		<p class="message"><span class="error"><b>Warning: This publication will be permanently deleted !</b></span></p>
+		<p>Are you sure you want to unpublish this report ?</p> 
+	</div>
+	<div id="confirmReportDeletionModalWindow" title="Permanently delete the report ?" style="display:none">
 		<p class="message"><span class="error"><b>Warning: this will also delete all the data elements and texts contained in this report. This action cannot be undone !</b></span></p>
 		<p>Are you sure you want to permanently delete this report ?</p> 
 	</div>
 	<script type="text/javascript">
-	setupConfirmBox("confirmUserStoryPublishModalWindow", "lnkPublishReport");
-	setupConfirmBox("confirmUserStoryDeletionModalWindow", "lnkDeleteReport");
+	setupConfirmBox("confirmReportPublishModalWindow", "lnkPublishReport");
+	setupConfirmBox("confirmReportUnpublishModalWindow", "lnkUnpublishReport");
+	setupConfirmBox("confirmReportDeletionModalWindow", "lnkDeleteReport");
 	</script>
 </div>	

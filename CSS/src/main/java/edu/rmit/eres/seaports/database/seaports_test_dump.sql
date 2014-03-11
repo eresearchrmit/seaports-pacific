@@ -18,32 +18,6 @@ USE `seaports_test`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `category_data_source_availability`
---
-
-DROP TABLE IF EXISTS `category_data_source_availability`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `category_data_source_availability` (
-  `element_category_id` int(11) NOT NULL,
-  `data_source_id` int(11) NOT NULL,
-  KEY `FK82452F0B1490C93C` (`data_source_id`),
-  KEY `FK82452F0BA4607006` (`element_category_id`),
-  CONSTRAINT `FK82452F0BA4607006` FOREIGN KEY (`element_category_id`) REFERENCES `element_category` (`id`),
-  CONSTRAINT `FK82452F0B1490C93C` FOREIGN KEY (`data_source_id`) REFERENCES `data_source` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `category_data_source_availability`
---
-
-LOCK TABLES `category_data_source_availability` WRITE;
-/*!40000 ALTER TABLE `category_data_source_availability` DISABLE KEYS */;
-/*!40000 ALTER TABLE `category_data_source_availability` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `climate_emission_scenario`
 --
 
@@ -95,35 +69,41 @@ INSERT INTO `climate_model` VALUES (1,'csiro_mk3_5','The CSIRO Mk3.5 climate mod
 UNLOCK TABLES;
 
 --
--- Table structure for table `climate_params`
+-- Table structure for table `cmar_data`
 --
 
-DROP TABLE IF EXISTS `climate_params`;
+DROP TABLE IF EXISTS `cmar_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `climate_params` (
+CREATE TABLE `cmar_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `creation_date` datetime DEFAULT NULL,
   `model_name` varchar(255) DEFAULT NULL,
+  `value` longtext,
+  `year` int(11) DEFAULT NULL,
   `climate_emission_scenario_id` int(11) DEFAULT NULL,
   `climate_model_id` int(11) DEFAULT NULL,
   `region_id` int(11) DEFAULT NULL,
+  `climate_variable_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKA6107AE0E13746FC` (`climate_model_id`),
-  KEY `FKA6107AE018AA137B` (`climate_emission_scenario_id`),
-  KEY `FKA6107AE06B59B27` (`region_id`),
-  CONSTRAINT `FKA6107AE06B59B27` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
-  CONSTRAINT `FKA6107AE018AA137B` FOREIGN KEY (`climate_emission_scenario_id`) REFERENCES `climate_emission_scenario` (`id`),
-  CONSTRAINT `FKA6107AE0E13746FC` FOREIGN KEY (`climate_model_id`) REFERENCES `climate_model` (`id`)
+  KEY `FK64859B4EE13746FC` (`climate_model_id`),
+  KEY `FK64859B4EEC39C8A9` (`climate_variable_id`),
+  KEY `FK64859B4E18AA137B` (`climate_emission_scenario_id`),
+  KEY `FK64859B4E6B59B27` (`region_id`),
+  CONSTRAINT `FK64859B4E6B59B27` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
+  CONSTRAINT `FK64859B4E18AA137B` FOREIGN KEY (`climate_emission_scenario_id`) REFERENCES `climate_emission_scenario` (`id`),
+  CONSTRAINT `FK64859B4EE13746FC` FOREIGN KEY (`climate_model_id`) REFERENCES `climate_model` (`id`),
+  CONSTRAINT `FK64859B4EEC39C8A9` FOREIGN KEY (`climate_variable_id`) REFERENCES `csiro_variable` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `climate_params`
+-- Dumping data for table `cmar_data`
 --
 
-LOCK TABLES `climate_params` WRITE;
-/*!40000 ALTER TABLE `climate_params` DISABLE KEYS */;
-/*!40000 ALTER TABLE `climate_params` ENABLE KEYS */;
+LOCK TABLES `cmar_data` WRITE;
+/*!40000 ALTER TABLE `cmar_data` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmar_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -162,38 +142,8 @@ CREATE TABLE `csiro_data` (
 
 LOCK TABLES `csiro_data` WRITE;
 /*!40000 ALTER TABLE `csiro_data` DISABLE KEYS */;
-INSERT INTO `csiro_data` VALUES (1,16.1,'2008-07-27 00:00:00','Hotter & Drier',1.3,2030,1,1,1,1),(2,16.1,'2008-07-27 00:00:00','Hotter & Drier',2.4,2055,1,1,1,1),(3,16.1,'2008-07-27 00:00:00','Hotter & Drier',3,2070,1,1,1,1),(4,16.1,'2008-07-27 00:00:00','Hotter & Drier',1.2,2030,2,1,1,1),(5,16.1,'2008-07-27 00:00:00','Hotter & Drier',3,2055,2,1,1,1),(6,16.1,'2008-07-27 00:00:00','Hotter & Drier',4.1,2070,2,1,1,1),(7,16.1,'2008-07-27 00:00:00','Most Likely',1,2030,1,3,1,1),(8,16.1,'2008-07-27 00:00:00','Most Likely',2,2055,1,3,1,1),(9,16.1,'2008-07-27 00:00:00','Most Likely',2.5,2070,1,3,1,1),(10,16.1,'2008-07-27 00:00:00','Most Likely',1,2030,2,3,1,1),(11,16.1,'2008-07-27 00:00:00','Most Likely',2.4,2055,2,3,1,1),(12,16.1,'2008-07-27 00:00:00','Most Likely',3.4,2070,2,3,1,1),(13,16.1,'2008-07-27 00:00:00','Cooler & Wetter',0.7,2030,1,4,1,1),(14,16.1,'2008-07-27 00:00:00','Cooler & Wetter',1.3,2055,1,4,1,1),(15,16.1,'2008-07-27 00:00:00','Cooler & Wetter',1.7,2070,1,4,1,1),(16,16.1,'2008-07-27 00:00:00','Cooler & Wetter',0.7,2030,2,4,1,1),(17,16.1,'2008-07-27 00:00:00','Cooler & Wetter',1.7,2055,2,4,1,1),(18,16.1,'2008-07-27 00:00:00','Cooler & Wetter',2.3,2070,2,4,1,1),(19,4.6,'2008-07-27 00:00:00','Hotter & Drier',0,2030,1,1,1,2),(20,4.6,'2008-07-27 00:00:00','Hotter & Drier',0,2055,1,1,1,2),(21,4.6,'2008-07-27 00:00:00','Hotter & Drier',0.1,2070,1,1,1,2),(22,4.6,'2008-07-27 00:00:00','Hotter & Drier',0,2030,2,1,1,2),(23,4.6,'2008-07-27 00:00:00','Hotter & Drier',0.1,2055,2,1,1,2),(24,4.6,'2008-07-27 00:00:00','Hotter & Drier',0.1,2070,2,1,1,2),(25,4.6,'2008-07-27 00:00:00','Most Likely',-2.1,2030,1,3,1,2),(26,4.6,'2008-07-27 00:00:00','Most Likely',-4,2055,1,3,1,2),(27,4.6,'2008-07-27 00:00:00','Most Likely',-5,2070,1,3,1,2),(28,4.6,'2008-07-27 00:00:00','Most Likely',-2,2030,2,3,1,2),(29,4.6,'2008-07-27 00:00:00','Most Likely',-4.9,2055,2,3,1,2),(30,4.6,'2008-07-27 00:00:00','Most Likely',-6.8,2070,2,3,1,2),(31,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-1.3,2030,1,4,1,2),(32,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-2.4,2055,1,4,1,2),(33,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-3,2070,1,4,1,2),(34,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-1.2,2030,2,4,1,2),(35,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-2.9,2055,2,4,1,2),(36,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-4.1,2070,2,4,1,2),(37,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-4.7,2030,1,1,1,3),(38,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-8.8,2055,1,1,1,3),(39,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-11.1,2070,1,1,1,3),(40,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-4.5,2030,2,1,1,3),(41,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-10.9,2055,2,1,1,3),(42,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-15.1,2070,2,1,1,3),(43,1029.8,'2008-07-27 00:00:00','Most Likely',-4.5,2030,1,3,1,3),(44,1029.8,'2008-07-27 00:00:00','Most Likely',-8.4,2055,1,3,1,3),(45,1029.8,'2008-07-27 00:00:00','Most Likely',-10.6,2070,1,3,1,3),(46,1029.8,'2008-07-27 00:00:00','Most Likely',-4.3,2030,2,3,1,3),(47,1029.8,'2008-07-27 00:00:00','Most Likely',-10.4,2055,2,3,1,3),(48,1029.8,'2008-07-27 00:00:00','Most Likely',-14.4,2070,2,3,1,3),(49,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',4.1,2030,1,4,1,3),(50,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',7.7,2055,1,4,1,3),(51,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',9.7,2070,1,4,1,3),(52,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',4,2030,2,4,1,3),(53,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',9.5,2055,2,4,1,3),(54,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',13.2,2070,2,4,1,3),(55,74.8,'2008-07-27 00:00:00','Hotter & Drier',-1.3,2030,1,1,1,4),(56,74.8,'2008-07-27 00:00:00','Hotter & Drier',-5.6,2055,1,1,1,4),(57,74.8,'2008-07-27 00:00:00','Hotter & Drier',-7.1,2070,1,1,1,4),(58,74.8,'2008-07-27 00:00:00','Hotter & Drier',-2.9,2030,2,1,1,4),(59,74.8,'2008-07-27 00:00:00','Hotter & Drier',-7,2055,2,1,1,4),(60,74.8,'2008-07-27 00:00:00','Hotter & Drier',-9.7,2070,2,1,1,4),(61,74.8,'2008-07-27 00:00:00','Most Likely',-0.2,2030,1,3,1,4),(62,74.8,'2008-07-27 00:00:00','Most Likely',-0.4,2055,1,3,1,4),(63,74.8,'2008-07-27 00:00:00','Most Likely',-0.5,2070,1,3,1,4),(64,74.8,'2008-07-27 00:00:00','Most Likely',-0.2,2030,2,3,1,4),(65,74.8,'2008-07-27 00:00:00','Most Likely',-0.5,2055,2,3,1,4),(66,74.8,'2008-07-27 00:00:00','Most Likely',-0.7,2070,2,3,1,4),(67,74.8,'2008-07-27 00:00:00','Cooler & Wetter',1.2,2030,1,4,1,4),(68,74.8,'2008-07-27 00:00:00','Cooler & Wetter',2.3,2055,1,4,1,4),(69,74.8,'2008-07-27 00:00:00','Cooler & Wetter',2.9,2070,1,4,1,4),(70,74.8,'2008-07-27 00:00:00','Cooler & Wetter',1.2,2030,2,4,1,4),(71,74.8,'2008-07-27 00:00:00','Cooler & Wetter',2.9,2055,2,4,1,4),(72,74.8,'2008-07-27 00:00:00','Cooler & Wetter',4,2070,2,4,1,4),(73,12.8,'2008-07-27 00:00:00','Hotter & Drier',1.1,2030,1,1,2,1),(74,12.8,'2008-07-27 00:00:00','Hotter & Drier',2,2055,1,1,2,1),(75,12.8,'2008-07-27 00:00:00','Hotter & Drier',2.6,2070,1,1,2,1),(76,12.8,'2008-07-27 00:00:00','Hotter & Drier',1,2030,2,1,2,1),(77,12.8,'2008-07-27 00:00:00','Hotter & Drier',2.5,2055,2,1,2,1),(78,12.8,'2008-07-27 00:00:00','Hotter & Drier',3.5,2070,2,1,2,1),(79,12.8,'2008-07-27 00:00:00','Most Likely',1,2030,1,3,2,1),(80,12.8,'2008-07-27 00:00:00','Most Likely',1.9,2055,1,3,2,1),(81,12.8,'2008-07-27 00:00:00','Most Likely',2.4,2070,1,3,2,1),(82,12.8,'2008-07-27 00:00:00','Most Likely',1,2030,2,3,2,1),(83,12.8,'2008-07-27 00:00:00','Most Likely',2.4,2055,2,3,2,1),(84,12.8,'2008-07-27 00:00:00','Most Likely',3.3,2070,2,3,2,1),(85,12.8,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2030,1,4,2,1),(86,12.8,'2008-07-27 00:00:00','Cooler & Wetter',1.2,2055,1,4,2,1),(87,12.8,'2008-07-27 00:00:00','Cooler & Wetter',1.5,2070,1,4,2,1),(88,12.8,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2030,2,4,2,1),(89,12.8,'2008-07-27 00:00:00','Cooler & Wetter',1.5,2055,2,4,2,1),(90,12.8,'2008-07-27 00:00:00','Cooler & Wetter',2,2070,2,4,2,1),(91,5.3,'2008-07-27 00:00:00','Hotter & Drier',-1.6,2030,1,1,2,2),(92,5.3,'2008-07-27 00:00:00','Hotter & Drier',-3.1,2055,1,1,2,2),(93,5.3,'2008-07-27 00:00:00','Hotter & Drier',-3.9,2070,1,1,2,2),(94,5.3,'2008-07-27 00:00:00','Hotter & Drier',-1.6,2030,2,1,2,2),(95,5.3,'2008-07-27 00:00:00','Hotter & Drier',-3.8,2055,2,1,2,2),(96,5.3,'2008-07-27 00:00:00','Hotter & Drier',-5.3,2070,2,1,2,2),(97,5.3,'2008-07-27 00:00:00','Most Likely',-2.7,2030,1,3,2,2),(98,5.3,'2008-07-27 00:00:00','Most Likely',-5,2055,1,3,2,2),(99,5.3,'2008-07-27 00:00:00','Most Likely',-6.4,2070,1,3,2,2),(100,5.3,'2008-07-27 00:00:00','Most Likely',-2.6,2030,2,3,2,2),(101,5.3,'2008-07-27 00:00:00','Most Likely',-6.3,2055,2,3,2,2),(102,5.3,'2008-07-27 00:00:00','Most Likely',-8.7,2070,2,3,2,2),(103,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.1,2030,1,4,2,2),(104,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2055,1,4,2,2),(105,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2070,1,4,2,2),(106,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.1,2030,2,4,2,2),(107,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2055,2,4,2,2),(108,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2070,2,4,2,2),(109,870,'2008-07-27 00:00:00','Hotter & Drier',-4.5,2030,1,1,2,3),(110,870,'2008-07-27 00:00:00','Hotter & Drier',-8.5,2055,1,1,2,3),(111,870,'2008-07-27 00:00:00','Hotter & Drier',-10.8,2070,1,1,2,3),(112,870,'2008-07-27 00:00:00','Hotter & Drier',-4.4,2030,2,1,2,3),(113,870,'2008-07-27 00:00:00','Hotter & Drier',-10.6,2055,2,1,2,3),(114,870,'2008-07-27 00:00:00','Hotter & Drier',-14.7,2070,2,1,2,3),(115,870,'2008-07-27 00:00:00','Most Likely',-4.1,2030,1,3,2,3),(116,870,'2008-07-27 00:00:00','Most Likely',-7.7,2055,1,3,2,3),(117,870,'2008-07-27 00:00:00','Most Likely',-9.8,2070,1,3,2,3),(118,870,'2008-07-27 00:00:00','Most Likely',-4,2030,2,3,2,3),(119,870,'2008-07-27 00:00:00','Most Likely',-9.6,2055,2,3,2,3),(120,870,'2008-07-27 00:00:00','Most Likely',-13.3,2070,2,3,2,3),(121,870,'2008-07-27 00:00:00','Cooler & Wetter',2,2030,1,4,2,3),(122,870,'2008-07-27 00:00:00','Cooler & Wetter',3.7,2055,1,4,2,3),(123,870,'2008-07-27 00:00:00','Cooler & Wetter',4.6,2070,1,4,2,3),(124,870,'2008-07-27 00:00:00','Cooler & Wetter',1.9,2030,2,4,2,3),(125,870,'2008-07-27 00:00:00','Cooler & Wetter',4.6,2055,2,4,2,3),(126,870,'2008-07-27 00:00:00','Cooler & Wetter',6.3,2070,2,4,2,3),(127,71.3,'2008-07-27 00:00:00','Hotter & Drier',-2.2,2030,1,1,2,4),(128,71.3,'2008-07-27 00:00:00','Hotter & Drier',-4.2,2055,1,1,2,4),(129,71.3,'2008-07-27 00:00:00','Hotter & Drier',-5.3,2070,1,1,2,4),(130,71.3,'2008-07-27 00:00:00','Hotter & Drier',-2.1,2030,2,1,2,4),(131,71.3,'2008-07-27 00:00:00','Hotter & Drier',-5.2,2055,2,1,2,4),(132,71.3,'2008-07-27 00:00:00','Hotter & Drier',-7.2,2070,2,1,2,4),(133,71.3,'2008-07-27 00:00:00','Most Likely',-0.8,2030,1,3,2,4),(134,71.3,'2008-07-27 00:00:00','Most Likely',-1.6,2055,1,3,2,4),(135,71.3,'2008-07-27 00:00:00','Most Likely',-2,2070,1,3,2,4),(136,71.3,'2008-07-27 00:00:00','Most Likely',-0.8,2030,2,3,2,4),(137,71.3,'2008-07-27 00:00:00','Most Likely',-2,2055,2,3,2,4),(138,71.3,'2008-07-27 00:00:00','Most Likely',-2.7,2070,2,3,2,4),(139,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2030,1,4,2,4),(140,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2055,1,4,2,4),(141,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.4,2070,1,4,2,4),(142,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2030,2,4,2,4),(143,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.4,2055,2,4,2,4),(144,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2070,2,4,2,4),(145,17.6,'2008-07-27 00:00:00','Hotter & Drier',1.1,2030,1,1,3,1),(146,17.6,'2008-07-27 00:00:00','Hotter & Drier',2.1,2055,1,1,3,1),(147,17.6,'2008-07-27 00:00:00','Hotter & Drier',2.6,2070,1,1,3,1),(148,17.6,'2008-07-27 00:00:00','Hotter & Drier',1.1,2030,2,1,3,1),(149,17.6,'2008-07-27 00:00:00','Hotter & Drier',2.6,2055,2,1,3,1),(150,17.6,'2008-07-27 00:00:00','Hotter & Drier',3.6,2070,2,1,3,1),(151,17.6,'2008-07-27 00:00:00','Most Likely',0.7,2030,1,4,3,1),(152,17.6,'2008-07-27 00:00:00','Most Likely',1.2,2055,1,4,3,1),(153,17.6,'2008-07-27 00:00:00','Most Likely',2.6,2070,1,4,3,1),(154,17.6,'2008-07-27 00:00:00','Most Likely',0.6,2030,2,4,3,1),(155,17.6,'2008-07-27 00:00:00','Most Likely',1.5,2055,2,4,3,1),(156,17.6,'2008-07-27 00:00:00','Most Likely',2.1,2070,2,4,3,1),(157,17.6,'2008-07-27 00:00:00','Cooler & Wetter',0.9,2030,1,5,3,1),(158,17.6,'2008-07-27 00:00:00','Cooler & Wetter',1.7,2055,1,5,3,1),(159,17.6,'2008-07-27 00:00:00','Cooler & Wetter',2.1,2070,1,5,3,1),(160,17.6,'2008-07-27 00:00:00','Cooler & Wetter',0.9,2030,2,5,3,1),(161,17.6,'2008-07-27 00:00:00','Cooler & Wetter',2.1,2055,2,5,3,1),(162,17.6,'2008-07-27 00:00:00','Cooler & Wetter',2.9,2070,2,5,3,1),(163,5.4,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,1,1,3,2),(164,5.4,'2008-07-27 00:00:00','Hotter & Drier',-2.8,2055,1,1,3,2),(165,5.4,'2008-07-27 00:00:00','Hotter & Drier',-3.6,2070,1,1,3,2),(166,5.4,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,2,1,3,2),(167,5.4,'2008-07-27 00:00:00','Hotter & Drier',-3.5,2055,2,1,3,2),(168,5.4,'2008-07-27 00:00:00','Hotter & Drier',-4.9,2070,2,1,3,2),(169,5.4,'2008-07-27 00:00:00','Most Likely',1.1,2030,1,4,3,2),(170,5.4,'2008-07-27 00:00:00','Most Likely',2.1,2055,1,4,3,2),(171,5.4,'2008-07-27 00:00:00','Most Likely',2.6,2070,1,4,3,2),(172,5.4,'2008-07-27 00:00:00','Most Likely',1.1,2030,2,4,3,2),(173,5.4,'2008-07-27 00:00:00','Most Likely',2.6,2055,2,4,3,2),(174,5.4,'2008-07-27 00:00:00','Most Likely',3.6,2070,2,4,3,2),(175,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2030,1,5,3,2),(176,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.5,2055,1,5,3,2),(177,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2070,1,5,3,2),(178,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2030,2,5,3,2),(179,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2055,2,5,3,2),(180,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.9,2070,2,5,3,2),(181,441.4,'2008-07-27 00:00:00','Hotter & Drier',-6.2,2030,1,1,3,3),(182,441.4,'2008-07-27 00:00:00','Hotter & Drier',-11.6,2055,1,1,3,3),(183,441.4,'2008-07-27 00:00:00','Hotter & Drier',-14.7,2070,1,1,3,3),(184,441.4,'2008-07-27 00:00:00','Hotter & Drier',-6,2030,2,1,3,3),(185,441.4,'2008-07-27 00:00:00','Hotter & Drier',-14.5,2055,2,1,3,3),(186,441.4,'2008-07-27 00:00:00','Hotter & Drier',-20.1,2070,2,1,3,3),(187,441.4,'2008-07-27 00:00:00','Most Likely',-6.7,2030,1,4,3,3),(188,441.4,'2008-07-27 00:00:00','Most Likely',-12.6,2055,1,4,3,3),(189,441.4,'2008-07-27 00:00:00','Most Likely',-16,2070,1,4,3,3),(190,441.4,'2008-07-27 00:00:00','Most Likely',-6.5,2030,2,4,3,3),(191,441.4,'2008-07-27 00:00:00','Most Likely',-15.7,2055,2,4,3,3),(192,441.4,'2008-07-27 00:00:00','Most Likely',-21.7,2070,2,4,3,3),(193,441.4,'2008-07-27 00:00:00','Cooler & Wetter',0.8,2030,1,5,3,3),(194,441.4,'2008-07-27 00:00:00','Cooler & Wetter',1.4,2055,1,5,3,3),(195,441.4,'2008-07-27 00:00:00','Cooler & Wetter',1.8,2070,1,5,3,3),(196,441.4,'2008-07-27 00:00:00','Cooler & Wetter',0.7,2030,2,5,3,3),(197,441.4,'2008-07-27 00:00:00','Cooler & Wetter',1.8,2055,2,5,3,3),(198,441.4,'2008-07-27 00:00:00','Cooler & Wetter',2.5,2070,2,5,3,3),(199,59.2,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,1,1,3,4),(200,59.2,'2008-07-27 00:00:00','Hotter & Drier',-2.9,2055,1,1,3,4),(201,59.2,'2008-07-27 00:00:00','Hotter & Drier',-3.7,2070,1,1,3,4),(202,59.2,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,2,1,3,4),(203,59.2,'2008-07-27 00:00:00','Hotter & Drier',-3.6,2055,2,1,3,4),(204,59.2,'2008-07-27 00:00:00','Hotter & Drier',-5,2070,2,1,3,4),(205,59.2,'2008-07-27 00:00:00','Most Likely',-0.9,2030,1,4,3,4),(206,59.2,'2008-07-27 00:00:00','Most Likely',-1.8,2055,1,4,3,4),(207,59.2,'2008-07-27 00:00:00','Most Likely',-2.3,2070,1,4,3,4),(208,59.2,'2008-07-27 00:00:00','Most Likely',-0.9,2030,2,4,3,4),(209,59.2,'2008-07-27 00:00:00','Most Likely',-2.2,2055,2,4,3,4),(210,59.2,'2008-07-27 00:00:00','Most Likely',-3.1,2070,2,4,3,4),(211,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.2,2030,1,5,3,4),(212,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.3,2055,1,5,3,4),(213,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.4,2070,1,5,3,4),(214,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.2,2030,2,5,3,4),(215,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.4,2055,2,5,3,4),(216,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.6,2070,2,5,3,4);
+INSERT INTO `csiro_data` VALUES (1,16.1,'2008-07-27 00:00:00','Hotter & Drier',1.3,2030,1,1,1,1),(2,16.1,'2008-07-27 00:00:00','Hotter & Drier',2.4,2055,1,1,1,1),(3,16.1,'2008-07-27 00:00:00','Hotter & Drier',3,2070,1,1,1,1),(4,16.1,'2008-07-27 00:00:00','Hotter & Drier',1.2,2030,2,1,1,1),(5,16.1,'2008-07-27 00:00:00','Hotter & Drier',3,2055,2,1,1,1),(6,16.1,'2008-07-27 00:00:00','Hotter & Drier',4.1,2070,2,1,1,1),(7,16.1,'2008-07-27 00:00:00','Most Likely',1,2030,1,3,1,1),(8,16.1,'2008-07-27 00:00:00','Most Likely',2,2055,1,3,1,1),(9,16.1,'2008-07-27 00:00:00','Most Likely',2.5,2070,1,3,1,1),(10,16.1,'2008-07-27 00:00:00','Most Likely',1,2030,2,3,1,1),(11,16.1,'2008-07-27 00:00:00','Most Likely',2.4,2055,2,3,1,1),(12,16.1,'2008-07-27 00:00:00','Most Likely',3.4,2070,2,3,1,1),(13,16.1,'2008-07-27 00:00:00','Cooler & Wetter',0.7,2030,1,4,1,1),(14,16.1,'2008-07-27 00:00:00','Cooler & Wetter',1.3,2055,1,4,1,1),(15,16.1,'2008-07-27 00:00:00','Cooler & Wetter',1.7,2070,1,4,1,1),(16,16.1,'2008-07-27 00:00:00','Cooler & Wetter',0.7,2030,2,4,1,1),(17,16.1,'2008-07-27 00:00:00','Cooler & Wetter',1.7,2055,2,4,1,1),(18,16.1,'2008-07-27 00:00:00','Cooler & Wetter',2.3,2070,2,4,1,1),(19,4.6,'2008-07-27 00:00:00','Hotter & Drier',0,2030,1,1,1,2),(20,4.6,'2008-07-27 00:00:00','Hotter & Drier',0,2055,1,1,1,2),(21,4.6,'2008-07-27 00:00:00','Hotter & Drier',0.1,2070,1,1,1,2),(22,4.6,'2008-07-27 00:00:00','Hotter & Drier',0,2030,2,1,1,2),(23,4.6,'2008-07-27 00:00:00','Hotter & Drier',0.1,2055,2,1,1,2),(24,4.6,'2008-07-27 00:00:00','Hotter & Drier',0.1,2070,2,1,1,2),(25,4.6,'2008-07-27 00:00:00','Most Likely',-2.1,2030,1,3,1,2),(26,4.6,'2008-07-27 00:00:00','Most Likely',-4,2055,1,3,1,2),(27,4.6,'2008-07-27 00:00:00','Most Likely',-5,2070,1,3,1,2),(28,4.6,'2008-07-27 00:00:00','Most Likely',-2,2030,2,3,1,2),(29,4.6,'2008-07-27 00:00:00','Most Likely',-4.9,2055,2,3,1,2),(30,4.6,'2008-07-27 00:00:00','Most Likely',-6.8,2070,2,3,1,2),(31,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-1.3,2030,1,4,1,2),(32,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-2.4,2055,1,4,1,2),(33,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-3,2070,1,4,1,2),(34,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-1.2,2030,2,4,1,2),(35,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-2.9,2055,2,4,1,2),(36,4.6,'2008-07-27 00:00:00','Cooler & Wetter',-4.1,2070,2,4,1,2),(37,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-4.7,2030,1,1,1,3),(38,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-8.8,2055,1,1,1,3),(39,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-11.1,2070,1,1,1,3),(40,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-4.5,2030,2,1,1,3),(41,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-10.9,2055,2,1,1,3),(42,1029.8,'2008-07-27 00:00:00','Hotter & Drier',-15.1,2070,2,1,1,3),(43,1029.8,'2008-07-27 00:00:00','Most Likely',-4.5,2030,1,3,1,3),(44,1029.8,'2008-07-27 00:00:00','Most Likely',-8.4,2055,1,3,1,3),(45,1029.8,'2008-07-27 00:00:00','Most Likely',-10.6,2070,1,3,1,3),(46,1029.8,'2008-07-27 00:00:00','Most Likely',-4.3,2030,2,3,1,3),(47,1029.8,'2008-07-27 00:00:00','Most Likely',-10.4,2055,2,3,1,3),(48,1029.8,'2008-07-27 00:00:00','Most Likely',-14.4,2070,2,3,1,3),(49,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',4.1,2030,1,4,1,3),(50,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',7.7,2055,1,4,1,3),(51,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',9.7,2070,1,4,1,3),(52,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',4,2030,2,4,1,3),(53,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',9.5,2055,2,4,1,3),(54,1029.8,'2008-07-27 00:00:00','Cooler & Wetter',13.2,2070,2,4,1,3),(55,74.8,'2008-07-27 00:00:00','Hotter & Drier',-1.3,2030,1,1,1,4),(56,74.8,'2008-07-27 00:00:00','Hotter & Drier',-5.6,2055,1,1,1,4),(57,74.8,'2008-07-27 00:00:00','Hotter & Drier',-7.1,2070,1,1,1,4),(58,74.8,'2008-07-27 00:00:00','Hotter & Drier',-2.9,2030,2,1,1,4),(59,74.8,'2008-07-27 00:00:00','Hotter & Drier',-7,2055,2,1,1,4),(60,74.8,'2008-07-27 00:00:00','Hotter & Drier',-9.7,2070,2,1,1,4),(61,74.8,'2008-07-27 00:00:00','Most Likely',-0.2,2030,1,3,1,4),(62,74.8,'2008-07-27 00:00:00','Most Likely',-0.4,2055,1,3,1,4),(63,74.8,'2008-07-27 00:00:00','Most Likely',-0.5,2070,1,3,1,4),(64,74.8,'2008-07-27 00:00:00','Most Likely',-0.2,2030,2,3,1,4),(65,74.8,'2008-07-27 00:00:00','Most Likely',-0.5,2055,2,3,1,4),(66,74.8,'2008-07-27 00:00:00','Most Likely',-0.7,2070,2,3,1,4),(67,74.8,'2008-07-27 00:00:00','Cooler & Wetter',1.2,2030,1,4,1,4),(68,74.8,'2008-07-27 00:00:00','Cooler & Wetter',2.3,2055,1,4,1,4),(69,74.8,'2008-07-27 00:00:00','Cooler & Wetter',2.9,2070,1,4,1,4),(70,74.8,'2008-07-27 00:00:00','Cooler & Wetter',1.2,2030,2,4,1,4),(71,74.8,'2008-07-27 00:00:00','Cooler & Wetter',2.9,2055,2,4,1,4),(72,74.8,'2008-07-27 00:00:00','Cooler & Wetter',4,2070,2,4,1,4),(73,12.8,'2008-07-27 00:00:00','Hotter & Drier',1.1,2030,1,1,2,1),(74,12.8,'2008-07-27 00:00:00','Hotter & Drier',2,2055,1,1,2,1),(75,12.8,'2008-07-27 00:00:00','Hotter & Drier',2.6,2070,1,1,2,1),(76,12.8,'2008-07-27 00:00:00','Hotter & Drier',1,2030,2,1,2,1),(77,12.8,'2008-07-27 00:00:00','Hotter & Drier',2.5,2055,2,1,2,1),(78,12.8,'2008-07-27 00:00:00','Hotter & Drier',3.5,2070,2,1,2,1),(79,12.8,'2008-07-27 00:00:00','Most Likely',1,2030,1,3,2,1),(80,12.8,'2008-07-27 00:00:00','Most Likely',1.9,2055,1,3,2,1),(81,12.8,'2008-07-27 00:00:00','Most Likely',2.4,2070,1,3,2,1),(82,12.8,'2008-07-27 00:00:00','Most Likely',1,2030,2,3,2,1),(83,12.8,'2008-07-27 00:00:00','Most Likely',2.4,2055,2,3,2,1),(84,12.8,'2008-07-27 00:00:00','Most Likely',3.3,2070,2,3,2,1),(85,12.8,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2030,1,4,2,1),(86,12.8,'2008-07-27 00:00:00','Cooler & Wetter',1.2,2055,1,4,2,1),(87,12.8,'2008-07-27 00:00:00','Cooler & Wetter',1.5,2070,1,4,2,1),(88,12.8,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2030,2,4,2,1),(89,12.8,'2008-07-27 00:00:00','Cooler & Wetter',1.5,2055,2,4,2,1),(90,12.8,'2008-07-27 00:00:00','Cooler & Wetter',2,2070,2,4,2,1),(91,5.3,'2008-07-27 00:00:00','Hotter & Drier',-1.6,2030,1,1,2,2),(92,5.3,'2008-07-27 00:00:00','Hotter & Drier',-3.1,2055,1,1,2,2),(93,5.3,'2008-07-27 00:00:00','Hotter & Drier',-3.9,2070,1,1,2,2),(94,5.3,'2008-07-27 00:00:00','Hotter & Drier',-1.6,2030,2,1,2,2),(95,5.3,'2008-07-27 00:00:00','Hotter & Drier',-3.8,2055,2,1,2,2),(96,5.3,'2008-07-27 00:00:00','Hotter & Drier',-5.3,2070,2,1,2,2),(97,5.3,'2008-07-27 00:00:00','Most Likely',-2.7,2030,1,3,2,2),(98,5.3,'2008-07-27 00:00:00','Most Likely',-5,2055,1,3,2,2),(99,5.3,'2008-07-27 00:00:00','Most Likely',-6.4,2070,1,3,2,2),(100,5.3,'2008-07-27 00:00:00','Most Likely',-2.6,2030,2,3,2,2),(101,5.3,'2008-07-27 00:00:00','Most Likely',-6.3,2055,2,3,2,2),(102,5.3,'2008-07-27 00:00:00','Most Likely',-8.7,2070,2,3,2,2),(103,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.1,2030,1,4,2,2),(104,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2055,1,4,2,2),(105,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2070,1,4,2,2),(106,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.1,2030,2,4,2,2),(107,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2055,2,4,2,2),(108,5.3,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2070,2,4,2,2),(109,870,'2008-07-27 00:00:00','Hotter & Drier',-4.5,2030,1,1,2,3),(110,870,'2008-07-27 00:00:00','Hotter & Drier',-8.5,2055,1,1,2,3),(111,870,'2008-07-27 00:00:00','Hotter & Drier',-10.8,2070,1,1,2,3),(112,870,'2008-07-27 00:00:00','Hotter & Drier',-4.4,2030,2,1,2,3),(113,870,'2008-07-27 00:00:00','Hotter & Drier',-10.6,2055,2,1,2,3),(114,870,'2008-07-27 00:00:00','Hotter & Drier',-14.7,2070,2,1,2,3),(115,870,'2008-07-27 00:00:00','Most Likely',-4.1,2030,1,3,2,3),(116,870,'2008-07-27 00:00:00','Most Likely',-7.7,2055,1,3,2,3),(117,870,'2008-07-27 00:00:00','Most Likely',-9.8,2070,1,3,2,3),(118,870,'2008-07-27 00:00:00','Most Likely',-4,2030,2,3,2,3),(119,870,'2008-07-27 00:00:00','Most Likely',-9.6,2055,2,3,2,3),(120,870,'2008-07-27 00:00:00','Most Likely',-13.3,2070,2,3,2,3),(121,870,'2008-07-27 00:00:00','Cooler & Wetter',2,2030,1,4,2,3),(122,870,'2008-07-27 00:00:00','Cooler & Wetter',3.7,2055,1,4,2,3),(123,870,'2008-07-27 00:00:00','Cooler & Wetter',4.6,2070,1,4,2,3),(124,870,'2008-07-27 00:00:00','Cooler & Wetter',1.9,2030,2,4,2,3),(125,870,'2008-07-27 00:00:00','Cooler & Wetter',4.6,2055,2,4,2,3),(126,870,'2008-07-27 00:00:00','Cooler & Wetter',6.3,2070,2,4,2,3),(127,71.3,'2008-07-27 00:00:00','Hotter & Drier',-2.2,2030,1,1,2,4),(128,71.3,'2008-07-27 00:00:00','Hotter & Drier',-4.2,2055,1,1,2,4),(129,71.3,'2008-07-27 00:00:00','Hotter & Drier',-5.3,2070,1,1,2,4),(130,71.3,'2008-07-27 00:00:00','Hotter & Drier',-2.1,2030,2,1,2,4),(131,71.3,'2008-07-27 00:00:00','Hotter & Drier',-5.2,2055,2,1,2,4),(132,71.3,'2008-07-27 00:00:00','Hotter & Drier',-7.2,2070,2,1,2,4),(133,71.3,'2008-07-27 00:00:00','Most Likely',-0.8,2030,1,3,2,4),(134,71.3,'2008-07-27 00:00:00','Most Likely',-1.6,2055,1,3,2,4),(135,71.3,'2008-07-27 00:00:00','Most Likely',-2,2070,1,3,2,4),(136,71.3,'2008-07-27 00:00:00','Most Likely',-0.8,2030,2,3,2,4),(137,71.3,'2008-07-27 00:00:00','Most Likely',-2,2055,2,3,2,4),(138,71.3,'2008-07-27 00:00:00','Most Likely',-2.7,2070,2,3,2,4),(139,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2030,1,4,2,4),(140,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2055,1,4,2,4),(141,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.4,2070,1,4,2,4),(142,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.2,2030,2,4,2,4),(143,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.4,2055,2,4,2,4),(144,71.3,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2070,2,4,2,4),(145,17.6,'2008-07-27 00:00:00','Hotter & Drier',1.1,2030,1,1,NULL,1),(146,17.6,'2008-07-27 00:00:00','Hotter & Drier',2.1,2055,1,1,NULL,1),(147,17.6,'2008-07-27 00:00:00','Hotter & Drier',2.6,2070,1,1,NULL,1),(148,17.6,'2008-07-27 00:00:00','Hotter & Drier',1.1,2030,2,1,NULL,1),(149,17.6,'2008-07-27 00:00:00','Hotter & Drier',2.6,2055,2,1,NULL,1),(150,17.6,'2008-07-27 00:00:00','Hotter & Drier',3.6,2070,2,1,NULL,1),(151,17.6,'2008-07-27 00:00:00','Most Likely',0.7,2030,1,4,NULL,1),(152,17.6,'2008-07-27 00:00:00','Most Likely',1.2,2055,1,4,NULL,1),(153,17.6,'2008-07-27 00:00:00','Most Likely',2.6,2070,1,4,NULL,1),(154,17.6,'2008-07-27 00:00:00','Most Likely',0.6,2030,2,4,NULL,1),(155,17.6,'2008-07-27 00:00:00','Most Likely',1.5,2055,2,4,NULL,1),(156,17.6,'2008-07-27 00:00:00','Most Likely',2.1,2070,2,4,NULL,1),(157,17.6,'2008-07-27 00:00:00','Cooler & Wetter',0.9,2030,1,5,NULL,1),(158,17.6,'2008-07-27 00:00:00','Cooler & Wetter',1.7,2055,1,5,NULL,1),(159,17.6,'2008-07-27 00:00:00','Cooler & Wetter',2.1,2070,1,5,NULL,1),(160,17.6,'2008-07-27 00:00:00','Cooler & Wetter',0.9,2030,2,5,NULL,1),(161,17.6,'2008-07-27 00:00:00','Cooler & Wetter',2.1,2055,2,5,NULL,1),(162,17.6,'2008-07-27 00:00:00','Cooler & Wetter',2.9,2070,2,5,NULL,1),(163,5.4,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,1,1,NULL,2),(164,5.4,'2008-07-27 00:00:00','Hotter & Drier',-2.8,2055,1,1,NULL,2),(165,5.4,'2008-07-27 00:00:00','Hotter & Drier',-3.6,2070,1,1,NULL,2),(166,5.4,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,2,1,NULL,2),(167,5.4,'2008-07-27 00:00:00','Hotter & Drier',-3.5,2055,2,1,NULL,2),(168,5.4,'2008-07-27 00:00:00','Hotter & Drier',-4.9,2070,2,1,NULL,2),(169,5.4,'2008-07-27 00:00:00','Most Likely',1.1,2030,1,4,NULL,2),(170,5.4,'2008-07-27 00:00:00','Most Likely',2.1,2055,1,4,NULL,2),(171,5.4,'2008-07-27 00:00:00','Most Likely',2.6,2070,1,4,NULL,2),(172,5.4,'2008-07-27 00:00:00','Most Likely',1.1,2030,2,4,NULL,2),(173,5.4,'2008-07-27 00:00:00','Most Likely',2.6,2055,2,4,NULL,2),(174,5.4,'2008-07-27 00:00:00','Most Likely',3.6,2070,2,4,NULL,2),(175,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2030,1,5,NULL,2),(176,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.5,2055,1,5,NULL,2),(177,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2070,1,5,NULL,2),(178,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.3,2030,2,5,NULL,2),(179,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.6,2055,2,5,NULL,2),(180,5.4,'2008-07-27 00:00:00','Cooler & Wetter',0.9,2070,2,5,NULL,2),(181,441.4,'2008-07-27 00:00:00','Hotter & Drier',-6.2,2030,1,1,NULL,3),(182,441.4,'2008-07-27 00:00:00','Hotter & Drier',-11.6,2055,1,1,NULL,3),(183,441.4,'2008-07-27 00:00:00','Hotter & Drier',-14.7,2070,1,1,NULL,3),(184,441.4,'2008-07-27 00:00:00','Hotter & Drier',-6,2030,2,1,NULL,3),(185,441.4,'2008-07-27 00:00:00','Hotter & Drier',-14.5,2055,2,1,NULL,3),(186,441.4,'2008-07-27 00:00:00','Hotter & Drier',-20.1,2070,2,1,NULL,3),(187,441.4,'2008-07-27 00:00:00','Most Likely',-6.7,2030,1,4,NULL,3),(188,441.4,'2008-07-27 00:00:00','Most Likely',-12.6,2055,1,4,NULL,3),(189,441.4,'2008-07-27 00:00:00','Most Likely',-16,2070,1,4,NULL,3),(190,441.4,'2008-07-27 00:00:00','Most Likely',-6.5,2030,2,4,NULL,3),(191,441.4,'2008-07-27 00:00:00','Most Likely',-15.7,2055,2,4,NULL,3),(192,441.4,'2008-07-27 00:00:00','Most Likely',-21.7,2070,2,4,NULL,3),(193,441.4,'2008-07-27 00:00:00','Cooler & Wetter',0.8,2030,1,5,NULL,3),(194,441.4,'2008-07-27 00:00:00','Cooler & Wetter',1.4,2055,1,5,NULL,3),(195,441.4,'2008-07-27 00:00:00','Cooler & Wetter',1.8,2070,1,5,NULL,3),(196,441.4,'2008-07-27 00:00:00','Cooler & Wetter',0.7,2030,2,5,NULL,3),(197,441.4,'2008-07-27 00:00:00','Cooler & Wetter',1.8,2055,2,5,NULL,3),(198,441.4,'2008-07-27 00:00:00','Cooler & Wetter',2.5,2070,2,5,NULL,3),(199,59.2,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,1,1,NULL,4),(200,59.2,'2008-07-27 00:00:00','Hotter & Drier',-2.9,2055,1,1,NULL,4),(201,59.2,'2008-07-27 00:00:00','Hotter & Drier',-3.7,2070,1,1,NULL,4),(202,59.2,'2008-07-27 00:00:00','Hotter & Drier',-1.5,2030,2,1,NULL,4),(203,59.2,'2008-07-27 00:00:00','Hotter & Drier',-3.6,2055,2,1,NULL,4),(204,59.2,'2008-07-27 00:00:00','Hotter & Drier',-5,2070,2,1,NULL,4),(205,59.2,'2008-07-27 00:00:00','Most Likely',-0.9,2030,1,4,NULL,4),(206,59.2,'2008-07-27 00:00:00','Most Likely',-1.8,2055,1,4,NULL,4),(207,59.2,'2008-07-27 00:00:00','Most Likely',-2.3,2070,1,4,NULL,4),(208,59.2,'2008-07-27 00:00:00','Most Likely',-0.9,2030,2,4,NULL,4),(209,59.2,'2008-07-27 00:00:00','Most Likely',-2.2,2055,2,4,NULL,4),(210,59.2,'2008-07-27 00:00:00','Most Likely',-3.1,2070,2,4,NULL,4),(211,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.2,2030,1,5,NULL,4),(212,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.3,2055,1,5,NULL,4),(213,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.4,2070,1,5,NULL,4),(214,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.2,2030,2,5,NULL,4),(215,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.4,2055,2,5,NULL,4),(216,59.2,'2008-07-27 00:00:00','Cooler & Wetter',-0.6,2070,2,5,NULL,4);
 /*!40000 ALTER TABLE `csiro_data` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `csiro_data_baseline`
---
-
-DROP TABLE IF EXISTS `csiro_data_baseline`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `csiro_data_baseline` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `creation_date` datetime DEFAULT NULL,
-  `value` double DEFAULT NULL,
-  `region_id` int(11) DEFAULT NULL,
-  `csiro_variable_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKE24548B16B59B27` (`region_id`),
-  KEY `FKE24548B1377894FA` (`csiro_variable_id`),
-  CONSTRAINT `FKE24548B1377894FA` FOREIGN KEY (`csiro_variable_id`) REFERENCES `csiro_variable` (`id`),
-  CONSTRAINT `FKE24548B16B59B27` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `csiro_data_baseline`
---
-
-LOCK TABLES `csiro_data_baseline` WRITE;
-/*!40000 ALTER TABLE `csiro_data_baseline` DISABLE KEYS */;
-/*!40000 ALTER TABLE `csiro_data_baseline` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -211,7 +161,7 @@ CREATE TABLE `csiro_variable` (
   `uom` varchar(255) DEFAULT NULL,
   `uom_variation` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,7 +170,7 @@ CREATE TABLE `csiro_variable` (
 
 LOCK TABLES `csiro_variable` WRITE;
 /*!40000 ALTER TABLE `csiro_variable` DISABLE KEYS */;
-INSERT INTO `csiro_variable` VALUES (1,'Forecasted hange of temperature from now','Temperature','T','&#8451;','&#8451;'),(2,'Forecasted wind speed','Wind speed','WS','km/h','%'),(3,'Forecasted rain fall','Rainfall','RF','mm/y','%'),(4,'Forecasted relative humidity','Relative humidity','RH','%','%'),(5,'Forecasted sea level rise','Sea Level Rise','SLR','mm','%');
+INSERT INTO `csiro_variable` VALUES (1,'Forecasted hange of temperature from now','Temperature','T','&#8451;','&#8451;'),(2,'Forecasted wind speed','Wind speed','WS','km/h','%'),(3,'Forecasted rain fall','Rainfall','RF','mm/y','%'),(4,'Forecasted relative humidity','Relative humidity','RH','%','%');
 /*!40000 ALTER TABLE `csiro_variable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -304,6 +254,33 @@ INSERT INTO `data_source_display_types` VALUES (1,1),(1,3),(1,5);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `data_source_element_category`
+--
+
+DROP TABLE IF EXISTS `data_source_element_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `data_source_element_category` (
+  `data_source_id` int(11) NOT NULL,
+  `element_category_id` int(11) NOT NULL,
+  KEY `FK1EE3D4F01490C93C` (`data_source_id`),
+  KEY `FK1EE3D4F0A4607006` (`element_category_id`),
+  CONSTRAINT `FK1EE3D4F0A4607006` FOREIGN KEY (`element_category_id`) REFERENCES `element_category` (`id`),
+  CONSTRAINT `FK1EE3D4F01490C93C` FOREIGN KEY (`data_source_id`) REFERENCES `data_source` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_source_element_category`
+--
+
+LOCK TABLES `data_source_element_category` WRITE;
+/*!40000 ALTER TABLE `data_source_element_category` DISABLE KEYS */;
+INSERT INTO `data_source_element_category` VALUES (1,3);
+/*!40000 ALTER TABLE `data_source_element_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `data_source_parameter`
 --
 
@@ -384,7 +361,6 @@ CREATE TABLE `data_source_seaports` (
 
 LOCK TABLES `data_source_seaports` WRITE;
 /*!40000 ALTER TABLE `data_source_seaports` DISABLE KEYS */;
-INSERT INTO `data_source_seaports` VALUES (1,'FJLEV'),(1,'FJSUV'),(1,'FJLTK'),(1,'FJSVU'),(1,'FJLBS');
 /*!40000 ALTER TABLE `data_source_seaports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -441,7 +417,7 @@ CREATE TABLE `element` (
   CONSTRAINT `FK9CE31EFC18125712` FOREIGN KEY (`display_type_id`) REFERENCES `display_type` (`id`),
   CONSTRAINT `FK9CE31EFC45538CC9` FOREIGN KEY (`category_id`) REFERENCES `element_category` (`id`),
   CONSTRAINT `FK9CE31EFCED3BF327` FOREIGN KEY (`report_id`) REFERENCES `report` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -450,7 +426,7 @@ CREATE TABLE `element` (
 
 LOCK TABLES `element` WRITE;
 /*!40000 ALTER TABLE `element` DISABLE KEYS */;
-INSERT INTO `element` VALUES ('InputElement',1,'2014-01-21 16:30:36','','Test 1',1,'This, is, a, test, for, CSV, Element','text/csv',1,1,NULL,NULL),('InputElement',2,'2014-01-21 16:30:36','','Test 2',1,'This is the second test','text/plain',2,1,NULL,NULL),('InputElement',3,'2014-01-21 16:30:36','','Test 3',1,'This is the third test','text/plain',3,1,NULL,NULL),('InputElement',4,'2014-01-21 16:30:36','','Test 4',1,'Report\'s Data Element content test','text/plain',1,2,NULL,NULL),('InputElement',5,'2014-01-21 16:30:36','','Comment text 1',2,'Report\'s Data Element content test','text/plain',1,2,NULL,NULL),('InputElement',6,'2014-01-21 16:30:36','','Test 5',3,'Report\'s Data Element content test','text/plain',4,2,NULL,NULL),('InputElement',7,'2014-01-21 16:30:36','','Comment text 2',4,'This is a second text comment','text/plain',3,2,NULL,NULL),('InputElement',8,'2014-01-21 16:30:36','','Test 6',5,'This is a second text comment','text/plain',4,2,NULL,NULL),('DataElement',9,'2014-01-21 16:30:36','','CSIRO Data Element Test',1,NULL,NULL,3,1,1,3);
+INSERT INTO `element` VALUES ('InputElement',1,'2014-02-12 09:51:24','','Test 1',1,'This, is, a, test, for, CSV, Element','text/csv',1,1,NULL,NULL),('InputElement',2,'2014-02-12 09:51:24','','Test 2',1,'This is the second test','text/plain',2,1,NULL,NULL),('InputElement',3,'2014-02-12 09:51:24','','Test 3',1,'This is the third test','text/plain',3,1,NULL,NULL),('InputElement',4,'2014-02-12 09:51:24','','Test 4',1,'Report\'s Data Element content test','text/plain',1,2,NULL,NULL),('InputElement',5,'2014-02-12 09:51:24','','Comment text 1',2,'Report\'s Data Element content test','text/plain',1,2,NULL,NULL),('InputElement',6,'2014-02-12 09:51:24','','Test 5',3,'Report\'s Data Element content test','text/plain',4,2,NULL,NULL),('InputElement',7,'2014-02-12 09:51:24','','Comment text 2',4,'This is a second text comment','text/plain',3,2,NULL,NULL),('InputElement',8,'2014-02-12 09:51:24','','Test 6',5,'This is a second text comment','text/plain',4,2,NULL,NULL),('DataElement',9,'2014-02-12 09:51:24','','CSIRO Data Element Test',1,NULL,NULL,3,1,1,3);
 /*!40000 ALTER TABLE `element` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -481,102 +457,6 @@ INSERT INTO `element_category` VALUES (1,'<h6>Non-Climate Context</h6><p class=\
 UNLOCK TABLES;
 
 --
--- Table structure for table `engineering_model_asset`
---
-
-DROP TABLE IF EXISTS `engineering_model_asset`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `engineering_model_asset` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `asset_code` varchar(255) DEFAULT NULL,
-  `carbonation_class` varchar(255) DEFAULT NULL,
-  `ce` double DEFAULT NULL,
-  `chloride_class` varchar(255) DEFAULT NULL,
-  `cover` double DEFAULT NULL,
-  `dbar` double DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `distance_from_coast` double DEFAULT NULL,
-  `dmember` double DEFAULT NULL,
-  `exposure_class` varchar(255) DEFAULT NULL,
-  `fprimec` double DEFAULT NULL,
-  `wc` double DEFAULT NULL,
-  `year_built` int(11) NOT NULL,
-  `zone` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `engineering_model_asset`
---
-
-LOCK TABLES `engineering_model_asset` WRITE;
-/*!40000 ALTER TABLE `engineering_model_asset` DISABLE KEYS */;
-/*!40000 ALTER TABLE `engineering_model_asset` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `engineering_model_data`
---
-
-DROP TABLE IF EXISTS `engineering_model_data`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `engineering_model_data` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `data` text,
-  `engineering_model_asset_id` int(11) DEFAULT NULL,
-  `climate_params_id` int(11) DEFAULT NULL,
-  `engineering_model_variable_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK4C7EABAC3668E658` (`climate_params_id`),
-  KEY `FK4C7EABAC27CBC89B` (`engineering_model_variable_id`),
-  KEY `FK4C7EABAC225FD6F9` (`engineering_model_asset_id`),
-  CONSTRAINT `FK4C7EABAC225FD6F9` FOREIGN KEY (`engineering_model_asset_id`) REFERENCES `engineering_model_asset` (`id`),
-  CONSTRAINT `FK4C7EABAC27CBC89B` FOREIGN KEY (`engineering_model_variable_id`) REFERENCES `engineering_model_variable` (`id`),
-  CONSTRAINT `FK4C7EABAC3668E658` FOREIGN KEY (`climate_params_id`) REFERENCES `climate_params` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `engineering_model_data`
---
-
-LOCK TABLES `engineering_model_data` WRITE;
-/*!40000 ALTER TABLE `engineering_model_data` DISABLE KEYS */;
-/*!40000 ALTER TABLE `engineering_model_data` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `engineering_model_variable`
---
-
-DROP TABLE IF EXISTS `engineering_model_variable`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `engineering_model_variable` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `short_name` varchar(255) DEFAULT NULL,
-  `uom` varchar(255) DEFAULT NULL,
-  `uom_variation` varchar(255) DEFAULT NULL,
-  `category` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `engineering_model_variable`
---
-
-LOCK TABLES `engineering_model_variable` WRITE;
-/*!40000 ALTER TABLE `engineering_model_variable` DISABLE KEYS */;
-/*!40000 ALTER TABLE `engineering_model_variable` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `region`
 --
 
@@ -588,7 +468,7 @@ CREATE TABLE `region` (
   `coordinates` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -597,7 +477,7 @@ CREATE TABLE `region` (
 
 LOCK TABLES `region` WRITE;
 /*!40000 ALTER TABLE `region` DISABLE KEYS */;
-INSERT INTO `region` VALUES (1,'176.284180,-15.891800 -178.046875,-15.891800 -178.046875,-20.070571 176.284180,-20.070571','Fiji'),(2,'','New Caledonia'),(3,'','Vaunuatu'),(4,'','Tonga'),(5,'','American Samoa'),(6,'','Wallis and Futuna'),(7,'','Solomon Islands'),(8,'','Papua New Guinea');
+INSERT INTO `region` VALUES (1,'176.284180,-15.891800 -178.046875,-15.891800 -178.046875,-20.070571 176.284180,-20.070571','Region 1'),(2,'','Region 2');
 /*!40000 ALTER TABLE `region` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -612,9 +492,7 @@ CREATE TABLE `report` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `access` varchar(255) DEFAULT NULL,
   `creation_date` datetime DEFAULT NULL,
-  `mode` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `publish_date` datetime DEFAULT NULL,
   `purpose` varchar(255) DEFAULT NULL,
   `owner_login` varchar(255) DEFAULT NULL,
   `seaport_id` varchar(255) DEFAULT NULL,
@@ -623,7 +501,7 @@ CREATE TABLE `report` (
   KEY `FKC84C5534E51AB3D5` (`owner_login`),
   CONSTRAINT `FKC84C5534E51AB3D5` FOREIGN KEY (`owner_login`) REFERENCES `user` (`username`),
   CONSTRAINT `FKC84C5534FC226F6D` FOREIGN KEY (`seaport_id`) REFERENCES `seaport` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -632,7 +510,7 @@ CREATE TABLE `report` (
 
 LOCK TABLES `report` WRITE;
 /*!40000 ALTER TABLE `report` DISABLE KEYS */;
-INSERT INTO `report` VALUES (1,'private','2013-04-10 00:00:00','active','User 1 Workboard',NULL,'Purpose','testuser1','FJLTK'),(2,'private','2013-04-10 00:00:00','passive','User 1 Story 1',NULL,'Purpose','testuser1','FJLBS'),(3,'public','2013-04-10 00:00:00','passive','User 1 Story 2 (Public)',NULL,'Purpose','testuser1','FJLTK'),(4,'public','2013-04-10 00:00:00','published','User 1 Story 3 (Published)','2013-04-10 00:00:00','Purpose','testuser1','FJLTK'),(5,'private','2013-04-10 00:00:00','active','User 2 Workboard (Empty)',NULL,'Purpose','testuser2','FJLBS'),(6,'private','2013-04-10 00:00:00','passive','User 2 Story (Empty)',NULL,'Purpose','testuser2','FJLTK');
+INSERT INTO `report` VALUES (1,'private','2013-04-10 00:00:00','User 1 Workboard','Purpose','testuser1','CODE1'),(2,'private','2013-04-10 00:00:00','User 1 Story 1','Purpose','testuser1','CODE2'),(3,'public','2013-04-10 00:00:00','User 1 Story 2 (Public)','Purpose','testuser1','CODE1'),(4,'public','2013-04-10 00:00:00','User 1 Story 3 (Published)','Purpose','testuser1','CODE1'),(5,'private','2013-04-10 00:00:00','User 2 Workboard (Empty)','Purpose','testuser2','CODE2'),(6,'private','2013-04-10 00:00:00','User 2 Story (Empty)','Purpose','testuser2','CODE1');
 /*!40000 ALTER TABLE `report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -652,7 +530,7 @@ CREATE TABLE `report_publication` (
   PRIMARY KEY (`id`),
   KEY `FK44BA27A1E51AB3D5` (`owner_login`),
   CONSTRAINT `FK44BA27A1E51AB3D5` FOREIGN KEY (`owner_login`) REFERENCES `user` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -661,7 +539,7 @@ CREATE TABLE `report_publication` (
 
 LOCK TABLES `report_publication` WRITE;
 /*!40000 ALTER TABLE `report_publication` DISABLE KEYS */;
-INSERT INTO `report_publication` VALUES (1,'¬í\0sr\0#edu.rmit.eres.seaports.model.ReportíÖ9ÜßV\0\nI\0idL\0accesst\0Ljava/lang/String;L\0creationDatet\0Ljava/util/Date;L\0elementst\0Ljava/util/List;L\0modeq\0~\0L\0nameq\0~\0L\0ownert\0#Ledu/rmit/eres/seaports/model/User;L\0publishDateq\0~\0L\0purposeq\0~\0L\0seaportt\0&Ledu/rmit/eres/seaports/model/Seaport;xp\0\0\0t\0publicsr\0java.util.DatehjKYt\0\0xpw\0\0=ï›\0xsr\0&org.hibernate.collection.PersistentBag\'„ˆÎ»vI\0L\0bagq\0~\0xr\05org.hibernate.collection.AbstractPersistentCollection°‘T9Kæ&³\0I\0\ncachedSizeZ\0dirtyZ\0initializedL\0keyt\0Ljava/io/Serializable;L\0ownert\0Ljava/lang/Object;L\0roleq\0~\0L\0storedSnapshotq\0~\0xpÿÿÿÿ\0pppsr\0java.util.ArrayListxÒ™Ça\0I\0sizexp\0\0\0\0w\0\0\0\0xsq\0~\0\0\0\0\0w\0\0\0\0xt\0	publishedt\0\ZUser 1 Story 3 (Published)sr\0!edu.rmit.eres.seaports.model.UseríÖ9ÜßV\0\nL\0emailq\0~\0L\0enabledt\0Ljava/lang/Boolean;L\0	firstnameq\0~\0L\0lastnameq\0~\0L\0	nlaNumberq\0~\0L\0	nonLockedq\0~\0L\0passwordq\0~\0L\0reportsq\0~\0L\0rolesq\0~\0L\0usernameq\0~\0xpt\0email@company.comsr\0java.lang.BooleanÍ r€Õœúî\0Z\0valuexpt\0	testuser1q\0~\0\Zpq\0~\0t\0@5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8pt\0	ROLE_USERq\0~\0\Zq\0~\0	t\0Purposesr\0$edu.rmit.eres.seaports.model.SeaportíÖ9ÜßV\0L\0codeq\0~\0L\0dataSourcesAvailableq\0~\0L\0nameq\0~\0L\0regiont\0%Ledu/rmit/eres/seaports/model/Region;L\0urbanCenterq\0~\0xpt\0FJLTKpt\0Lautokasr\0#edu.rmit.eres.seaports.model.RegioníÖ9ÜßV\0I\0idL\0coordinatesq\0~\0L\0nameq\0~\0L\0portsq\0~\0xp\0\0\0t\0Y176.284180,-15.891800 -178.046875,-15.891800 -178.046875,-20.070571 176.284180,-20.070571t\0Fijipq\0~\0\"','2014-01-21 16:30:36','User 1 Story 3 (Published)','testuser1');
+INSERT INTO `report_publication` VALUES (1,'¬í\0sr\0#edu.rmit.eres.seaports.model.ReportíÖ9ÜßV\0I\0idL\0accesst\0Ljava/lang/String;L\0creationDatet\0Ljava/util/Date;L\0elementst\0Ljava/util/List;L\0nameq\0~\0L\0ownert\0#Ledu/rmit/eres/seaports/model/User;L\0purposeq\0~\0L\0seaportt\0&Ledu/rmit/eres/seaports/model/Seaport;xp\0\0\0t\0publicsr\0java.util.DatehjKYt\0\0xpw\0\0=ï›\0xsr\0&org.hibernate.collection.PersistentBag\'„ˆÎ»vI\0L\0bagq\0~\0xr\05org.hibernate.collection.AbstractPersistentCollection°‘T9Kæ&³\0I\0\ncachedSizeZ\0dirtyZ\0initializedL\0keyt\0Ljava/io/Serializable;L\0ownert\0Ljava/lang/Object;L\0roleq\0~\0L\0storedSnapshotq\0~\0xpÿÿÿÿ\0pppsr\0java.util.ArrayListxÒ™Ça\0I\0sizexp\0\0\0\0w\0\0\0\0xsq\0~\0\0\0\0\0w\0\0\0\0xt\0\ZUser 1 Story 3 (Published)sr\0!edu.rmit.eres.seaports.model.UseríÖ9ÜßV\0\nL\0emailq\0~\0L\0enabledt\0Ljava/lang/Boolean;L\0	firstnameq\0~\0L\0lastnameq\0~\0L\0	nlaNumberq\0~\0L\0	nonLockedq\0~\0L\0passwordq\0~\0L\0reportsq\0~\0L\0rolesq\0~\0L\0usernameq\0~\0xpt\0email@company.comsr\0java.lang.BooleanÍ r€Õœúî\0Z\0valuexpt\0	testuser1q\0~\0pq\0~\0t\0@5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8pt\0	ROLE_USERq\0~\0t\0Purposesr\0$edu.rmit.eres.seaports.model.SeaportíÖ9ÜßV\0L\0codeq\0~\0L\0dataSourcesAvailableq\0~\0L\0nameq\0~\0L\0regiont\0%Ledu/rmit/eres/seaports/model/Region;L\0urbanCenterq\0~\0xpt\0CODE1pt\0Port 1sr\0#edu.rmit.eres.seaports.model.RegioníÖ9ÜßV\0I\0idL\0coordinatesq\0~\0L\0nameq\0~\0L\0portsq\0~\0xp\0\0\0t\0Y176.284180,-15.891800 -178.046875,-15.891800 -178.046875,-20.070571 176.284180,-20.070571t\0Region 1pt\0City 1','2014-02-12 09:51:24','User 1 Story 3 (Published)','testuser1');
 /*!40000 ALTER TABLE `report_publication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -689,7 +567,7 @@ CREATE TABLE `seaport` (
 
 LOCK TABLES `seaport` WRITE;
 /*!40000 ALTER TABLE `seaport` DISABLE KEYS */;
-INSERT INTO `seaport` VALUES ('FJLBS','Lambasa','Lambasa',1),('FJLEV','Levuka','Levuka',1),('FJLTK','Lautoka','Lautoka',1),('FJSUV','Suva','Suva',1),('FJSVU','Savu Savu','Savu Savu',1);
+INSERT INTO `seaport` VALUES ('CODE1','Port 1','City 1',1),('CODE2','Port 2','City 2',1),('CODE3','Port 3','City 3',1);
 /*!40000 ALTER TABLE `seaport` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -723,36 +601,6 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES ('testadmin1','email@company.com','','testadmin1','testadmin1',NULL,'','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','ROLE_ADMIN'),('testadmin2','email@company.com','','testadmin2','testadmin2',NULL,'','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','ROLE_ADMIN'),('testuser1','email@company.com','','testuser1','testuser1',NULL,'','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','ROLE_USER'),('testuser2','email@company.com','','testuser2','testuser2',NULL,'','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','ROLE_USER'),('testuser3','email@company.com','','testuser3','testuser3',NULL,'','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','ROLE_USER'),('testuser4','email@company.com','','testuser4','testuser4',NULL,'','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8','ROLE_USER');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `weather_event`
---
-
-DROP TABLE IF EXISTS `weather_event`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `weather_event` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `changes` varchar(255) DEFAULT NULL,
-  `consequences_other` varchar(255) DEFAULT NULL,
-  `consequences_rating` varchar(255) DEFAULT NULL,
-  `direct` bit(1) DEFAULT NULL,
-  `impact` varchar(255) DEFAULT NULL,
-  `response_adequate` bit(1) DEFAULT NULL,
-  `type` varchar(255) DEFAULT NULL,
-  `year` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `weather_event`
---
-
-LOCK TABLES `weather_event` WRITE;
-/*!40000 ALTER TABLE `weather_event` DISABLE KEYS */;
-/*!40000 ALTER TABLE `weather_event` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -763,4 +611,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-01-21 16:35:06
+-- Dump completed on 2014-02-12  9:51:53

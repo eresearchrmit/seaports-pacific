@@ -108,7 +108,7 @@ public class SeaportDaoTest {
 		List<Seaport> resSeaports = seaportDao.getAllInRegion(region);
 		
 		Assert.assertNotNull(resSeaports);
-		Assert.assertEquals(2, resSeaports.size()); // There are two seaports in region with ID 1
+		Assert.assertEquals(3, resSeaports.size()); // There are two seaports in region with ID 1
 		for (Seaport resSeaport : resSeaports) {
 			Assert.assertNotNull(resSeaport);
 			Assert.assertEquals(Seaport.class, resSeaport.getClass());

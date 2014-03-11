@@ -202,7 +202,8 @@ public class DataSourceParameter implements Serializable {
 	public enum Display {
 		UNDEFINED("undefined"),
 		DROPDOWN("dropdown"),
-		RADIO("radio");
+		RADIO("radio"),
+		TEXT("text");
 		
 		private String text;
 

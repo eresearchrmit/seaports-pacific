@@ -41,6 +41,7 @@
 		
 		<mapping class="edu.rmit.eres.seaports.model.CsiroDataSource" />
 		<mapping class="edu.rmit.eres.seaports.model.CmarDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.VulnerabilityDataSource" />
 		
 		<mapping class="edu.rmit.eres.seaports.model.Region" />
 		<mapping class="edu.rmit.eres.seaports.model.Seaport" />
@@ -50,6 +51,6 @@
 		<mapping class="edu.rmit.eres.seaports.model.CsiroVariable" />
 		<mapping class="edu.rmit.eres.seaports.model.CsiroData" />
 		<mapping class="edu.rmit.eres.seaports.model.CmarData" />
-		
+		<mapping class="edu.rmit.eres.seaports.model.WeatherEvent" />
     </session-factory>
 </hibernate-configuration>
