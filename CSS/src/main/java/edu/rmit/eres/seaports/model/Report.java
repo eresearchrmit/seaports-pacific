@@ -95,6 +95,12 @@ public class Report implements Serializable {
 	private Date creationDate;
 	
 	/**
+	 * The name of the template used to display the report
+	 */
+	@Column
+	private String template;
+	
+	/**
 	 * Default constructor of report
 	 */
 	public Report() {
@@ -163,6 +169,14 @@ public class Report implements Serializable {
 	}
 	
 	/**
+	 * Setter for the name of the report
+	 * @return The new name of the report
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
 	 * Setter for the purpose of the report
 	 * @return The new purpose of the report
 	 */
@@ -176,14 +190,6 @@ public class Report implements Serializable {
 	 */
 	public String getPurpose() {
 		return this.purpose;
-	}
-	
-	/**
-	 * Setter for the name of the report
-	 * @return The new name of the report
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -266,6 +272,22 @@ public class Report implements Serializable {
 	 */
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+	
+	/**
+	 * Getter for the name of the template used to display the report
+	 * @return The current name of the template used to display the report
+	 */
+	public String getTemplate() {
+		return this.template;
+	}
+	
+	/**
+	 * Setter for the name of the template used to display the report
+	 * @return The new name of the template used to display the report
+	 */
+	public void setTemplate(String template) {
+		this.template = template;
 	}
 	
 	/**

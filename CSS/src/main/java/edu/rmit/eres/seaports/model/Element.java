@@ -52,19 +52,19 @@ public class Element implements Serializable {
 	@Column
 	protected String name;
 
-	/**
-	 * The category of the element
-	 */
-	@ManyToOne
-	@JoinColumn(name="category_id")
-	protected ElementCategory category;
-	
     /**
      * The report to which this element belongs
      */
 	@ManyToOne
 	@JoinColumn(name="report_id")
 	protected Report report;
+	
+	/**
+	 * The category of the element
+	 */
+	@ManyToOne
+	@JoinColumn(name="category_id")
+	protected ElementCategory category;
 	
 	/**
 	 * Whether the element is included or not in the publication of its parent Report.
@@ -77,12 +77,27 @@ public class Element implements Serializable {
 	 */
     @Column
     protected int position;
+    
+	/**
+	 * Whether the element takes 2 column (full width) or only one column (half width)
+	 */
+    @Column
+    protected boolean fullWidth;
+    
+	/**
+	 * Whether there should be a page break after the element
+	 */
+    @Column
+    protected boolean pageBreakAfter;
 
 	/**
 	 * Default constructor of element
 	 */
 	public Element() {
 		setCreationDate(new Date());
+		setIncluded(true);
+		setFullWidth(true);
+		setPageBreakAfter(false);
 	}
 
 	/**
@@ -94,14 +109,18 @@ public class Element implements Serializable {
 	 * @param included: whether the element is included or not in the publication of its parent Report.
 	 * @param position: the position of the element in the report it belongs to
 	 * @param displayType: the way the element should be displayed
+	 * @param fullWidth: whether the element takes 2 column (full width) or only one column (half width)
+	 * @param pageBreakAfter: whether there should be a page break after the element
 	 */
-	public Element(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position) {
+	public Element(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position, boolean fullWidth, boolean pageBreakAfter) {
 		setCreationDate(creationDate);
 		setName(name);
 		setCategory(category);
 		setReport(report);
 		setIncluded(included);
 		setPosition(position);
+		setFullWidth(fullWidth);
+		setPageBreakAfter(pageBreakAfter);
 	}
     
 	/**
@@ -153,22 +172,6 @@ public class Element implements Serializable {
 	}
 	
 	/**
-	 * Getter for the category of the element
-	 * @return The current category of the element
-	 */
-	public ElementCategory getCategory() {
-		return this.category;
-	}
-	
-	/**
-	 * Setter for the category of the element
-	 * @param report: The new category of the element
-	 */
-	public void setCategory(ElementCategory category) {
-		this.category = category;
-	}
-	
-	/**
 	 * Getter for the report containing this element
 	 * @return The report currently containing this element
 	 */
@@ -182,6 +185,22 @@ public class Element implements Serializable {
 	 */
 	public void setReport(Report report) {
 		this.report = report;
+	}
+	
+	/**
+	 * Getter for the category of the element
+	 * @return The current category of the element
+	 */
+	public ElementCategory getCategory() {
+		return this.category;
+	}
+	
+	/**
+	 * Setter for the category of the element
+	 * @param report: The new category of the element
+	 */
+	public void setCategory(ElementCategory category) {
+		this.category = category;
 	}
 
 	/**
@@ -214,6 +233,38 @@ public class Element implements Serializable {
 	 */
 	public void setPosition(int position) {
 		this.position = position;
+	}
+	
+	/**
+	 * Getter for whether the element takes 2 column (full width) or only one column (half width)
+	 * @return true if the element is currently full width, false otherwise
+	 */
+	public boolean getFullWidth() {
+		return this.fullWidth;
+	}
+	
+	/**
+	 * Setter for whether the element takes 2 column (full width) or only one column (half width)
+	 * @param fullWidth: true if the element is currently full width, false otherwise
+	 */
+	public void setFullWidth(boolean fullWidth) {
+		this.fullWidth = fullWidth;
+	}
+	
+	/**
+	 * Getter for whether there should be a page break after the element
+	 * @return true if there currently should be a page break after the element, false otherwise
+	 */
+	public boolean getPageBreakAfter() {
+		return this.pageBreakAfter;
+	}
+	
+	/**
+	 * Setter for whether there should be a page break after the element
+	 * @param pageBreakAfter: true if there should be a page break after the element, false otherwise
+	 */
+	public void setPageBreakAfter(boolean pageBreakAfter) {
+		this.pageBreakAfter = pageBreakAfter;
 	}
 	
 	public static long getSerialversionuid() {

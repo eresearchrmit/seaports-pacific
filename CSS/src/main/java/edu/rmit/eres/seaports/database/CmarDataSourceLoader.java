@@ -135,11 +135,28 @@ public class CmarDataSourceLoader {
 		
 		// Availability of the data source for each seaport
 		List<Seaport> seaports = new ArrayList<Seaport>();
-		seaports.add((Seaport)(session.get(Seaport.class, "FJLEV")));
 		seaports.add((Seaport)(session.get(Seaport.class, "FJSUV")));
 		seaports.add((Seaport)(session.get(Seaport.class, "FJLTK")));
-		seaports.add((Seaport)(session.get(Seaport.class, "FJSVU")));
-		seaports.add((Seaport)(session.get(Seaport.class, "FJLBS")));
+		seaports.add((Seaport)(session.get(Seaport.class, "FJMAL")));
+		seaports.add((Seaport)(session.get(Seaport.class, "FJLEV")));
+		seaports.add((Seaport)(session.get(Seaport.class, "FJWAI")));
+		
+		seaports.add((Seaport)(session.get(Seaport.class, "PGGUR")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGATP")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGBUA")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGDAU")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGKVG")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGKIE")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGKIM")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGLAE")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGLOR")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGMAG")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGROR")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGPOM")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGRAB")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGVAI")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGWWK")));
+		
 		dsCmar.setSeaports(seaports);
 		
 		

@@ -192,6 +192,8 @@
 						<form:hidden id="hdnInputElementIncluded" path="included" value="true" />
 						<form:hidden id="hdnInputElementContentType" path="contentType" value="txt" />
 						<form:hidden id="hdnInputElementReport" path="report.id" value="${report.id}" />
+						<form:hidden id="hdnInputElementFullWidth" path="fullWidth" value="true" />
+						<form:hidden id="hdnInputElementPageBreakAfter" path="pageBreakAfter" value="false" />
 						
 						<textarea name="textContent" class="tinymce" rows="12">
 						</textarea>
@@ -225,6 +227,8 @@
 						<form:hidden id="hdnInputElementCategory" path="category.name" value="${category.name}" />
 						<form:hidden id="hdnInputElementIncluded" path="included" value="true" />
 						<form:hidden id="hdnInputElementReport" path="report.id" value="${report.id}" />
+						<form:hidden id="hdnInputElementFullWidth" path="fullWidth" value="true" />
+						<form:hidden id="hdnInputElementPageBreakAfter" path="pageBreakAfter" value="false" />
 						
 						<table width="auto" height="auto" class="form">
 							<tr>
@@ -289,6 +293,8 @@
 								<form:hidden id="hdnEDatalementCategory" path="category.name" value="${category.name}" />
 								<form:hidden id="hdnDataElementDataSource" path="dataSource.name" value="${datasource.name}" />
 								<form:hidden id="hdnDataElementReport" path="report.id" value="${report.id}" />
+								<form:hidden id="hdnInputElementFullWidth" path="fullWidth" value="true" />
+								<form:hidden id="hdnInputElementPageBreakAfter" path="pageBreakAfter" value="false" />
 								
 								<p><strong>2. ${datasource.displayName} Element Options:</strong></p>
 								
@@ -422,18 +428,40 @@
 							<div class="box round${element.included == false ? ' box-disabled' : ''}">
 								<div class="box-header">
 								<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
+									<!-- Download Button -->
+									<%--<a class="lnkDownloadElement" href="/auth/report/download-element?id=${element.id}">
+										<button type="button" download= class="btn btn-icon btn-blue btn-small btn-arrow-down floatright" >
+											<span></span>Download
+										</button>
+									</a> --%>
 									<!-- Delete button -->
 									<a class="lnkDeleteElement" href="/auth/report/delete-element?id=${element.id}">
-										<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright" >
+										<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright btn-margin" >
 											<span></span>Delete
 										</button>
 									</a>
 									<!-- 'Include/Exclude' button -->
 									<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
-										<button type="button" class="btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
+										<button type="button" class="btn btn-icon btn-small btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
 											<span></span>${element.included == false ? 'Include' : 'Exclude'}
 										</button>
 									</a>
+									
+									<form:form id="editElementDisplayForm${element.id}" method="post" action="/auth/report/edit-element-display" class="floatright btn-margin"> 
+										<input id="hdnElementToEditId" type="hidden" name="elementId" value="${element.id}" />
+										
+										<!-- Page Break Checkbox -->
+										<input type="checkbox" id="chkPageBreak" name="pageBreakAfter" onchange="submit();" class="floatright btn-margin" style="margin-top: 3px" ${element.pageBreakAfter == true ? ' checked' : ''}  />
+										<label for="ddlDisplayType${element.id}" class="floatright" >Page Break:</label>
+									
+										<!-- Full-width or Half-width -->	
+										<select id="ddlFullWidth${element.id}" name="fullWidth" onchange="submit();" class="floatright btn-margin">
+											<option value="0" ${element.fullWidth == false ? 'selected' : ''}>50%</option>
+											<option value="1" ${element.fullWidth == true ? 'selected' : ''}>100%</option>
+										</select>
+										<label for="ddlFullWidth${element.id}" class="floatright">Width:</label>
+									</form:form>
+									
 									<!-- 'Edit text' button for plain text elements -->
 									<% Element element = (Element)(request.getAttribute("element"));
 										System.out.print(element.getClass().getName());
@@ -448,14 +476,15 @@
 										<form:form id="editDataElementDisplayTypeForm${element.id}" method="post" action="/auth/report/edit-display-type" class="floatright btn-margin"> 
 											<input id="hdnDataElementToEditId" type="hidden" name="elementId" value="${element.id}" />
 											
-											<select name="displayType" onchange="submit();">
-												<option value="0">--- Change Display Type ---</option>
+											<select id="ddlDisplayType${element.id}" name="displayType" onchange="submit();">
 												<c:forEach items="${element.dataSource.displayTypes}" var="displayType" varStatus="displayLoopStatus">
 													<option value="${displayType.name}" ${displayType.name == element.displayType.name ? ' selected' : ''} /> ${displayType.name}</option>
 												</c:forEach>
 											</select>
 										</form:form>
+										<label for="ddlDisplayType${element.id}" class="floatright">Display:</label>
 									<% } %>
+									
 									<div class="clear"></div>
 								</div>
 								

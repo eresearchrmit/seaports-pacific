@@ -7,9 +7,11 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -37,7 +39,20 @@ public class Seaport implements Serializable {
 	/**
 	 * The name of the seaport
 	 */
+	@Column
 	private String name;
+	
+	/**
+	 * The latitude component of the GPS coordinates of the seaport
+	 */
+	@Column
+	private Double latitude;
+	
+	/**
+	 * The longitude component of the GPS coordinates of the seaport
+	 */
+	@Column
+	private Double longitude;
 	
 	/**
 	 * The region where the seaport is located
@@ -49,6 +64,7 @@ public class Seaport implements Serializable {
 	/**
 	 * The urban center the seaport belongs to, if any
 	 */
+	@Column
 	private String urbanCenter;
 	
 	/**
@@ -79,12 +95,16 @@ public class Seaport implements Serializable {
 	 * Constructor of Seaport specifying the code, name, region and urban center
 	 * @param code: the unique code of the seaport
 	 * @param name: the name of the seaport
+	 * @param latitude: the latitude component of the GPS coordinates of the seaport
+	 * @param longitude: the longitude component of the GPS coordinates of the seaport
 	 * @param region: the region where the seaport is located
 	 * @param urbanCenter: the name of the urban center near the seaport
 	 */
-	public Seaport(String code, String name, Region region, String urbanCenter) {
+	public Seaport(String code, String name, Double latitude, Double longitude, Region region, String urbanCenter) {
 		setCode(code);
 		setName(name);
+		setLatitude(latitude);
+		setLongitude(longitude);
 		setRegion(region);
 		setUrbanCenter(urbanCenter);
 	}
@@ -106,19 +126,51 @@ public class Seaport implements Serializable {
 	}
 	
 	/**
-	 * Getter for the name for the seaport
-	 * @return the name for the seaport
+	 * Getter for the name of the seaport
+	 * @return the name of the seaport
 	 */
 	public String getName() {
 		return this.name;
 	}
 	
 	/**
-	 * Setter for the name for the seaport
+	 * Setter for the name of the seaport
 	 * @param name: the new name of the seaport
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * Getter for the latitude component of the GPS coordinates of the seaport
+	 * @return the latitude of the seaport
+	 */
+	public Double getLatitude() {
+		return this.latitude;
+	}
+	
+	/**
+	 * Setter for the latitude component of the GPS coordinates of the seaport
+	 * @param latitude: the new latitude of the seaport
+	 */
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	
+	/**
+	 * Getter for the longitude component of the GPS coordinates of the seaport
+	 * @return the longitude of the seaport
+	 */
+	public Double getLongitude() {
+		return this.longitude;
+	}
+	
+	/**
+	 * Setter for the longitude component of the GPS coordinates of the seaport
+	 * @param location: the new longitude of the seaport
+	 */
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 	
 	/**

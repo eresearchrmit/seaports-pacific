@@ -81,7 +81,7 @@ public class AnonymousControllerTest {
 		// Dummy Input Element to pass for file upload test
 		Report report = new Report();
 		report.setId(1);
-		inputElement = new InputElement(new Date(), null, new ElementCategory("Observed climate"), report, true, 1, null);
+		inputElement = new InputElement(new Date(), null, new ElementCategory("Observed climate"), report, true, 1, null, true, false);
 		inputElement.setId(0);
 		
 		// Text Element to test text edition methods

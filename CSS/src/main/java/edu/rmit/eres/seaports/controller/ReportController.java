@@ -334,7 +334,7 @@ public class ReportController {
 			
 			reorderReportElementsAfterPosition(report, insertPosition);
 			
-			DataElement newElement = new DataElement(new Date(), title, category, report, true, insertPosition,  dataSource, options, displayType);
+			DataElement newElement = new DataElement(new Date(), title, category, report, true, insertPosition,  dataSource, options, displayType, true, false);
 			elementDao.save(newElement);
 			
 			// Redirects to the right tab of the report after creating the element, based on its category
@@ -371,7 +371,7 @@ public class ReportController {
 			
 			reorderReportElementsAfterPosition(report, insertPosition);
 			
-			InputElement newElement = new InputElement(new Date(), title, category, report, true, insertPosition, "text/plain", content);
+			InputElement newElement = new InputElement(new Date(), title, category, report, true, insertPosition, "text/plain", content, true, false);
 			elementDao.save(newElement);
 			
 			return "redirect:" + redirectToCategory(newElement);
@@ -414,7 +414,7 @@ public class ReportController {
     			
     			reorderReportElementsAfterPosition(report, insertPosition);
     			
-            	InputElement newElement = new InputElement(new Date(), title, category, report, true, insertPosition, uploadfile.getContentType(), uploadfile.getBytes());
+            	InputElement newElement = new InputElement(new Date(), title, category, report, true, insertPosition, uploadfile.getContentType(), uploadfile.getBytes(), true, false);
     			elementDao.save(newElement);
             	
             	attributes.addFlashAttribute("successMessage", MSG_FILE_UPLOAD_SUCCESS);
@@ -473,6 +473,36 @@ public class ReportController {
 			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
 	
+	@RequestMapping(value="/edit-element-display", method=RequestMethod.POST) 
+	public String editFullWidth(@RequestParam(value="elementId") Integer elementId,
+			@RequestParam(value="fullWidth") boolean fullWidth, 
+			@RequestParam(value="pageBreakAfter", required=false) boolean pageBreakAfter, 
+			RedirectAttributes attributes) {
+		logger.info("Inside editElementDisplay");
+		
+		Element element = null;
+		try {
+			// Retrieve the data element
+			element = elementDao.find(elementId);
+			
+			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(element.getReport()))) // Security: ownership check
+    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+
+			element.setFullWidth(fullWidth);
+			element.setPageBreakAfter(pageBreakAfter);
+			elementDao.save(element);
+				
+			attributes.addFlashAttribute("successMessage", MSG_ELEMENT_EDITED);
+		}
+		catch (IllegalArgumentException | NoResultException e) {
+			attributes.addFlashAttribute("errorMessage", ERR_EDIT_ELEMENT);
+		}
+		
+		if (element != null)
+			return "redirect:" + redirectToCategory(element);
+		else
+			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
+	}
 	
 	private void reorderReportElementsAfterPosition(Report report, int insertPosition) {
 		// Increment the positions of all the elements after the new one
@@ -521,7 +551,7 @@ public class ReportController {
 		else
 			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}
-	
+		
 	@RequestMapping(value = "/delete-element",method=RequestMethod.GET) 
 	public String deleteElement(@RequestParam(value="id",required=true) Integer elementId, RedirectAttributes attributes, Model model) {
 		logger.info("Inside deleteElement");
@@ -663,52 +693,60 @@ public class ReportController {
 		List<Element> elements = report.getElements(); 		
 		if (elements != null) {
  			for (Element element : elements) {
-	 			if (element.getClass().equals(InputElement.class)) {
-	 				((InputElement)element).generateStringContent();
-	 			}
-	 			else if (element.getClass().equals(DataElement.class)) {
-	 				DataElement de = ((DataElement)element);
-	 				
-	 				/*if (de.getDataSource() instanceof CsiroDataSource)
-	 				{
-	 					CsiroDataSource csiroDataSource = (CsiroDataSource)de.getDataSource();
-	 					csiroDataSource.init(csiroDataDao);
-	 					de.setData(csiroDataSource.getData(de));
-	 					de.getDataSource().flush();
-	 				}*/
-	 				try {
-	 					// Instantiate the data source of the sub-type specified by the data source name
-	 					String className = "edu.rmit.eres.seaports.model." + WordUtils.capitalize(de.getDataSource().getName().toLowerCase()) + "DataSource";
-	 					Constructor<?> constructor = Class.forName(className).getDeclaredConstructor(DataSource.class);
-	 					constructor.setAccessible(true);
-	 					
-	 					// Cast to the correct specific data source type
-	 				    Class<? extends DataSource> dataSourceClass = Class.forName(className).asSubclass(DataSource.class);
-	 				    DataSource ds = dataSourceClass.cast(constructor.newInstance(new Object[] { de.getDataSource() }));
-	 				    
-	 					// Retrieves the data and set the field
-	 				   if (ds instanceof CsiroDataSource)
-	 						ds.init(csiroDataDao);
-	 				   if (ds instanceof CmarDataSource)
-	 						ds.init(cmarDataDao);
-	 				   
-	 				   try {
-	 					   List<?> data = ds.getData(de);
-	 					   de.setData(data);
-	 				   }
-	 				   catch (NoResultException e) {
-	 					  e.printStackTrace();
-	 				   }
-	 				   ds.flush();
-	 				}
-					catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException 
-							| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						e.printStackTrace();
-					}
-	 			}
+	 			element = prepareElementData(element);
 	 		}
  		}
  		return report;
+	}
+	
+	private Element prepareElementData(Element element) {
+		if (element.getClass().equals(InputElement.class)) {
+			InputElement ie = ((InputElement)element);
+			ie.generateStringContent();
+			return ie;
+		}
+		else if (element.getClass().equals(DataElement.class)) {
+			DataElement de = ((DataElement)element);
+			
+			/*if (de.getDataSource() instanceof CsiroDataSource)
+			{
+				CsiroDataSource csiroDataSource = (CsiroDataSource)de.getDataSource();
+				csiroDataSource.init(csiroDataDao);
+				de.setData(csiroDataSource.getData(de));
+				de.getDataSource().flush();
+			}*/
+			try {
+				// Instantiate the data source of the sub-type specified by the data source name
+				String className = "edu.rmit.eres.seaports.model." + WordUtils.capitalize(de.getDataSource().getName().toLowerCase()) + "DataSource";
+				Constructor<?> constructor = Class.forName(className).getDeclaredConstructor(DataSource.class);
+				constructor.setAccessible(true);
+				
+				// Cast to the correct specific data source type
+			    Class<? extends DataSource> dataSourceClass = Class.forName(className).asSubclass(DataSource.class);
+			    DataSource ds = dataSourceClass.cast(constructor.newInstance(new Object[] { de.getDataSource() }));
+			    
+				// Retrieves the data and set the field
+			   if (ds instanceof CsiroDataSource)
+					ds.init(csiroDataDao);
+			   if (ds instanceof CmarDataSource)
+					ds.init(cmarDataDao);
+			   
+			   try {
+				   List<?> data = ds.getData(de);
+				   de.setData(data);
+			   }
+			   catch (NoResultException e) {
+				  e.printStackTrace();
+			   }
+			   ds.flush();
+			   return de;
+			}
+			catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException 
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return element;
 	}
 	
 	/*
@@ -831,7 +869,9 @@ public class ReportController {
 	public static final String ERR_INVALID_FILE_FORMAT = "Invalid file format. The type of the file you tried to upload is not allowed";
 	
 	public static final String MSG_ELEMENT_CREATED = "The element has been added successfully to your report";
-	public static final String MSG_ELEMENT_DELETED = "The element was deleted successfully from the report";
+	public static final String MSG_ELEMENT_EDITED = "Element edited successfully";
+	public static final String ERR_EDIT_ELEMENT = "Error editing the element. Please Try Again";
+	public static final String MSG_ELEMENT_DELETED = "The element was deleted successfully from the report";	
 	public static final String MSG_FILE_UPLOAD_SUCCESS = "The file was uploaded successfully to the report";
 	
 	public static final String MSG_TEXT_EDITED = "Text edited successfully";

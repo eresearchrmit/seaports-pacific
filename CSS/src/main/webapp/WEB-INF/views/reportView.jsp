@@ -60,17 +60,24 @@
 			 	
 			 	<!-- Iteration on every element in the report -->
 			 	<c:forEach items="${report.elements}" var="element" varStatus="status">
+					<c:if test="${element.fullWidth == true}">
+						<div class="clearfix"></div>
+					</c:if>
+					
 					<c:if test="${element.included == true}">
-						<div class="element">
+						<div class="element${element.fullWidth == false ? ' halfwidth' : '' }">
 							<c:set var="element" scope="request" value="${element}"/>
 				 			<c:set var="elementLoopIndex" scope="request" value="${status.index}"/>
 							<jsp:include page="element.jsp" />
 						</div>
 					</c:if>
+					<c:if test="${element.pageBreakAfter == true}">
+						<div class="pagebreak"></div>
+					</c:if>
 				</c:forEach>
 			</div>
 		</c:if>
-	
+		
 		<div class="report-license">
 			<div class="floatleft">
 				<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/" id="lnkCCLicence" target="_blank">

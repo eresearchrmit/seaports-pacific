@@ -61,9 +61,9 @@ public class TestDatabaseLoader {
 		session.save(r2);
 		
 		// Seaports
-		Seaport port1 = new Seaport("CODE1", "Port 1", r1, "City 1");
-		Seaport port2 = new Seaport("CODE2", "Port 2", r1, "City 2");
-		Seaport port3 = new Seaport("CODE3", "Port 3", r1, "City 3");
+		Seaport port1 = new Seaport("CODE1", "Port 1", 0.0, 0.0, r1, "City 1");
+		Seaport port2 = new Seaport("CODE2", "Port 2",  0.0, 0.0, r1, "City 2");
+		Seaport port3 = new Seaport("CODE3", "Port 3",  0.0, 0.0, r1, "City 3");
 		session.save(port1);
 		session.save(port2);
 		session.save(port3);
@@ -147,32 +147,32 @@ public class TestDatabaseLoader {
 		// Add Elements in the report
 	    date = new Date();
 	    String content = "This, is, a, test, for, CSV, Element";
-	    InputElement ie1 = new InputElement(date, "Test 1", nonClimateCategory, user1wb, true, 1, "text/csv", content.getBytes());
+	    InputElement ie1 = new InputElement(date, "Test 1", nonClimateCategory, user1wb, true, 1, "text/csv", content.getBytes(), true, false);
 	    session.save(ie1);
 	    
 	    content = "This is the second test";
-	    InputElement ie2 = new InputElement(date, "Test 2", observedClimateCategory, user1wb, true, 1, "text/plain", content.getBytes());
+	    InputElement ie2 = new InputElement(date, "Test 2", observedClimateCategory, user1wb, true, 1, "text/plain", content.getBytes(), true, false);
 	    session.save(ie2);
 	    
 	    content = "This is the third test";
-	    InputElement ie3 = new InputElement(date, "Test 3", futureClimateCategory, user1wb, true, 1, "text/plain", content.getBytes());
+	    InputElement ie3 = new InputElement(date, "Test 3", futureClimateCategory, user1wb, true, 1, "text/plain", content.getBytes(), true, false);
 	    session.save(ie3);
 	    
 	    content = "Report's Data Element content test";
-	    InputElement ie4 = new InputElement(date, "Test 4", nonClimateCategory, user1us1, true, 1, "text/plain", content.getBytes());
+	    InputElement ie4 = new InputElement(date, "Test 4", nonClimateCategory, user1us1, true, 1, "text/plain", content.getBytes(), true, false);
 	    session.save(ie4);
 	    
-	    InputElement text1 = new InputElement(date, "Comment text 1", nonClimateCategory, user1us1, true, 2, "text/plain", content.getBytes());
+	    InputElement text1 = new InputElement(date, "Comment text 1", nonClimateCategory, user1us1, true, 2, "text/plain", content.getBytes(), true, false);
 	    session.save(text1);
 	    
-	    InputElement ie5 = new InputElement(date, "Test 5", applicationsCategory, user1us1, true, 3, "text/plain", content.getBytes());
+	    InputElement ie5 = new InputElement(date, "Test 5", applicationsCategory, user1us1, true, 3, "text/plain", content.getBytes(), true, false);
 	    session.save(ie5);
 	    
 	    content = "This is a second text comment";
-	    InputElement text2 = new InputElement(date, "Comment text 2", futureClimateCategory, user1us1, true, 4, "text/plain", content.getBytes());
+	    InputElement text2 = new InputElement(date, "Comment text 2", futureClimateCategory, user1us1, true, 4, "text/plain", content.getBytes(), true, false);
 	    session.save(text2);
 	    
-	    InputElement ie6 = new InputElement(date, "Test 6", applicationsCategory, user1us1, true, 5, "text/plain", content.getBytes());
+	    InputElement ie6 = new InputElement(date, "Test 6", applicationsCategory, user1us1, true, 5, "text/plain", content.getBytes(), true, false);
 	    session.save(ie6);
 		
 
@@ -181,7 +181,7 @@ public class TestDatabaseLoader {
 		selectedOptions.add(csiroVariableTemperature);
 		selectedOptions.add(mediumEmScn);
 		selectedOptions.add(year2055);
-	    DataElement deCsiro = new DataElement(date, "CSIRO Data Element Test", futureClimateCategory, user1wb, true, 1, dsCsiro, selectedOptions, tableDisplayType);
+	    DataElement deCsiro = new DataElement(date, "CSIRO Data Element Test", futureClimateCategory, user1wb, true, 1, dsCsiro, selectedOptions, tableDisplayType, true, false);
 	    session.save(deCsiro);
 	    
 	    

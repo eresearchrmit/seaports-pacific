@@ -47,7 +47,7 @@ public class ElementDaoTest {
 	 */
 	@Before
 	public void prepareData() {		
-		elementToSave = new Element(new Date(), "New Element Test", new ElementCategory(), new Report(), true, 1);
+		elementToSave = new Element(new Date(), "New Element Test", new ElementCategory(), new Report(), true, 1, true, false);
 	}
 
 	/**

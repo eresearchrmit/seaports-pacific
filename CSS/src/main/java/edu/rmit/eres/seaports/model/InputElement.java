@@ -59,9 +59,12 @@ public class InputElement extends Element implements Serializable {
 	 * @param included: whether the input element is included or not in the publication of its parent Report.
 	 * @param position: the position of the input element in the report it belongs to
 	 * @param contentType: the type of the input content (considered as plain text if not recognized)
+	 * @param fullWidth: whether the element takes 2 column (full width) or only one column (half width)
+	 * @param pageBreakAfter: whether there should be a page break after the element
 	 */
-	public InputElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position, String contentType) {
-		super(creationDate, name, category, report, included, position);
+	public InputElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, 
+			int position, String contentType, boolean fullWidth, boolean pageBreakAfter) {
+		super(creationDate, name, category, report, included, position, fullWidth, pageBreakAfter);
 		setContentType(contentType);
 	}
 	
@@ -75,9 +78,12 @@ public class InputElement extends Element implements Serializable {
 	 * @param position: the position of the input element in the report it belongs to
 	 * @param contentType: the type of the input content (considered as plain text if not recognized)
 	 * @param content: the content of the input element
+	 * @param fullWidth: whether the element takes 2 column (full width) or only one column (half width)
+	 * @param pageBreakAfter: whether there should be a page break after the element
 	 */
-	public InputElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position, String contentType, byte[] content) {
-		super(creationDate, name, category, report, included, position);
+	public InputElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, 
+			int position, String contentType, byte[] content, boolean fullWidth, boolean pageBreakAfter) {
+		super(creationDate, name, category, report, included, position, fullWidth, pageBreakAfter);
 		setContentType(contentType);
 		setContent(content);
 	}

@@ -35,7 +35,7 @@
 			
 			map = new google.maps.Map(document.getElementById('map-${mapId}-canvas-${element.id}'), mapOptions);
 		
-			<%--var str = "https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=terrain&sensor=false";--%>
+			var str = "https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=terrain&sensor=false";
 			
 			var image = '<c:url value="/resources/img/icons/transparent.png" />';
 		    var bounds = new google.maps.LatLngBounds();
@@ -55,13 +55,13 @@
 				     });
 					bounds.extend(marker.position);
 					
-					<%--str += "&markers=size:mid%7Ccolor:blue%7C${entry.key.x},${entry.key.y}"; --%>
+					str += "&markers=size:mid%7Ccolor:blue%7C${entry.key.x},${entry.key.y}";
 				</c:forEach>
 			</c:forEach>
 			map.setCenter(bounds.getCenter());
 			map.fitBounds(bounds);
 			
-			<%--$("#map-${mapId}-picture-${element.id}").attr("src", str);--%>
+			$("#map-${mapId}-picture-${element.id}").attr("src", str);
 			
 			mapBounds${element.id} = bounds;
 			map${mapId}${element.id} = map;
@@ -82,11 +82,11 @@
 	</script>
 	
 	<c:set var="firstDataRow" value="${element.data[0]}" />
-	<p style="margin-top:10px; text-align:center; font-weight"><b>Average ${firstDataRow.variable.name} for the ${firstDataRow.region.name} region under a ${firstDataRow.emissionScenario.description} (${firstDataRow.emissionScenario.name}) emissions scenario.</b></p>
+	<p style="margin-top:10px; font-weight"><b>Average ${firstDataRow.variable.name} for the ${firstDataRow.region.name} region under a ${firstDataRow.emissionScenario.description} (${firstDataRow.emissionScenario.name}) emissions scenario.</b></p>
 	
 	<div id="map-${mapId}-canvas-${element.id}" class="cmarMap"></div>
 	
-	<%--<img id="map-${mapId}-picture-${element.id}" class="map-pic" src="" /> --%>
+	<img id="map-${mapId}-picture-${element.id}" class="map-pic" src="" />
 	
 	<br />
 	<i class="credits">Data provided by CSIRO Marine and Atmospheric Research on <fmt:formatDate value="${firstDataRow.creationDate}" pattern="dd MMM yyyy" /> was the best available to date.</i>

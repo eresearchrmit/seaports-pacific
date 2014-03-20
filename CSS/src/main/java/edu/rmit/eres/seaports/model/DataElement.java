@@ -76,10 +76,12 @@ public class DataElement extends Element implements Serializable {
 	 * @param position: the position of the data element in the report it belongs to
 	 * @param dataSource: the source of the data for this data element
 	 * @param selectedOptions: the selected options for the data source of this element
+	 * @param fullWidth: whether the element takes 2 column (full width) or only one column (half width)
+	 * @param pageBreakAfter: whether there should be a page break after the element
 	 */
 	public DataElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position, 
-			DataSource dataSource, List<DataSourceParameterOption> selectedOptions) {
-		super(creationDate, name, category, report, included, position);
+			DataSource dataSource, List<DataSourceParameterOption> selectedOptions, boolean fullWidth, boolean pageBreakAfter) {
+		super(creationDate, name, category, report, included, position, fullWidth, pageBreakAfter);
 		setDataSource(dataSource);
 		setSelectedOptions(selectedOptions);
 	}
@@ -95,10 +97,12 @@ public class DataElement extends Element implements Serializable {
 	 * @param dataSource: the source of the data for this data element
 	 * @param selectedOptions: the selected options for the data source of this element
 	 * @param displayType: the way the data element should be displayed
+	 * @param fullWidth: whether the element takes 2 column (full width) or only one column (half width)
+	 * @param pageBreakAfter: whether there should be a page break after the element
 	 */
 	public DataElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position, 
-			DataSource dataSource, List<DataSourceParameterOption> selectedOptions, DisplayType displayType) {
-		super(creationDate, name, category, report, included, position);
+			DataSource dataSource, List<DataSourceParameterOption> selectedOptions, DisplayType displayType, boolean fullWidth, boolean pageBreakAfter) {
+		super(creationDate, name, category, report, included, position, fullWidth, pageBreakAfter);
 		setDataSource(dataSource);
 		setSelectedOptions(selectedOptions);
 		setDisplayType(displayType);
