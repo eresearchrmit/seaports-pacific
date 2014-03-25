@@ -92,7 +92,7 @@ public class ReportControllerTest {
 		// Dummy Input Element to pass for file upload test
 		Report report = new Report();
 		report.setId(1);
-		inputElement = new InputElement(new Date(), null, new ElementCategory("Observed climate"), report, true, 1, null, true, false);
+		inputElement = new InputElement(new Date(), null, new ElementCategory("Observed climate &amp; marine"), report, true, 1, null, true, false);
 		inputElement.setId(0);
 		
 		seaportForTest = new Seaport("CODE1", "Port 1", new Region("Region 1", ""));

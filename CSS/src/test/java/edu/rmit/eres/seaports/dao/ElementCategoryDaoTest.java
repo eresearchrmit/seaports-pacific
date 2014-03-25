@@ -55,7 +55,7 @@ public class ElementCategoryDaoTest {
 	 */
 	@Test
 	public void findElementCategoryIdTest() {
-		int elementCategoryeId = 3;
+		int elementCategoryeId = 2;
 		ElementCategory resElementCategory = elementCategoryDao.find(elementCategoryeId);
 
 		Assert.assertNotNull(resElementCategory);

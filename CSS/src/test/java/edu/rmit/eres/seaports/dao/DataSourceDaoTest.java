@@ -53,7 +53,7 @@ public class DataSourceDaoTest {
 
 		Assert.assertNotNull(resDataSource);
 		Assert.assertEquals(dataSourceId, resDataSource.getId());
-		Assert.assertEquals("CSIRO", resDataSource.getName()); // 'CSIRO' has ID 1
+		Assert.assertEquals("csiro", resDataSource.getName()); // 'CSIRO' has ID 1
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class DataSourceDaoTest {
 	 */
 	@Test
 	public void findDataSourceByNameTest() {
-		String dataSourceName = "CSIRO";
+		String dataSourceName = "csiro";
 		DataSource resDataSource  = dataSourceDao.find(dataSourceName);
 
 		Assert.assertNotNull(resDataSource);
