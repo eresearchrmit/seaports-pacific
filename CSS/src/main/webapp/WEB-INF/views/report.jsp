@@ -170,10 +170,6 @@
 			<c:set var="categoryNameWithDashes" value="${fn:replace(category.name, ' ', '-')}" />
 			<div id="tabs-${categoryNameWithDashes}">
 			
-				<%-- Explanation text --%>
-				<a href="#" id="helpTooltip-${categoryNameWithDashes}" class="helpTooltip" title="${category.helpText}">
-					<img src="<c:url value="/resources/img/icons/help.png" />">
-				</a>
 				
 				<%-- 'Add Element' button --%>
 				<div class="centered">
@@ -186,6 +182,13 @@
 					<button id="btnOpenAddFileModalWindow${category.id}" type="button" class="btn btn-icon btn-blue btn-plus" >
 						<span></span>Add File
 					</button>
+				</div>
+				
+				<%-- Explanation text --%>
+				<div class="centered" style="margin-top: 5px">
+					<a href="#" id="helpTooltip-${categoryNameWithDashes}" class="helpTooltipCentered" title="${category.helpText}">
+						<img src="<c:url value="/resources/img/icons/help.png" />">&nbsp;<b>What should I add in this category ?</b>
+					</a>
 				</div>
 				
 				<%-- Text Addition Modal Window --%>
