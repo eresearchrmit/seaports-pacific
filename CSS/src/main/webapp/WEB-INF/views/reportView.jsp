@@ -59,21 +59,26 @@
 			<div class="element-container">	 	
 			 	
 			 	<!-- Iteration on every element in the report -->
-			 	<c:forEach items="${report.elements}" var="element" varStatus="status">
-					<c:if test="${element.fullWidth == true}">
-						<div class="clearfix"></div>
-					</c:if>
-					
-					<c:if test="${element.included == true}">
-						<div class="element${element.fullWidth == false ? ' halfwidth' : '' }">
-							<c:set var="element" scope="request" value="${element}"/>
-				 			<c:set var="elementLoopIndex" scope="request" value="${status.index}"/>
-							<jsp:include page="element.jsp" />
-						</div>
-					</c:if>
-					<c:if test="${element.pageBreakAfter == true}">
-						<div class="pagebreak"></div>
-					</c:if>
+			 	
+				<c:forEach items="${allCategories}" var="category" varStatus="status">
+				 	<c:forEach items="${report.elements}" var="element" varStatus="status">
+						<c:if test="${element.category.id == category.id}">
+							<c:if test="${element.fullWidth == true}">
+								<div class="clearfix"></div>
+							</c:if>
+							
+							<c:if test="${element.included == true}">
+								<div class="element${element.fullWidth == false ? ' halfwidth' : '' }">
+									<c:set var="element" scope="request" value="${element}"/>
+						 			<c:set var="elementLoopIndex" scope="request" value="${status.index}"/>
+									<jsp:include page="element.jsp" />
+								</div>
+							</c:if>
+							<c:if test="${element.pageBreakAfter == true}">
+								<div class="pagebreak"></div>
+							</c:if>
+						</c:if>
+					</c:forEach>
 				</c:forEach>
 			</div>
 		</c:if>

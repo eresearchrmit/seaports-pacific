@@ -203,7 +203,7 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value="/create", method=RequestMethod.POST)
-	public ModelAndView createReport(@ModelAttribute("report") Report report, Model model) {
+	public ModelAndView createReport(@ModelAttribute("report") Report report, @RequestParam(value="prefillReport",required=false) boolean prefillReport, Model model) {
 		logger.info("Inside createReport - POST");
         
 		try {
@@ -230,6 +230,14 @@ public class ReportController {
 			report.setCreationDate(new Date());
 			reportDao.save(report);
 			
+			if (prefillReport == true)  {
+				List<ElementCategory> categories = elementCategoryDao.getAll();
+				for (ElementCategory cat : categories) {
+					String content = "<p><span style=\"text-decoration: underline; font-size: x-large;\">" + cat.getName() + "</span></p>";
+				    InputElement heading = new InputElement(new Date(), "Category Heading", cat, report, true, 1, "text/plain", content.getBytes(), true, false);
+				    elementDao.save(heading);
+				}
+			}
 			
 			model.addAttribute("report", report);
 			
@@ -252,19 +260,21 @@ public class ReportController {
 	public String saveReport(@Valid @ModelAttribute("report") Report updatedReport, RedirectAttributes attributes) {
 		logger.info("Inside saveReport");
 		
-		Report report = null;
+		Element elementForRedirection = null;
 		try {
 			// Retrieve the original user story
-			report = reportDao.find(updatedReport.getId());
+			Report report = reportDao.find(updatedReport.getId());
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
+			
 			
 			// Reorder the data elements in the user story
 			for (Element elem : report.getElements()) {
 				for (Element updatedDataElement : updatedReport.getElements()) {
 					if (elem.getId() == updatedDataElement.getId()) {
 						elem.setPosition(updatedDataElement.getPosition());
+						elementForRedirection = elem;
 						break;
 					}
 				}
@@ -280,8 +290,9 @@ public class ReportController {
 			attributes.addFlashAttribute("errorMessage", ERR_SAVE_REPORT);
 		}
 		
-		if (report != null)
-			return "redirect:/auth/report?id=" + report.getId() + "#tabs-summary";
+		if (elementForRedirection != null)
+			return "redirect:" + redirectToCategory(elementForRedirection);
+			//return "redirect:/auth/report?id=" + report.getId() + "#tabs-summary";
 		else
 			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
 	}

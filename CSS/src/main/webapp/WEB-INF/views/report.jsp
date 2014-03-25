@@ -49,13 +49,12 @@
 				<span></span>Delete Report
 			</button>
 		</a>
-		
-		<a href="javascript: $('#reportOrderForm').submit();" class="floatright btn-margin">
+		<a href="javascript: $('#reportOrderForm${category.id}').submit();" id="lnkSaveReportOrder" class="floatright btn-margin">
 			<button id="btnSaveReportOrder" type="button" class="btn btn-icon btn-grey btn-refresh">
 				<span></span>Save order
 			</button>
 		</a>
-		
+					
 		<div style="display:none" id="confirmWorkboardDeletionModalWindow" title="Delete this report ?">
 			<p class="message"><span class="error"><b>Warning : Deleting this report will also delete all the data it contains. This action cannot be undone !</b></span></p>
 			<p>Are you sure you want to permanently delete this report ?</p> 
@@ -132,11 +131,17 @@
 					    history.pushState(null, null, tabHash);
 					else
 					    location.hash = tabHash;
-
+					
+					// Change the target of the link of the "Save Order" button
+					$("#lnkSaveReportOrder").attr("href", "javascript: $('#reportOrderForm-" + tabHash.replace('#', '') + "').submit();");
+					
 					// Triggered to resize the Highcharts graphs to a % of the width of the tab
 					$(window).resize();
 				}
 			});
+			
+			// Initialise target of the link of the "Save Order" button
+			$("#lnkSaveReportOrder").attr("href", "javascript: $('#reportOrderForm-" + window.location.hash.substring(1).replace('#', '') + "').submit();");
 			
 			setupConfirmBox("confirmConvertToUserStoryModalWindow", "lnkPublishReport");
 			setupConfirmBox("confirmWorkboardDeletionModalWindow", "lnkDeleteReport");
@@ -209,9 +214,11 @@
 									<option value="0">[Insert in 1st position]</option>
 									<c:if test="${not empty report.elements}">
 										<c:forEach items="${report.elements}" var="positionLoopElements" varStatus="elementPositionLoopStatus">
+											<c:if test="${positionLoopElements.category.id == element.category.id + 1}">
 											<option value="${positionLoopElements.position}"${elementPositionLoopStatus.index == 0 ? ' selected' : ''}>
 												${positionLoopElements.name} [${positionLoopElements.position}]
 											</option>
+											</c:if>
 										</c:forEach>
 									</c:if>
 								</form:select>
@@ -255,9 +262,11 @@
 									<option value="0">[Insert in 1st position]</option>
 									<c:if test="${not empty report.elements}">
 										<c:forEach items="${report.elements}" var="positionLoopElements" varStatus="elementPositionLoopStatus">
+											<c:if test="${positionLoopElements.category.id == element.category.id + 1}">
 											<option value="${positionLoopElements.position}"${elementPositionLoopStatus.index == 0 ? ' selected' : ''}>
 												${positionLoopElements.name} [${positionLoopElements.position}]
 											</option>
+											</c:if>
 										</c:forEach>
 									</c:if>
 								</form:select>
@@ -297,6 +306,8 @@
 								<form:hidden id="hdnInputElementPageBreakAfter" path="pageBreakAfter" value="false" />
 								
 								<p><strong>2. ${datasource.displayName} Element Options:</strong></p>
+								
+								<div class="hint">${datasource.helpText}</div>
 								
 								<table width="auto" height="auto" class="form">
 									<c:forEach items="${datasource.parameters}" var="parameter" varStatus="parameterLoopStatus">
@@ -370,9 +381,11 @@
 											<option value="0">[Insert in 1st position]</option>
 											<c:if test="${not empty report.elements}">
 												<c:forEach items="${report.elements}" var="positionLoopElements" varStatus="elementPositionLoopStatus">
+													<c:if test="${positionLoopElements.category.id == element.category.id + 1}">
 													<option value="${positionLoopElements.position}"${elementPositionLoopStatus.index == 0 ? ' selected' : ''}>
 														${positionLoopElements.name} [${positionLoopElements.position}]
 													</option>
+													</c:if>
 												</c:forEach>
 											</c:if>
 										</form:select>
@@ -420,82 +433,121 @@
 				
 				<%-- Elements --%>
 				<c:if test="${not empty report.elements}">
+					<form:form id="reportOrderForm-tabs-${fn:replace(category.name, ' ', '-')}" method="post" action="/auth/report/save" modelAttribute="report">
+	  				<form:input value="${report.id}" type="hidden" path="id" />
+	  				
+					<ul id="sortable${category.id}" class="sortable">
 					<c:forEach items="${report.elements}" var="element" varStatus="status">
 						<c:if test="${element.category.name == category.name}">
 							<c:set var="element" scope="request" value="${element}"/>
 							<c:set var="categoryNotEmpty" scope="request" value="true"/>
 							
-							<div class="box round${element.included == false ? ' box-disabled' : ''}">
-								<div class="box-header">
-								<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
-									<!-- Download Button -->
-									<%--<a class="lnkDownloadElement" href="/auth/report/download-element?id=${element.id}">
-										<button type="button" download= class="btn btn-icon btn-blue btn-small btn-arrow-down floatright" >
-											<span></span>Download
-										</button>
-									</a> --%>
-									<!-- Delete button -->
-									<a class="lnkDeleteElement" href="/auth/report/delete-element?id=${element.id}">
-										<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright btn-margin" >
-											<span></span>Delete
-										</button>
-									</a>
-									<!-- 'Include/Exclude' button -->
-									<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
-										<button type="button" class="btn btn-icon btn-small btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
-											<span></span>${element.included == false ? 'Include' : 'Exclude'}
-										</button>
-									</a>
-									
-									<form:form id="editElementDisplayForm${element.id}" method="post" action="/auth/report/edit-element-display" class="floatright btn-margin"> 
-										<input id="hdnElementToEditId" type="hidden" name="elementId" value="${element.id}" />
+							<li class="sortableItem sortable${category.id}Item" id="element${element.id}">
+								<div class="box round${element.included == false ? ' box-disabled' : ''}">
+									<div class="box-header">
+									<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
+										<!-- Delete button -->
+										<a class="lnkDeleteElement" href="/auth/report/delete-element?id=${element.id}">
+											<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright btn-margin" >
+												<span></span>Delete
+											</button>
+										</a>
+										<!-- 'Include/Exclude' button -->
+										<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
+											<button type="button" class="btn btn-icon btn-small btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
+												<span></span>${element.included == false ? 'Include' : 'Exclude'}
+											</button>
+										</a>
 										
-										<!-- Page Break Checkbox -->
-										<input type="checkbox" id="chkPageBreak" name="pageBreakAfter" onchange="submit();" class="floatright btn-margin" style="margin-top: 3px" ${element.pageBreakAfter == true ? ' checked' : ''}  />
-										<label for="ddlDisplayType${element.id}" class="floatright" >Page Break:</label>
-									
-										<!-- Full-width or Half-width -->	
-										<select id="ddlFullWidth${element.id}" name="fullWidth" onchange="submit();" class="floatright btn-margin">
-											<option value="0" ${element.fullWidth == false ? 'selected' : ''}>50%</option>
-											<option value="1" ${element.fullWidth == true ? 'selected' : ''}>100%</option>
-										</select>
-										<label for="ddlFullWidth${element.id}" class="floatright">Width:</label>
-									</form:form>
-									
-									<!-- 'Edit text' button for plain text elements -->
-									<% Element element = (Element)(request.getAttribute("element"));
-										System.out.print(element.getClass().getName());
-										if (element instanceof InputElement) {
-											if (FileTypeHelper.IsContentTypePlaintext(((InputElement)element).getContentType())) { %>
-										<button id="btnOpenEditTextElementModalWindow" class="btn btn-small btn-icon btn-blue btn-edit floatright btn-margin btnEditText"
-										 onclick="$('#hdnTextElementToEditId').val(${element.id}); tinyMCE.get('txtElementToEditContent').setContent('${fn:escapeXml(element.escapedStringContent)}');">
-											<span></span>Edit text
-										</button>
-									<% 		}
-										} else if (element instanceof DataElement) { %>
-										<form:form id="editDataElementDisplayTypeForm${element.id}" method="post" action="/auth/report/edit-display-type" class="floatright btn-margin"> 
-											<input id="hdnDataElementToEditId" type="hidden" name="elementId" value="${element.id}" />
+										<form:form id="editElementDisplayForm${element.id}" method="post" action="/auth/report/edit-element-display" class="floatright btn-margin"> 
+											<input id="hdnElementToEditId" type="hidden" name="elementId" value="${element.id}" />
 											
-											<select id="ddlDisplayType${element.id}" name="displayType" onchange="submit();">
-												<c:forEach items="${element.dataSource.displayTypes}" var="displayType" varStatus="displayLoopStatus">
-													<option value="${displayType.name}" ${displayType.name == element.displayType.name ? ' selected' : ''} /> ${displayType.name}</option>
-												</c:forEach>
+											<!-- Page Break Checkbox -->
+											<input type="checkbox" id="chkPageBreak" name="pageBreakAfter" onchange="submit();" class="floatright btn-margin" style="margin-top: 3px" ${element.pageBreakAfter == true ? ' checked' : ''}  />
+											<label for="ddlDisplayType${element.id}" class="floatright" >Page Break:</label>
+										
+											<!-- Full-width or Half-width -->	
+											<select id="ddlFullWidth${element.id}" name="fullWidth" onchange="submit();" class="floatright btn-margin">
+												<option value="0" ${element.fullWidth == false ? 'selected' : ''}>50%</option>
+												<option value="1" ${element.fullWidth == true ? 'selected' : ''}>100%</option>
 											</select>
+											<label for="ddlFullWidth${element.id}" class="floatright">Width:</label>
 										</form:form>
-										<label for="ddlDisplayType${element.id}" class="floatright">Display:</label>
-									<% } %>
+										
+										<!-- 'Edit text' button for plain text elements -->
+										<% Element element = (Element)(request.getAttribute("element"));
+											System.out.print(element.getClass().getName());
+											if (element instanceof InputElement) {
+												if (FileTypeHelper.IsContentTypePlaintext(((InputElement)element).getContentType())) { %>
+											<button id="btnOpenEditTextElementModalWindow" class="btn btn-small btn-icon btn-blue btn-edit floatright btn-margin btnEditText"
+											 onclick="$('#hdnTextElementToEditId').val(${element.id}); tinyMCE.get('txtElementToEditContent').setContent('${fn:escapeXml(element.escapedStringContent)}');">
+												<span></span>Edit text
+											</button>
+										<% 		}
+											} else if (element instanceof DataElement) { %>
+											<form:form id="editDataElementDisplayTypeForm${element.id}" method="post" action="/auth/report/edit-display-type" class="floatright btn-margin"> 
+												<input id="hdnDataElementToEditId" type="hidden" name="elementId" value="${element.id}" />
+												
+												<select id="ddlDisplayType${element.id}" name="displayType" onchange="submit();">
+													<c:forEach items="${element.dataSource.displayTypes}" var="displayType" varStatus="displayLoopStatus">
+														<option value="${displayType.name}" ${displayType.name == element.displayType.name ? ' selected' : ''} /> ${displayType.name}</option>
+													</c:forEach>
+												</select>
+											</form:form>
+											<label for="ddlDisplayType${element.id}" class="floatright">Display:</label>
+										<% } %>
+										<div class="clear"></div>
+									</div>
 									
-									<div class="clear"></div>
+									<input type="hidden" name="elements[${status.index}].id" value="${element.id}" id="elements[${status.index}].id" >
+									<input type="hidden" name="elements[${status.index}].position" value="${element.position}" id="elements[${status.index}].position" class="dataElementPosition">
+									
+									<div class="box-content">
+										<c:set var="element" scope="request" value="${element}" />
+										<jsp:include page="element.jsp" />
+									</div>
 								</div>
-								
-								<div class="box-content">
-									<c:set var="element" scope="request" value="${element}" />
-									<jsp:include page="element.jsp" />
-								</div>
-							</div>
-							
+							</li>
 						</c:if>
-					</c:forEach>					
+					</c:forEach>
+					</ul>
+					</form:form>
+					<div class="clear"></div>
+					
+					<%-- Script enabling drag-and-drop reordering --%>
+					<script type="text/javascript">
+						$(document).ready(function () {
+							
+							var draggedTextContent = null;
+							
+							// Enables the sortable list
+							$( "#sortable${category.id}" ).sortable({
+								placeholder: "sortable-placeholder",
+								cursor: 'crosshair',
+								start: function(event, ui) {
+									draggedTextContent = ui.item.find('.tinymce').html();
+								},
+					            update: function(event, ui) {
+					            	// Reorder the positions into the hidden field of each element
+					            	var order = $("#sortable${category.id}").sortable("toArray");
+									for (var i = 0; i < order.length; i++)
+									{
+										var element = $("#" + order[i]);
+										element.find(".dataElementPosition").attr("value", i + 1);
+									}
+									
+									// Highlights the save button to remind the user to save the report after reordering
+									$("#btnSaveReportOrder").removeClass("btn-grey");
+									$("#btnSaveReportOrder").addClass("btn-blue");
+									$("#btnSaveReportOrder").effect( "highlight", {color:"#FF7F24"}, 2000 );
+					            }
+							});
+							$( "#sortable${category.id}" ).disableSelection();
+							
+							// This is not a Jquery '$', but a JSTL tag to get the current number of data elements
+							var index = ${fn:length(report.elements)};
+						});
+					</script>
 				</c:if>
 				
 				
@@ -525,84 +577,44 @@
 			
 				<c:set var="category" scope="request" value="summary"/>
 			
-				<div id="msgTabSummary" class="message info">
+				<%--<div id="msgTabSummary" class="message info">
 					<h5>Information</h5>
 					<p><c:out value="All your selected data is presented in this section." /></p>
-				</div>
+				</div>--%>
 				
-				<form:form id="reportOrderForm" method="post" action="/auth/report/save" modelAttribute="report">
-	  				<form:input value="${report.id}" type="hidden" path="id" />
-		 			<ul id="sortable">
-		 	
-						<c:forEach items="${report.elements}" var="element" varStatus="status">
-						<li class="sortableItem" id="element${element.id}">
-							<div class="box round${element.included == false ? ' box-disabled' : ''}">
-								<div class="box-header">
-								<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
-									<!--  Delete Element Button -->
-									<a class="lnkDeleteDataElement" href="/auth/report/delete-element?id=${element.id}">
-										<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright" >
-											<span></span>Delete
-										</button>
-									</a>
-									<!-- 'Include/Exclude' button -->
-									<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
-										<button type="button" class="btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
-											<span></span>${element.included == false ? 'Include' : 'Exclude'}
-										</button>
-									</a>
-									<div class="clear"></div>
-								</div>
-
-								<input type="hidden" name="elements[${status.index}].id" value="${element.id}" id="elements[${status.index}].id" >
-								<input type="hidden" name="elements[${status.index}].name" value="${element.name}" id="elements[${status.index}].name">
-								<input type="hidden" name="elements[${status.index}].position" value="${element.position}" id="elements[${status.index}].position" class="dataElementPosition">
-								
-								<div class="box-content">
-									<c:set var="element" scope="request" value="${element}" />
-									<jsp:include page="element.jsp" />
-								</div>
+				<c:forEach items="${allCategories}" var="category" varStatus="status">
+					<c:forEach items="${report.elements}" var="element" varStatus="status">
+						<c:if test="${element.category.id == category.id}">
+						<div class="box round${element.included == false ? ' box-disabled' : ''}">
+							<div class="box-header">
+							<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
+								<!--  Delete Element Button -->
+								<a class="lnkDeleteDataElement" href="/auth/report/delete-element?id=${element.id}">
+									<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright" >
+										<span></span>Delete
+									</button>
+								</a>
+								<!-- 'Include/Exclude' button -->
+								<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
+									<button type="button" class="btn btn-icon btn-small btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
+										<span></span>${element.included == false ? 'Include' : 'Exclude'}
+									</button>
+								</a>
+								<div class="clear"></div>
 							</div>
-						</li>
-						</c:forEach>
-					</ul>
-				</form:form>
-				
-			<%-- Script enabling drag-and-drop reordering --%>
-			<script type="text/javascript">
-				$(document).ready(function () {
-					
-					var draggedTextContent = null;
-					
-					// Enables the sortable list
-					$( "#sortable" ).sortable({
-						placeholder: "sortable-placeholder",
-						cursor: 'crosshair',
-						start: function(event, ui) {
-							draggedTextContent = ui.item.find('.tinymce').html();
-						},
-			            update: function(event, ui) {
-			            	// Reorder the positions into the hidden field of each data element
-			            	var order = $("#sortable").sortable("toArray");
-							for (var i = 0; i < order.length; i++)
-							{
-								var element = $("#" + order[i]);
-								element.find(".dataElementPosition").attr("value", (i + 1));
-							}
+
+							<input type="hidden" name="elements[${status.index}].id" value="${element.id}" id="elements[${status.index}].id" >
+							<input type="hidden" name="elements[${status.index}].name" value="${element.name}" id="elements[${status.index}].name">
+							<input type="hidden" name="elements[${status.index}].position" value="${element.position}" id="elements[${status.index}].position" class="dataElementPosition">
 							
-							// Highlights the save button to remind the user to save the report after reordering
-							$("#btnSaveReportOrder").removeClass("btn-grey");
-							$("#btnSaveReportOrder").addClass("btn-blue");
-							$("#btnSaveReportOrder").effect( "highlight", {color:"#FF7F24"}, 2000 );
-			            }
-					});
-					$( "#sortable" ).disableSelection();
-					
-					// This is not a Jquery '$', but a JSTL tag to get the current number of data elements
-					var index = ${fn:length(report.elements)};
-				});
-			</script>
-				
+							<div class="box-content">
+								<c:set var="element" scope="request" value="${element}" />
+								<jsp:include page="element.jsp" />
+							</div>
+						</div>
+						</c:if>
+					</c:forEach>
+				</c:forEach>
 			</c:if>
 			
 			<%-- 'No element' message if report empty --%>

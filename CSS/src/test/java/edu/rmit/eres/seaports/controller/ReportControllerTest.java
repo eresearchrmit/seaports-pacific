@@ -947,7 +947,7 @@ public class ReportControllerTest {
 		Report report = new Report();
 		report.setName("addWorkBoardTestWithoutRegion");
 		report.setPurpose("Activity description");
-		ModelAndView result = reportController.createReport(report, model);
+		ModelAndView result = reportController.createReport(report, false, model);
 
 		Assert.assertNotNull(result);
 		Assert.assertNotNull(model.get("errorMessage"));
@@ -968,7 +968,7 @@ public class ReportControllerTest {
 		Report report = new Report();
 		report.setName("addWorkBoardTestWithoutPurpose");
 		report.setSeaport(new Seaport("AUSYD", "Sydney Harbour", new Region("East Coast South", "")));
-		ModelAndView result = reportController.createReport(report, model);
+		ModelAndView result = reportController.createReport(report, false, model);
 
 		Assert.assertNotNull(result);
 		Assert.assertNotNull(model.get("errorMessage"));
@@ -1013,7 +1013,7 @@ public class ReportControllerTest {
 		refReport.setSeaport(seaportForTest);
 		refReport.setPurpose("Activity description");
 		refReport.setName("addWorkBoardTest");
-		ModelAndView result = reportController.createReport(refReport, model);
+		ModelAndView result = reportController.createReport(refReport, false, model);
 
 		// Check there was no error
 		Assert.assertNotNull(result);

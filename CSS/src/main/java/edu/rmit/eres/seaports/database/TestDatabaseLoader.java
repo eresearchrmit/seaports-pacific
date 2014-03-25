@@ -80,9 +80,9 @@ public class TestDatabaseLoader {
 		
 				
 		// Retrieves the created element categories
-		ElementCategory nonClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 1));
-		ElementCategory observedClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 2));
-		ElementCategory futureClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 3));
+		ElementCategory observedClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 1));
+		ElementCategory futureClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 2));
+		ElementCategory nonClimateCategory = (ElementCategory)(session.get(ElementCategory.class, 3));
 		ElementCategory applicationsCategory = (ElementCategory)(session.get(ElementCategory.class, 4));
 		// Retrieves the created  data sources
 		DataSource dsCsiro = (DataSource)(session.get(DataSource.class, 1)); // ID 1 = CSIRO

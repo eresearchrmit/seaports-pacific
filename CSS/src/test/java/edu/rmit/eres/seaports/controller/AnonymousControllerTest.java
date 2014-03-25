@@ -148,7 +148,7 @@ public class AnonymousControllerTest {
 		Report report = new Report();
 		report.setName("addWorkBoardTest");
 		report.setSeaport(new Seaport("AUSYD", "Sydney Harbour", new Region("East Coast South", "")));
-		workboardController.createReport(report, model);
+		workboardController.createReport(report, false, model);
 	}
 	
 	@Test(expected = AccessDeniedException.class)

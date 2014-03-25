@@ -97,7 +97,7 @@ fieldset
 	margin-bottom: 20px;
 }
 
-.hint {
+.hint, .hint p {
 	text-align:justify;
 	font-size:8pt;
 	color:#3f7227;

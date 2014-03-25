@@ -90,7 +90,7 @@ public class CmarDataSourceLoader {
 		
 		
 		// Data Source
-		CmarDataSource dsCmar = new CmarDataSource("cmar", "CMAR", null, null, displayTypesCmar);
+		CmarDataSource dsCmar = new CmarDataSource("cmar", "CMAR", "", null, null, displayTypesCmar);
 		
 		
 		DataSourceParameter cmarVariableParam = new DataSourceParameter("Variable", "<p><h6>Sea Level Rise</h6>Sea level data was derived from the CSIRO Marine and Atmospheric Research (CMAR). Data provided by CMAR was taken from the average of 17 climate model simulations for the medium (A1B) emissions scenario. This average was plotted around the Australian coastline to allow the identification of particular locations. Figures from these locations were then added to the globally averaged sea level projections for 2030 and 2070, using only the medium emissions scenario. These global projections included estimates for ice-sheet melt and were taken from the 50th percentile range.</p>", 
