@@ -798,10 +798,13 @@ public class ReportController {
 	}
 	*/
 	
-	private ModelAndView ModelForReport(Model model, Report report) {
+	public ModelAndView ModelForReport(Model model, Report report) {
 		logger.info("Inside ModelForReport");
 		
-		model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
+		// Try/Catch this so no exception is thrown is no user is logged in (allow calling from PublicController) 
+		try { model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername())); }
+		catch (NoResultException e) {}
+		
 		ModelAndView mav = new ModelAndView("report");
 		
 		if (report != null)

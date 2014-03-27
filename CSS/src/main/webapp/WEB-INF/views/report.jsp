@@ -159,16 +159,17 @@
 		<c:if test="${not empty allCategories}">
 		<ul>
 			<c:forEach items="${allCategories}" var="category" varStatus="status">
-				<li><a href="#tabs-${fn:replace(category.name, ' ', '-')}" id="lnk${fn:replace(category.name, ' ', '-')}">${category.name}</a></li>
+				<li><a href="#tabs-${category.displayName}" id="lnk${category.displayName}">${category.name}</a></li>
 			</c:forEach>
-			<li style="float:right"><a href="#tabs-summary" id="lnkSummaryTab" class="${(dataelementsCounts[0] > 0 && dataelementsCounts[1] > 0 && dataelementsCounts[2] > 0 && dataelementsCounts[3] > 0) ? 'checked' : ''}">Summary (All)</a></li>
+			<li style="float:right"><a href="#tabs-summary" id="lnkSummaryTab">Summary</a></li>
 		</ul>
 		</c:if>
 		
+	  	<c:set var="elementCount" value="0"/>
+	  				
 		<%-- Content of tabs --%>
 		<c:forEach items="${allCategories}" var="category" varStatus="status">
-			<c:set var="categoryNameWithDashes" value="${fn:replace(category.name, ' ', '-')}" />
-			<div id="tabs-${categoryNameWithDashes}">
+			<div id="tabs-${category.displayName}">
 			
 				
 				<%-- 'Add Element' button --%>
@@ -186,14 +187,14 @@
 				
 				<%-- Explanation text --%>
 				<div class="centered" style="margin-top: 5px">
-					<a href="#" id="helpTooltip-${categoryNameWithDashes}" class="helpTooltipCentered" title="${category.helpText}">
+					<a href="#" id="helpTooltip-${category.displayName}" class="helpTooltipCentered" title="${category.helpText}">
 						<img src="<c:url value="/resources/img/icons/help.png" />">&nbsp;<b>What should I add in this category ?</b>
 					</a>
 				</div>
 				
 				<%-- Text Addition Modal Window --%>
 				<div id="addTextModalWindow${category.id}" class="box round first" title="New Text" style="display:none">
-					<form:form method="post" action="/auth/report/create-text-element?id=${report.id}#tabs-${categoryNameWithDashes}" modelAttribute="newinputelement">
+					<form:form method="post" action="/auth/report/create-text-element?id=${report.id}#tabs-${category.displayName}" modelAttribute="newinputelement">
 						
 						<form:hidden id="hdnInputElementId" path="id" value="0" />
 						<form:hidden id="hdnInputElementCategory" path="category.name" value="${category.name}" />
@@ -298,7 +299,7 @@
 					
 					<c:forEach items="${category.dataSourcesAvailable}" var="datasource" varStatus="dsLoopStatus">
 						<div id="addElementForm${category.id}-${fn:replace(datasource.name, ' ', '-')}" class="elementForm">
-							<form:form method="post" action="/auth/report/create-data-element?id=${report.id}#tabs-${categoryNameWithDashes}" modelAttribute="newdataelement">
+							<form:form method="post" action="/auth/report/create-data-element?id=${report.id}#tabs-${category.displayName}" modelAttribute="newdataelement">
 								<%--<form:input id="txtElementName" path="name" style="width:300px" />--%>
 								
 								<form:hidden id="hdnDataElementId" path="id" value="0" />
@@ -436,14 +437,14 @@
 				
 				<%-- Elements --%>
 				<c:if test="${not empty report.elements}">
-					<form:form id="reportOrderForm-tabs-${fn:replace(category.name, ' ', '-')}" method="post" action="/auth/report/save" modelAttribute="report">
+					<form:form id="reportOrderForm-tabs-${category.displayName}" method="post" action="/auth/report/save" modelAttribute="report">
 	  				<form:input value="${report.id}" type="hidden" path="id" />
-	  				
+	  									
 					<ul id="sortable${category.id}" class="sortable">
 					<c:forEach items="${report.elements}" var="element" varStatus="status">
 						<c:if test="${element.category.name == category.name}">
 							<c:set var="element" scope="request" value="${element}"/>
-							<c:set var="categoryNotEmpty" scope="request" value="true"/>
+							<c:set var="elementCount" value="${elementCount + 1}"/>
 							
 							<li class="sortableItem sortable${category.id}Item" id="element${element.id}">
 								<div class="box round${element.included == false ? ' box-disabled' : ''}">
@@ -517,6 +518,14 @@
 					</form:form>
 					<div class="clear"></div>
 					
+					<c:if test="${not empty elementCount && elementCount > 0}">
+						<script type="text/javascript">
+							$(document).ready(function () {
+								$("#lnk${category.displayName}").text($("#lnk${category.displayName}").text() + " (${elementCount})");
+							});
+						</script>
+					</c:if>
+					
 					<%-- Script enabling drag-and-drop reordering --%>
 					<script type="text/javascript">
 						$(document).ready(function () {
@@ -546,31 +555,24 @@
 					            }
 							});
 							$( "#sortable${category.id}" ).disableSelection();
-							
-							// This is not a Jquery '$', but a JSTL tag to get the current number of data elements
-							var index = ${fn:length(report.elements)};
 						});
 					</script>
 				</c:if>
 				
+				<%-- If category is empty, hides the help tooltip and display full description text --%>
+				<c:if test="${not empty elementCount && elementCount <= 0}">
+					${category.descriptionText}
+					<script type="text/javascript">
+						$("#helpTooltip-${category.displayName}").hide();
+					</script>
+			    </c:if>
+				<%--<c:otherwise>
+					<script type="text/javascript">
+						$("#lnk${category.displayName}").addClass('checked');
+					</script>
+				</c:otherwise>--%>
 				
-				<c:choose>
-					 <%-- If category isn't empty, displays the green 'check' icon in the tab header --%>
-					<c:when test="${not empty categoryNotEmpty && categoryNotEmpty == 'true'}">
-						<script type="text/javascript">
-							$("#lnk${fn:replace(category.name, ' ', '-')}").addClass('checked');
-						</script>
-				    </c:when>
-				     <%-- If category is empty, hides the help tooltip and display full description text --%>
-				    <c:otherwise>
-						${category.descriptionText}
-						<script type="text/javascript">
-							$("#helpTooltip-${fn:replace(category.name, ' ', '-')}").hide();
-						</script>
-				    </c:otherwise>
-				</c:choose>
-				
-				<c:set var="categoryNotEmpty" scope="request" value="false"/>
+				<c:set var="elementCount" value="0"/>
 			</div>
 		</c:forEach>
 		
@@ -618,7 +620,24 @@
 						</c:if>
 					</c:forEach>
 				</c:forEach>
+				
+				<%-- Publish report button --%>
+				<div class="centered">
+					<a class="lnkPublishReport" href="/auth/report/publish?id=${report.id}" >
+						<button id="btnPublishReportBottom" type="button" class="btn btn-icon btn-blue btn-globe">
+							<span></span>Publish Report
+						</button>
+					</a>
+				</div>
 			</c:if>
+			
+			<script type="text/javascript">
+				$(document).ready(function () {
+					// This is not a Jquery '$', but a JSTL tag to get the current number of data elements
+					var index = ${fn:length(report.elements)};
+					$("#lnkSummaryTab").text($("#lnkSummaryTab").text() + " (" + index + ")");
+				});
+			</script>
 			
 			<%-- 'No element' message if report empty --%>
 			<c:if test="${empty report.elements}">
@@ -626,17 +645,7 @@
 					<h5>Information</h5>
 					<p><c:out value="There is no element in the report. Select category tabs and add elements to fill the report." /></p>
 				</div>
-			</c:if>
-			
-			<%-- Publish report button --%>
-			<div class="centered">
-				<a class="lnkPublishReport" href="/auth/report/publish?id=${report.id}" >
-					<button id="btnPublishReport" type="button" class="btn btn-icon btn-blue btn-globe">
-						<span></span>Publish Report
-					</button>
-				</a>
-			</div>
-			
+			</c:if>			
 		</div>
 	</div>	
 </c:if>

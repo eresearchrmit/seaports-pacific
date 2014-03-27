@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -120,6 +121,14 @@ public class ElementCategory implements Serializable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * Getter for the display name of the category
+	 * @return the current display name of the category
+	 */
+	public String getDisplayName() {
+		return StringEscapeUtils.unescapeHtml(this.name).replaceAll("[^a-zA-Z]+", "-");
 	}
 	
 	/**

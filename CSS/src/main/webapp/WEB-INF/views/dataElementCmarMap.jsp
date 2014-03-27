@@ -13,7 +13,7 @@
 
 <c:if test="${not empty element.data}">
 	
-	<c:set var="mapId" scope="request" value="${fn:replace(element.category.name, ' ', '')}"/>
+	<c:set var="mapId" scope="request" value="${fn:replace(element.category.displayName, '-', '')}"/>
 	<c:if test="${not empty category}">
 		<c:set var="mapId" scope="request" value="${category}"/>
 	</c:if>

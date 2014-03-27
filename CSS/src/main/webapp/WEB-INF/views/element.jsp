@@ -5,8 +5,8 @@
  This code is under the BSD license. See 'license.txt' for details.
  Project hosted at: https://code.google.com/p/climate-smart-seaports/
 --%>
-<%@page import="edu.rmit.eres.seaports.model.InputElement"%>
-<%@page import="edu.rmit.eres.seaports.helpers.FileTypeHelper"%>
+<%@ page import="edu.rmit.eres.seaports.model.InputElement"%>
+<%@ page import="edu.rmit.eres.seaports.helpers.FileTypeHelper"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="true" %>
 <%@ page import= "org.springframework.web.servlet.tags.*" %>
@@ -15,7 +15,7 @@
 
 <c:choose>
 	<%-- Data Element --%>
-	<c:when test="${element.class.simpleName == 'DataElement'}">
+	<c:when test="${element.getClass().simpleName == 'DataElement'}">
 		<%-- Display the data element according to its data source and display type --%>
 		<c:choose>
 			<c:when test="${not empty element.data}">
@@ -41,7 +41,7 @@
 	</c:when>
 	
 	<%-- Input Element --%>
-	<c:when test="${element.class.simpleName == 'InputElement'}">
+	<c:when test="${element.getClass().simpleName == 'InputElement'}">
 			<%-- Need to use a scriplet here in order to test against the 'IsContentTypeJpeg' method --%>
 			<% InputElement element = (InputElement)(request.getAttribute("element"));
 				if (FileTypeHelper.IsContentTypeJpeg(element.getContentType())) {	%>
