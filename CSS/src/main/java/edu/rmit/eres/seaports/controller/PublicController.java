@@ -8,14 +8,11 @@
 package edu.rmit.eres.seaports.controller;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import org.apache.commons.lang.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +28,8 @@ import edu.rmit.eres.seaports.dao.UserDao;
 import edu.rmit.eres.seaports.dao.ReportDao;
 import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
-import edu.rmit.eres.seaports.model.CmarDataSource;
-import edu.rmit.eres.seaports.model.CsiroDataSource;
-import edu.rmit.eres.seaports.model.DataElement;
-import edu.rmit.eres.seaports.model.DataSource;
-import edu.rmit.eres.seaports.model.Element;
-import edu.rmit.eres.seaports.model.ElementCategory;
-import edu.rmit.eres.seaports.model.InputElement;
 import edu.rmit.eres.seaports.model.Report;
 import edu.rmit.eres.seaports.model.ReportPublication;
-import edu.rmit.eres.seaports.model.Seaport;
-
 /**
  * Controller for the public section of the application
  */

@@ -15,7 +15,6 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.WeatherEvent;
 
 /**

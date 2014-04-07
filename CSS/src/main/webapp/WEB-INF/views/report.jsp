@@ -463,6 +463,7 @@
 											</button>
 										</a>
 										
+										<form></form>
 										<form:form id="editElementDisplayForm${element.id}" method="post" action="/auth/report/edit-element-display" class="floatright btn-margin"> 
 											<input id="hdnElementToEditId" type="hidden" name="elementId" value="${element.id}" />
 											

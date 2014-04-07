@@ -29,7 +29,11 @@ body {
 .centered {text-align:center;}
 .justified {text-align:justify;}
 .clear {clear: both;}
-.pagebreak { display: none; }
+.pagebreak { 
+	display: block; 
+	border-bottom: 2px dashed darkgrey; 
+	margin: 50px 0;
+}
 
 /* -----------------------------------------------------------
 	 anchors
