@@ -162,7 +162,7 @@ public class CmarDataSourceLoader {
 		
 		// Availability of data sources for each element category
 		List<ElementCategory> categories = new ArrayList<ElementCategory>();
-		categories.add((ElementCategory)(session.get(ElementCategory.class, 3))); // Category 3 = Future Climate
+		categories.add((ElementCategory)(session.get(ElementCategory.class, 2))); // Category 2 = Future Climate
 		dsCmar.setCategories(categories);
 		
 		
