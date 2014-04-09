@@ -47,7 +47,7 @@
 				if (FileTypeHelper.IsContentTypeJpeg(element.getContentType())) {	%>
 				<ul class="prettygallery clearfix">
 					<li>
-						<a href="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" target="_blank" rel="prettyPhoto" title="${element.name}">
+						<a href="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" target="_blank" rel="lightbox" title="${element.name}" class="centered">
 							<img name="${element.name}" src="data:image/jpeg;charset=utf-8;base64,${element.stringContent}" style="max-width:100%; max-height: 500px;" />
 						</a>
 			    	</li>

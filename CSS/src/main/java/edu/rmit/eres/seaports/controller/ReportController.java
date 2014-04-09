@@ -399,7 +399,7 @@ public class ReportController {
 	
 	@RequestMapping(value= "/create-file-element", method = RequestMethod.POST)
 	public String createFileElement(@ModelAttribute("newinputelement") InputElement inputElement, 
-			@RequestParam(value="file",required=true) MultipartFile uploadfile,
+			@RequestParam(value="file",required=false) MultipartFile uploadfile,
 			RedirectAttributes attributes) {
 		logger.info("Inside uploadfileinWorkBoard");
 		
