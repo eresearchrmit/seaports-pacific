@@ -11,6 +11,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -43,7 +46,7 @@ public class DataElement extends Element implements Serializable {
 	
 	@Transient
 	protected List<?> data;
-	
+		
 	/**
 	 * The selected options for the data source of this element
 	 */
@@ -58,6 +61,12 @@ public class DataElement extends Element implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="display_type_id")
 	protected DisplayType displayType;
+	
+	@ElementCollection
+	@CollectionTable(name="TextInput", joinColumns=@JoinColumn(name="data_element_id"))
+	@Column(name="inputs")
+	@LazyCollection(value=LazyCollectionOption.FALSE)
+    protected List<String> inputs;
 	
 	/**
 	 * Default constructor of data element
@@ -165,4 +174,11 @@ public class DataElement extends Element implements Serializable {
 		return this.data;
 	}
 	
+	public List<String> getInputs() {
+    	return this.inputs;
+    }
+    
+    public void setInputs(List<String> inputs) {
+    	this.inputs = inputs;
+    }
 }

@@ -335,8 +335,10 @@
 													</c:forEach>
 												</c:when>
 												<c:when test="${parameter.display.text == 'text'}">
-													<c:forEach items="${parameter.options}" var="option">
-														<textarea id="txtOption${option.id}" name="selectedOptions[${parameterLoopStatus.index}].value" rows="5" class="small" ></textarea>
+													<%-- <textarea id="txtOption${option.id}" name="selectedOptions[${parameterLoopStatus.index}].value" rows="5" class="small" ></textarea> --%>
+													<c:forEach items="${parameter.options}" var="option" varStatus="optionLoopStatus">
+														<form:hidden path="selectedOptions[${parameterLoopStatus.index}].id" value="${option.id}" />
+														<textarea name="inputs" rows="5" class="small" ></textarea>
 													</c:forEach>
 												</c:when>
 											</c:choose>

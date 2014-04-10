@@ -19,6 +19,7 @@ import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -322,8 +323,9 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value = "/create-data-element", method=RequestMethod.POST) 
-	public String createDataElement(@ModelAttribute("newdataelement") DataElement dataElement, RedirectAttributes attributes, Model model) {
-		logger.info("Inside addDataElement");
+	public String createDataElement(@ModelAttribute("newdataelement") DataElement dataElement, 
+			RedirectAttributes attributes, Model model) {
+		logger.info("Inside createDataElement");
 		
 		Report report = null;
 		try {
@@ -331,21 +333,23 @@ public class ReportController {
 			
 			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
     			throw new AccessDeniedException(ERR_ACCESS_DENIED);
-						
+			
 			DisplayType displayType = displayTypeDao.find(dataElement.getDisplayType().getName());
 			ElementCategory category = elementCategoryDao.find(dataElement.getCategory().getName());
 			DataSource dataSource = dataSourceDao.find(dataElement.getDataSource().getName());
 			List<DataSourceParameterOption> options = new ArrayList<DataSourceParameterOption>();
-			for (DataSourceParameterOption selectedOption : dataElement.getSelectedOptions()) {
+			for (DataSourceParameterOption selectedOption : dataElement.getSelectedOptions()) {	
 				if (selectedOption.getId() > 0)
 					options.add(dataSourceParameterOptionDao.find(selectedOption.getId()));
 			}
+			
 			String title = dataSource.getDisplayName() + " Data Element";
 			int insertPosition = dataElement.getPosition() + 1;
 			
 			reorderReportElementsAfterPosition(report, insertPosition);
 			
 			DataElement newElement = new DataElement(new Date(), title, category, report, true, insertPosition,  dataSource, options, displayType, true, false);
+			newElement.setInputs(dataElement.getInputs());
 			elementDao.save(newElement);
 			
 			// Redirects to the right tab of the report after creating the element, based on its category

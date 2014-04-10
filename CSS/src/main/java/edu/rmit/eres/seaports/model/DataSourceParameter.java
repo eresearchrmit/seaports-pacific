@@ -230,6 +230,10 @@ public class DataSourceParameter implements Serializable {
 			return text;
 		}
 
+		public boolean equals(Display otherDisplay) {
+			return (otherDisplay == null) ? false : text.equals(otherDisplay.getText());
+		}
+		
 		public boolean equals(String otherText) {
 			return (otherText == null) ? false : text.equals(otherText);
 		}
