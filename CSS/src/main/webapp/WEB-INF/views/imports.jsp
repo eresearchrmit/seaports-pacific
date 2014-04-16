@@ -37,7 +37,7 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/MarkerWithLabel.js" />"></script>
 
-<script language="javascript" type="text/javascript" src="<c:url value="/resources/js/setup.js" />"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/setup.js" />"></script>
 
 <script type="text/javascript">
    $(document).ready(function () {

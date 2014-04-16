@@ -42,20 +42,52 @@
 				<thead>
 					<tr>
 						<th>Title</th>
-						<th>Edit</th>
-						<th>Preview</th>
-						<th>Publish</th>
-						<th>Delete</th>
+						<th class="sorting_desc_disabled">Edit</th>
+						<th class="sorting_desc_disabled">Preview</th>
+						<th class="sorting_desc_disabled">Publish</th>
+						<th class="sorting_desc_disabled">Delete</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${reportList}" var="report" varStatus="status"> 
 					<tr>
 						<td><c:out value="${report.name}" /></td>
-						<td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/report_edit.png" />" alt="Edit"/></a></td>
+						<%--<td><a href="/auth/report?id=${report.id}" title="Edit this Report"><img src="<c:url value="/resources/img/icons/report_edit.png" />" alt="Edit"/></a></td>
 		                <td><a href="/auth/report/view?id=${report.id}" title="View this Report" target="_blank"><img src="<c:url value="/resources/img/icons/report.png" />" alt="View" /></a></td>
 		                <td><a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report"><img src="<c:url value="/resources/img/icons/report_go.png" />" alt="Publish"/></a></td>
-						<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>
+						<td><a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report"><img src="<c:url value="/resources/img/icons/delete.png" />" alt="Delete" /></a></td>--%>
+						
+						<td>
+							<a href="/auth/report?id=${report.id}" title="Edit this Report">
+								<button id="btnEditReport" type="button" class="btn btn-small btn-icon btn-blue btn-edit" style="margin-top: 5px" >
+									<span></span>Edit
+								</button>
+							</a>
+						</td>
+						
+						<td>
+							<a href="/auth/report/view?id=${report.id}" title="View this Report">
+								<button id="btnViewReport" type="button" class="btn btn-small btn-icon btn-blue btn-doc" style="margin-top: 5px" >
+									<span></span>View
+								</button>
+							</a>
+						</td>
+						
+						<td>
+							<a href="/auth/report/publish?id=${report.id}" title="Publish this Report">
+								<button id="btnPublishReport" type="button" class="btn btn-small btn-icon btn-blue btn-globe" style="margin-top: 5px" >
+									<span></span>Publish
+								</button>
+							</a>
+						</td>
+						
+						<td>
+							<a href="/auth/report/delete?id=${report.id}" title="Delete this Report">
+								<button id="btnDeleteReport" type="button" class="btn btn-small btn-icon btn-blue btn-cross" style="margin-top: 5px" >
+									<span></span>Delete
+								</button>
+							</a>
+						</td>
 					</tr>
 					</c:forEach>
 				</tbody>
@@ -86,8 +118,8 @@
 					<th>Title</th>
 					<th>Region</th>
 					<th>Published on</th>
-					<th>View</th>
-					<th>Unpublish</th>
+					<th class="sorting_desc_disabled">View</th>
+					<th class="sorting_desc_disabled">Unpublish</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -96,8 +128,22 @@
 					<td><c:out value="${publishedReport.name}" /></td>
 					<td>${publishedReport.report.seaport.region.name}</td>
 					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy (HH:mm:ss)" /></td>
-					<td><a href="/public/published-report/view?id=${publishedReport.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/report.png" />" alt="View" /></a></td>
-					<td><a href="/auth/report/unpublish?id=${publishedReport.id}" class="lnkUnpublishReport" title="Unpublish this Report"><img src="<c:url value="/resources/img/icons/report_delete.png" />" alt="Unpublish" /></a></td>
+					<%--<td><a href="/public/published-report/view?id=${publishedReport.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/report.png" />" alt="View" /></a></td>
+					<td><a href="/auth/report/unpublish?id=${publishedReport.id}" class="lnkUnpublishReport" title="Unpublish this Report"><img src="<c:url value="/resources/img/icons/report_delete.png" />" alt="Unpublish" /></a></td>--%>
+					<td>
+						<a href="/public/published-report/view?id=${publishedReport.id}" title="View this Report">
+							<button id="btnViewPublishedReport" type="button" class="btn btn-small btn-icon btn-blue btn-doc" style="margin-top: 5px" >
+								<span></span>View
+							</button>
+						</a>
+					</td>
+					<td>
+						<a href="/auth/report/unpublish?id=${publishedReport.id}" title="Unpublish this Report" class="lnkUnpublishReport">
+							<button id="btnUnpublishReport" type="button" class="btn btn-small btn-icon btn-blue btn-cross" >
+								<span></span>Unpublish
+							</button>
+						</a>
+					</td>
 				</tr>
 				</c:forEach>
 			</tbody>

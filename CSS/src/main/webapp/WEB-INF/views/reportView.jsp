@@ -22,6 +22,13 @@
 
 <div class="grid_12">
 
+	<%-- Display errors, warnings, notifications --%>
+	<c:set var="successMessage" scope="request" value="${successMessage}"/>
+	<c:set var="warningMessage" scope="request" value="${warningMessage}"/>
+	<c:set var="errorMessage" scope="request" value="${errorMessage}"/>
+	<jsp:include page="notifications.jsp" />
+	<br />
+
 	<c:if test="${not empty report}">	
 		<a href="javascript: window.print()" id="btnPrint" class="floatright btn-margin">
 			<button class="btnAddDataElement btn btn-icon btn-blue btn-print">
@@ -43,18 +50,11 @@
 		</center>
 	</c:if>
 	
-	<br />
-	<%-- Display errors, warnings, notifications --%>
-	<c:set var="successMessage" scope="request" value="${successMessage}"/>
-	<c:set var="warningMessage" scope="request" value="${warningMessage}"/>
-	<c:set var="errorMessage" scope="request" value="${errorMessage}"/>
-	<jsp:include page="notifications.jsp" />
+	
+
 	
 	<%-- Display content --%>
-	<c:if test="${not empty report}">
-		<p class="report-content">${report.fullDescription}</p>
-		<br/><br/><br/>
-	
+	<c:if test="${not empty report}">	
 		<c:if test="${not empty report.elements}">
 			<div class="element-container">	 	
 			 	
@@ -82,6 +82,10 @@
 				</c:forEach>
 			</div>
 		</c:if>
+		
+		<br/><br/><br/><br/>
+		<p class="report-content">${report.fullDescription}</p>
+
 		
 		<div class="report-license">
 			<div class="floatleft">

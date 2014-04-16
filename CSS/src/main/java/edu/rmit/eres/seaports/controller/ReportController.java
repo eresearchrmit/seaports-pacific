@@ -19,7 +19,6 @@ import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -732,7 +731,7 @@ public class ReportController {
 			}*/
 			try {
 				// Instantiate the data source of the sub-type specified by the data source name
-				String className = "edu.rmit.eres.seaports.model." + WordUtils.capitalize(de.getDataSource().getName().toLowerCase()) + "DataSource";
+				String className = "edu.rmit.eres.seaports.model." + WordUtils.capitalize(de.getDataSource().getName()) + "DataSource";
 				Constructor<?> constructor = Class.forName(className).getDeclaredConstructor(DataSource.class);
 				constructor.setAccessible(true);
 				
@@ -745,7 +744,6 @@ public class ReportController {
 					ds.init(csiroDataDao);
 			   if (ds instanceof CmarDataSource)
 					ds.init(cmarDataDao);
-			   
 			   try {
 				   List<?> data = ds.getData(de);
 				   de.setData(data);

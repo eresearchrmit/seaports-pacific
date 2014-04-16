@@ -185,7 +185,7 @@ public class WeatherEvent implements Serializable {
 	
 	/**
 	 * Setter for whether the event had direct or indirect impact
-	 * @param year: true if the weather event had direct impact, false if indirect
+	 * @param direct: true if the weather event had direct impact, false if indirect
 	 */
 	public void setDirect(Boolean direct) {
 		this.direct = direct;

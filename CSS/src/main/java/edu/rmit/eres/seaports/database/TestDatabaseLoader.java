@@ -76,7 +76,10 @@ public class TestDatabaseLoader {
 		
 		// Loads the various data sources
 		CsiroDataSourceLoader.LoadCsiroDataSource(session);
-		
+
+		VulnerabilityDataSourceLoader.LoadVulnerabilityDataSource(session);
+		CurrentClimateRiskDataSourceLoader.LoadCurrentClimateRiskDataSource(session);
+		FutureClimateRiskDataSourceLoader.LoadFutureClimateRiskDataSource(session);
 		
 				
 		// Retrieves the created element categories

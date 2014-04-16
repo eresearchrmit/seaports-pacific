@@ -64,6 +64,8 @@ public class DatabaseLoader {
 		CsiroDataSourceLoader.LoadCsiroDataSource(session);
 		CmarDataSourceLoader.LoadCmarDataSource(session);
 		VulnerabilityDataSourceLoader.LoadVulnerabilityDataSource(session);
+		CurrentClimateRiskDataSourceLoader.LoadCurrentClimateRiskDataSource(session);
+		FutureClimateRiskDataSourceLoader.LoadFutureClimateRiskDataSource(session);
 		
 		session.getTransaction().commit();
 		

@@ -32,25 +32,25 @@
 	
 	<%-- Action buttons --%>
 	<div id="actionButtons">
-		<a id="lnkPublishReport" href="/auth/report/publish?id=${report.id}" class="floatright btn-margin">
+		<a id="lnkPublishReport" href="/auth/report/publish?id=${report.id}" class="floatright btn-margin" title="Publish the Report">
 			<button id="btnConvertToUserStory" type="button" class="btn btn-icon btn-blue btn-globe" >
 				<span></span>Publish Report
 			</button>
 		</a>
 		
-		<a href="/auth/report/view?id=${report.id}" target="_blank" class="floatright btn-margin">
+		<a href="/auth/report/view?id=${report.id}" target="_blank" class="floatright btn-margin" title="Preview the Report">
 			<button class="btnAddDataElement btn btn-icon btn-blue btn-doc" >
 				<span></span>Preview the report
 			</button>
 		</a>
 		
-		<a id="lnkDeleteReport" href="/auth/report/delete?id=${report.id}" class="floatright btn-margin">
+		<a id="lnkDeleteReport" href="/auth/report/delete?id=${report.id}" class="floatright btn-margin" title="Delete the Report">
 			<button id="btnDeleteWorkboard" type="button" class="btn btn-icon btn-blue btn-cross" >
 				<span></span>Delete Report
 			</button>
 		</a>
-		<a href="javascript: $('#reportOrderForm${category.id}').submit();" id="lnkSaveReportOrder" class="floatright btn-margin">
-			<button id="btnSaveReportOrder" type="button" class="btn btn-icon btn-grey btn-refresh">
+		<a href="javascript: $('#reportOrderForm${category.id}').submit();" id="lnkSaveReportOrder" class="floatright btn-margin" title="Save order of element within the selected category">
+			<button id="btnSaveReportOrder" type="button" class="btn btn-icon btn-grey btn-save">
 				<span></span>Save order
 			</button>
 		</a>
@@ -174,13 +174,13 @@
 				
 				<%-- 'Add Element' button --%>
 				<div class="centered">
-					<button id="btnOpenAddDataModalWindow${category.id}" type="button" class="btn btn-icon btn-blue btn-plus" >
+					<button id="btnOpenAddDataModalWindow${category.id}" type="button" class="btn btn-small btn-icon btn-blue btn-plus" title="Add a data element to this category">
 						<span></span>Add Data
 					</button>
-					<button id="btnOpenAddTextModalWindow${category.id}" type="button" class="btn btn-icon btn-blue btn-plus" >
+					<button id="btnOpenAddTextModalWindow${category.id}" type="button" class="btn btn-small btn-icon btn-blue btn-plus" title="Add a text element to this category">
 						<span></span>Add Text
 					</button>
-					<button id="btnOpenAddFileModalWindow${category.id}" type="button" class="btn btn-icon btn-blue btn-plus" >
+					<button id="btnOpenAddFileModalWindow${category.id}" type="button" class="btn btn-small btn-icon btn-blue btn-plus" title="Upload a file to this category">
 						<span></span>Add File
 					</button>
 				</div>
@@ -453,14 +453,14 @@
 									<div class="box-header">
 									<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
 										<!-- Delete button -->
-										<a class="lnkDeleteElement" href="/auth/report/delete-element?id=${element.id}">
-											<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright btn-margin" >
+										<a class="lnkDeleteElement" href="/auth/report/delete-element?id=${element.id}" title="Delete this Element">
+											<button type="button" class="btn btn-icon btn-blue btn-mini btn-cross floatright btn-margin" >
 												<span></span>Delete
 											</button>
 										</a>
 										<!-- 'Include/Exclude' button -->
 										<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
-											<button type="button" class="btn btn-icon btn-small btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
+											<button type="button" class="btn btn-icon btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
 												<span></span>${element.included == false ? 'Include' : 'Exclude'}
 											</button>
 										</a>

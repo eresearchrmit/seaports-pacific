@@ -64,7 +64,7 @@ public class DataElement extends Element implements Serializable {
 	
 	@ElementCollection
 	@CollectionTable(name="TextInput", joinColumns=@JoinColumn(name="data_element_id"))
-	@Column(name="inputs")
+	@Column(name="inputs", columnDefinition = "TEXT")
 	@LazyCollection(value=LazyCollectionOption.FALSE)
     protected List<String> inputs;
 	
