@@ -94,11 +94,6 @@
         <put-attribute name="body" value="/WEB-INF/views/reportCreation.jsp" />
 	</definition>
 	
-	<definition name="reportCreated" extends="base.definition">
-		<put-attribute name="title" value="Report created - Climate Smart Seaports" />
-        <put-attribute name="body" value="/WEB-INF/views/reportCreated.jsp" />
-	</definition>
-	
 	<definition name="report" extends="base.definition">
 		<put-attribute name="title" value="Report Edition - Climate Smart Seaports" />
 		<put-attribute name="sidemenu" value="/WEB-INF/views/reportToolbox.jsp" />

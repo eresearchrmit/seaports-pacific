@@ -61,8 +61,11 @@ public class DatabaseLoader {
 		DisplayTypesLoader.LoadDisplayTypes(session);
 		
 		// Loads the various data sources
-		CsiroDataSourceLoader.LoadCsiroDataSource(session);
-		CmarDataSourceLoader.LoadCmarDataSource(session);
+		//CsiroDataSourceLoader.LoadCsiroDataSource(session);
+		//CmarDataSourceLoader.LoadCmarDataSource(session);
+		ObservedTrendDataSourceLoader.LoadObservedTrendDataSource(session);
+		ObservedExtremeDataSourceLoader.LoadObservedExtremeDataSource(session);
+		FutureExtremeDataSourceLoader.LoadFutureExtremeDataSource(session);
 		VulnerabilityDataSourceLoader.LoadVulnerabilityDataSource(session);
 		CurrentClimateRiskDataSourceLoader.LoadCurrentClimateRiskDataSource(session);
 		FutureClimateRiskDataSourceLoader.LoadFutureClimateRiskDataSource(session);

@@ -207,7 +207,7 @@ public class CsiroDataSourceLoader {
 		session.save(rf);
 		session.save(rh);
 		
-		DateFormat dateFormatter = new SimpleDateFormat("F");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date dateCsiroData = null;
 		try {
 			dateCsiroData = dateFormatter.parse("2013-02-01");

@@ -209,7 +209,7 @@ public class CmarDataSourceLoader {
 		CsiroVariable slr = new CsiroVariable("Sea Level Rise", "SLR", "Forecasted sea level rise", "mm");
 		session.save(slr);
 		
-		DateFormat dateFormatter = new SimpleDateFormat("F");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Date dateCmarData = null;
 		try {

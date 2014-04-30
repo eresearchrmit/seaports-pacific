@@ -134,11 +134,11 @@ public class FutureClimateRiskDataSourceLoader {
 		// Rating of the consequence of risk
 		DataSourceParameter consequence = new DataSourceParameter("Consequence Rating", "", dsFutureClimateRisk, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence);
-		session.save(new DataSourceParameterOption("Not vulnerable", "0", consequence, 1));
-		session.save(new DataSourceParameterOption("Could be vulnerable", "1", consequence, 2));
-		session.save(new DataSourceParameterOption("Somewhat vulnerable", "2", consequence, 3));
-		session.save(new DataSourceParameterOption("Moderately vulnerable", "3", consequence, 4));
-		session.save(new DataSourceParameterOption("Significantly vulnerable", "4", consequence, 5));
+		session.save(new DataSourceParameterOption("None or Negligible", "0", consequence, 1));
+		session.save(new DataSourceParameterOption("Minor", "1", consequence, 2));
+		session.save(new DataSourceParameterOption("Medium", "2", consequence, 3));
+		session.save(new DataSourceParameterOption("Major", "3", consequence, 4));
+		session.save(new DataSourceParameterOption("Extreme", "4", consequence, 5));
 		
 		// Rating of the likelihood of a risk
 		DataSourceParameter likelihood = new DataSourceParameter("Likelihood", "", dsFutureClimateRisk, null, DataSourceParameter.Display.RADIO);

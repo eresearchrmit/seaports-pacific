@@ -84,6 +84,12 @@ public class ReportController {
 	@Autowired
 	private CmarDataDao cmarDataDao;
 	
+	@Autowired
+	private ObservedTrendDataDao observedTrendDataDao;
+	
+	@Autowired
+	private ExtremeDataDao extremeDataDao;
+	
 	@RequestMapping(value= "/my-reports", method = RequestMethod.GET)
 	public String myReports(Model model) {
 		logger.info("Inside myReports");
@@ -241,7 +247,7 @@ public class ReportController {
 			
 			model.addAttribute("report", report);
 			
-			return new ModelAndView("reportCreated");
+			return new ModelAndView("redirect:/auth/report?id=" + report.getId());
 		}
 		catch (AccessDeniedException e) {
 			throw e;
@@ -744,6 +750,10 @@ public class ReportController {
 					ds.init(csiroDataDao);
 			   if (ds instanceof CmarDataSource)
 					ds.init(cmarDataDao);
+			   if (ds instanceof ObservedTrendDataSource)
+					ds.init(observedTrendDataDao);
+			   if (ds instanceof ObservedExtremeDataSource || ds instanceof FutureExtremeDataSource)
+					ds.init(extremeDataDao);
 			   try {
 				   List<?> data = ds.getData(de);
 				   de.setData(data);
@@ -866,7 +876,7 @@ public class ReportController {
 	 * @return the address to which the page should be redirected
 	 */
 	private String redirectToCategory(Element element) {
-		return "/auth/report?id=" + element.getReport().getId() + "#tabs-" + element.getCategory().getName().replace(' ', '-');
+		return "/auth/report?id=" + element.getReport().getId() + "#tabs-" + element.getCategory().getDisplayName();
 	}
 	
 	public static final String ERR_ACCESS_DENIED = "You are not allowed to access this Report";
