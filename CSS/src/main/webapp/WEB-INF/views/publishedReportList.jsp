@@ -30,7 +30,7 @@
 					<th>Author</th>
 					<th>Published on</th>
 					<th>Region</th>
-					<th>View</th>
+					<th class="sorting_desc_disabled">View</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -40,7 +40,13 @@
 					<td><a href="/public/user/${publishedReport.owner.username}" title="View profile">${publishedReport.owner.firstname} ${publishedReport.owner.lastname}</a></td>
 					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy" /></td>
 					<td>${publishedReport.report.seaport.region.name}</td>
-					<td><a href="/public/published-report/view?id=${publishedReport.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
+					<td>
+						<a href="/public/published-report/view?id=${publishedReport.report.id}" title="View this Report" target="_blank">
+							<button id="btnViewReport" type="button" class="btn btn-small btn-icon btn-blue btn-doc" style="margin-top: 5px" >
+								<span></span>View
+							</button>
+						</a>
+					</td>
 				</tr>
 				</c:forEach>
 			</tbody>

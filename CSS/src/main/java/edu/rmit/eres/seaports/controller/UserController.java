@@ -8,6 +8,7 @@
 package edu.rmit.eres.seaports.controller;
 
 import java.security.MessageDigest;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 
@@ -37,6 +38,9 @@ public class UserController {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private ReportPublicationDao reportPublicationDao;
 
 	@ModelAttribute("user")
 	@RequestMapping(value = {"/login", "/register"}, method = RequestMethod.GET)
@@ -112,10 +116,14 @@ public class UserController {
 			// If no user is logged in, it's not a problem since this is a public page
 		}
 		
-		// Retrieve the required user's profile
 		try {
+			// Retrieve the required user's profile
 			User user = userDao.find(username);
 			model.addAttribute("userProfile", user);
+			
+			// Retrieve the list of reports published by the user
+			List<ReportPublication> publishedReports = reportPublicationDao.getReportPublications(user);
+			model.addAttribute("publishedReports", publishedReports);
 		}
 		catch (NoResultException e) {
 			model.addAttribute("errorMessage", e.getMessage());

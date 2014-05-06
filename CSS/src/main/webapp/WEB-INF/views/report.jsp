@@ -24,6 +24,12 @@
 
 <div class="grid_12">
 <c:if test="${not empty report}">
+
+	<c:set var="successMessage" scope="request" value="${successMessage}"/>
+	<c:set var="warningMessage" scope="request" value="${warningMessage}"/>
+	<c:set var="errorMessage" scope="request" value="${errorMessage}"/>
+	<jsp:include page="notifications.jsp" />
+
 	<%-- Titles --%>
 	<div class="floatleft" style="margin-left: 20px">
 		<h2><c:out value="${report.name}" /></h2>
@@ -107,12 +113,7 @@
 		});
 	</script>
 	<div class="clear"></div><br />
-	
-	<c:set var="successMessage" scope="request" value="${successMessage}"/>
-	<c:set var="warningMessage" scope="request" value="${warningMessage}"/>
-	<c:set var="errorMessage" scope="request" value="${errorMessage}"/>
-	<jsp:include page="notifications.jsp" />
-	
+		
 	<%-- Script enabling the tabs --%>
 	<script type="text/javascript">
 	
