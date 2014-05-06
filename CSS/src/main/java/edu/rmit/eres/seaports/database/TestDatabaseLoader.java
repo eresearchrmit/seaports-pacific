@@ -74,9 +74,10 @@ public class TestDatabaseLoader {
 		// Loads the display types available
 		DisplayTypesLoader.LoadDisplayTypes(session);
 		
-		// Loads the various data sources
-		CsiroDataSourceLoader.LoadCsiroDataSource(session);
-
+		ObservedTrendDataSourceLoader.LoadObservedTrendDataSource(session);
+		ObservedExtremeDataSourceLoader.LoadObservedExtremeDataSource(session);
+		FutureTrendDataSourceLoader.LoadFutureTrendDataSource(session);
+		FutureExtremeDataSourceLoader.LoadFutureExtremeDataSource(session);
 		VulnerabilityDataSourceLoader.LoadVulnerabilityDataSource(session);
 		CurrentClimateRiskDataSourceLoader.LoadCurrentClimateRiskDataSource(session);
 		FutureClimateRiskDataSourceLoader.LoadFutureClimateRiskDataSource(session);

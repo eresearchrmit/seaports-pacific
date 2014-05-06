@@ -14,26 +14,26 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import edu.rmit.eres.seaports.dao.CmarDataDao;
+import edu.rmit.eres.seaports.dao.FutureTrendDataDao;
 
 /**
  * Class representing a source of data
  * @author Guillaume Prevost
- * @since 17th Dec. 2013
+ * @since 5th May. 2014
  */
 @Entity
-@DiscriminatorValue(value="Cmar")
-public class CmarDataSource extends DataSource implements Serializable {
+@DiscriminatorValue(value="FutureTrend")
+public class FutureTrendDataSource extends DataSource implements Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;
 	
 	@Transient
-	private CmarDataDao cmarDataDao;
+	private FutureTrendDataDao futureTrendDataDao;
 	
 	/**
 	 * Default constructor of data source
 	 */
-	public CmarDataSource() {
+	public FutureTrendDataSource() {
 		super();
 	}
 	
@@ -45,14 +45,14 @@ public class CmarDataSource extends DataSource implements Serializable {
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 */
-	public CmarDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
+	public FutureTrendDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
 		super(name, displayName, helpText, parameters, seaports);
 	}
 	
 	/**
 	 * Copy constructor of data source
 	 */
-	public CmarDataSource(DataSource dataSource) {
+	public FutureTrendDataSource(DataSource dataSource) {
 		super(dataSource);
 	}
 
@@ -65,42 +65,37 @@ public class CmarDataSource extends DataSource implements Serializable {
 	 * @param seaports: the list of seaports for which this data source is available
 	 * @param displayTypes: the display types available for this data source
 	 */
-	public CmarDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
+	public FutureTrendDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
 		super(name, displayName, helpText, parameters, seaports, displayTypes);
 	}
 	
 	@Override
 	public void init(Object obj) {
-		CmarDataDao dataDao = (CmarDataDao)obj;
-		this.cmarDataDao = (CmarDataDao) dataDao;
+		FutureTrendDataDao dataDao = (FutureTrendDataDao)obj;
+		this.futureTrendDataDao = (FutureTrendDataDao) dataDao;
 	}
 	
 	@Override
 	public void flush() {
-		this.cmarDataDao = null;
+		this.futureTrendDataDao = null;
 	}
 	
 	/**
 	 * Retrieves the data according to the given parameters
 	 */
 	@Override
-	public List<CmarData> getData(DataElement dataElement) {
+	public List<FutureTrendData> getData(DataElement dataElement) {
 		
-		String variable = "";
-		String emissionScenario = "";
-		int year = 0;
+		Region region = dataElement.getReport().getSeaport().getRegion();
+		
+		String variableName = "";
 		for (DataSourceParameterOption opt : dataElement.getSelectedOptions())
 		{
-			if (opt.getParameter().getName().equals("Emission Scenario"))
-				emissionScenario = opt.getValue();
 			if (opt.getParameter().getName().equals("Variable"))
-				variable = opt.getValue();
-			if (opt.getParameter().getName().equals("Year"))
-				year = Integer.parseInt(opt.getValue());
+				variableName = opt.getValue();
 		}
-		String regionName = dataElement.getReport().getSeaport().getRegion().getName();
 
-		List<CmarData> data = this.cmarDataDao.find(regionName, emissionScenario, year, variable);
+		List<FutureTrendData> data = this.futureTrendDataDao.find(region, variableName);
 				
 		return data;
 	}

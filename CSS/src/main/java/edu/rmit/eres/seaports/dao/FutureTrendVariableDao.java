@@ -7,8 +7,6 @@
  */
 package edu.rmit.eres.seaports.dao;
 
-//import helpers.EngineeringModelHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,37 +21,37 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.rmit.eres.seaports.model.Variable;
 
 /**
- * Data Access Object for the CSIRO variable
+ * Data Access Object for the Future Trend Variables
  * @author Guillaume Prevost
  */
 @Repository
-public class CsiroVariableDao {
+public class FutureTrendVariableDao {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	/**
-	 * The name of the table in the database where the Climate Variables are stored
+	 * The name of the table in the database where the Future Trends Variables are stored
 	 */
-	public final static String TABLE_NAME = "CsiroVariable";
+	public final static String TABLE_NAME = "FutureTrendVariable";
 	
 	/**
-	 * Retrieve the climate variable in the database associated to a unique ID
-	 * @param id: the unique ID of the required climate variable
-	 * @return the climate variable associated to the given unique ID
+	 * Retrieve the variable in the database associated to a unique ID
+	 * @param id: the unique ID of the required variable
+	 * @return the trend variable associated to the given unique ID
 	 * @throws NoResultException if the search didn't return any result
 	 */
 	public Variable find(Integer id) {
-		Variable climateVariable = entityManager.find(Variable.class, id);
-		if (climateVariable == null)
+		Variable variable = entityManager.find(Variable.class, id);
+		if (variable == null)
 			throw new NoResultException(ERR_NO_RESULT);
-		return climateVariable;
+		return variable;
 	}
 	
 	/**
-	 * Retrieve the (unique) Climate variable matching a name
+	 * Retrieve the (unique) variable matching a name
 	 * @param variableName: the name of the variable to match
-	 * @return the Climate variable from the database
+	 * @return the future variable from the database
 	 * @throws NoResultException if no variable matches the given name 
 	 */
 	@Transactional
@@ -86,23 +84,6 @@ public class CsiroVariableDao {
 		return results;
 	}
 	
-	/**
-	 * Returns a list of all the different engineering model variables (static listing, not actually querying the database)
-	 * @return the list of all the different engineering model variables in the Database
-	 */
-	/*public List<Variable> getEngineeringModelVariables() {
-		List<Variable> results = new ArrayList<Variable>();
-		
-		List<Variable> allVars = getAll();
-		for (Variable var : allVars) {
-			if (EngineeringModelHelper.ENGINEERING_MODEL_VARIABLES.containsKey("Chloride|" + var.getName())
-				|| EngineeringModelHelper.ENGINEERING_MODEL_VARIABLES.containsKey("Carbonation|" + var.getName()))
-				results.add(var);
-		}
-		
-		return results;
-	}*/
-	
 	// Information, success, warning and error messages
-	public static final String ERR_NO_RESULT = "No climate variable found corresponding to the specified name";
+	public static final String ERR_NO_RESULT = "No future trend variable found corresponding to the specified name";
 }

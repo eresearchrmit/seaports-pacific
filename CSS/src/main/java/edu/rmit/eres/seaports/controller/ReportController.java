@@ -77,15 +77,12 @@ public class ReportController {
 	
 	@Autowired
 	private ElementDao elementDao;
-
-	@Autowired
-	private CsiroDataDao csiroDataDao;
-	
-	@Autowired
-	private CmarDataDao cmarDataDao;
 	
 	@Autowired
 	private ObservedTrendDataDao observedTrendDataDao;
+	
+	@Autowired
+	private FutureTrendDataDao futureTrendDataDao;
 	
 	@Autowired
 	private ExtremeDataDao extremeDataDao;
@@ -746,14 +743,12 @@ public class ReportController {
 			    DataSource ds = dataSourceClass.cast(constructor.newInstance(new Object[] { de.getDataSource() }));
 			    
 				// Retrieves the data and set the field
-			   if (ds instanceof CsiroDataSource)
-					ds.init(csiroDataDao);
-			   if (ds instanceof CmarDataSource)
-					ds.init(cmarDataDao);
 			   if (ds instanceof ObservedTrendDataSource)
 					ds.init(observedTrendDataDao);
 			   if (ds instanceof ObservedExtremeDataSource || ds instanceof FutureExtremeDataSource)
 					ds.init(extremeDataDao);
+			   if (ds instanceof FutureTrendDataSource)
+					ds.init(futureTrendDataDao);
 			   try {
 				   List<?> data = ds.getData(de);
 				   de.setData(data);

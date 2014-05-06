@@ -47,7 +47,7 @@ public abstract class Variable implements Serializable {
 	/**
 	 * The description of the variable
 	 */
-	@Column
+	@Column(columnDefinition = "TEXT")
 	protected String description;
 	
 	/**

@@ -148,7 +148,7 @@ public class ObservedTrendDataSourceLoader {
 		//Region r2 = (Region)(session.get(Region.class, 2)); // PNG
 		
 		// Climate Variables
-		ObservedTrendVariable minTe = new ObservedTrendVariable("Minimum Temperatures", "MinTemp", "Trend in minimum temperaturs", "&#8451;", "&#8451;");
+		ObservedTrendVariable minTe = new ObservedTrendVariable("Minimum Temperatures", "MinTemp", "Trend in minimum temperatures", "&#8451;", "&#8451;");
 		ObservedTrendVariable maxTe = new ObservedTrendVariable("Maximum Temperatures", "MaxTemp", "Trend in maximum temperatures", "&#8451;", "&#8451;");
 		ObservedTrendVariable rf = new ObservedTrendVariable("Rainfall", "RF", "Trend in rainfall", "mm/y", "%");
 		ObservedTrendVariable slr = new ObservedTrendVariable("Sea Level", "SLR", "Short-term changes in sea level", "%");
