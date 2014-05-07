@@ -31,7 +31,7 @@
                 </div>
                 <div class="clear"></div>
                 <div class="pitch">
-					<h3 class="darkblue">Facilitating the identification and collection of relevant data so that Australian ports can become Climate Smart Seaports. </h3>
+					<h3 class="darkblue">Facilitating the identification and collection of relevant data so that Southern Pacific ports can become Climate Smart Seaports. </h3>
 				</div>
             </div>
 	        <div class="clear"></div>
