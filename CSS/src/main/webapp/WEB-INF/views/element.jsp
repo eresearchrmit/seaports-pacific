@@ -20,8 +20,7 @@
 		<c:choose>
 			<c:when test="${not empty element.data}">
 				<c:set var="element" value="${element}" scope="request" />
-				
-				<c:set var="formattedDataSourceName" value="${fn:replace(element.dataSource.displayName, ' ', '')}" />
+				<c:set var="formattedDataSourceName" value="${fn:toUpperCase(fn:substring(element.dataSource.name, 0, 1))}${fn:substring(element.dataSource.name, 1,fn:length(element.dataSource.name))}" />
 				<c:catch var="e">
 				    <jsp:include page="dataElements/${formattedDataSourceName}/${element.displayType}.jsp" />
 				</c:catch>
