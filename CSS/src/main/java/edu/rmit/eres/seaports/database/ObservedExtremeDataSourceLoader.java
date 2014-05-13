@@ -91,7 +91,7 @@ public class ObservedExtremeDataSourceLoader {
 		seaports.add((Seaport)(session.get(Seaport.class, "FJLEV")));
 		seaports.add((Seaport)(session.get(Seaport.class, "FJWAI")));
 		
-		seaports.add((Seaport)(session.get(Seaport.class, "PGGUR")));
+		/*eaports.add((Seaport)(session.get(Seaport.class, "PGGUR")));
 		seaports.add((Seaport)(session.get(Seaport.class, "PGATP")));
 		seaports.add((Seaport)(session.get(Seaport.class, "PGBUA")));
 		seaports.add((Seaport)(session.get(Seaport.class, "PGDAU")));
@@ -105,7 +105,7 @@ public class ObservedExtremeDataSourceLoader {
 		seaports.add((Seaport)(session.get(Seaport.class, "PGPOM")));
 		seaports.add((Seaport)(session.get(Seaport.class, "PGRAB")));
 		seaports.add((Seaport)(session.get(Seaport.class, "PGVAI")));
-		seaports.add((Seaport)(session.get(Seaport.class, "PGWWK")));
+		seaports.add((Seaport)(session.get(Seaport.class, "PGWWK")));*/
 		
 		dsExtreme.setSeaports(seaports);
 		

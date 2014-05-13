@@ -145,7 +145,7 @@ public class ObservedTrendDataSourceLoader {
 	{
 		// Regions
 		Region r1 = (Region)(session.get(Region.class, 1)); // Fiji
-		//Region r2 = (Region)(session.get(Region.class, 2)); // PNG
+		Region r2 = (Region)(session.get(Region.class, 2)); // PNG
 		
 		// Climate Variables
 		ObservedTrendVariable minTe = new ObservedTrendVariable("Minimum Temperatures", "MinTemp", "Trend in minimum temperatures", "&#8451;", "&#8451;");
@@ -161,6 +161,7 @@ public class ObservedTrendDataSourceLoader {
 		Date creationDate = null;
 		Date periodStartDate = null;
 		Date periodStartDate2 = null;
+		Date periodStartDate3 = null;
 		Date periodEndDate = null;
 		try {
 			creationDate = dateFormatter.parse("2011-01-01");
@@ -178,11 +179,17 @@ public class ObservedTrendDataSourceLoader {
 			periodStartDate2 = new Date();
 		}
 		try {
+			periodStartDate3 = dateFormatter.parse("1950-01-01");
+		} catch (ParseException e) {
+			periodStartDate3 = new Date();
+		}
+		try {
 			periodEndDate = dateFormatter.parse("2010-01-01");
 		} catch (ParseException e) {
 			periodEndDate = new Date();
 		}
 		
+		// Fiji
 		String sourceName = "Fiji Meteorological Services";
 		session.save(new ObservedTrendData(creationDate, r1, periodStartDate, periodEndDate, minTe, SEASON_ANNUAL, 0.6, null, sourceName));
 		session.save(new ObservedTrendData(creationDate, r1, periodStartDate, periodEndDate, minTe, SEASON_WARM, 0.7, null, sourceName));
@@ -197,8 +204,11 @@ public class ObservedTrendDataSourceLoader {
 		session.save(new ObservedTrendData(creationDate, r1, periodStartDate, periodEndDate, rf, SEASON_COOL, 0.76, 0.11, sourceName));
 		
 		String sourceName2 = "Climate Change in the Pacific: Scientific Assessment and New Research: Vol 2 Country Reports, Ch 5 Fiji Islands";
-		session.save(new ObservedTrendData(creationDate, r1, periodStartDate, periodStartDate2, slr, SEASON_ANNUAL, 0.6, null, sourceName2));
-		session.save(new ObservedTrendData(creationDate, r1, periodStartDate, periodStartDate2, slr, SEASON_WARM, 0.6, null, sourceName2));
-		session.save(new ObservedTrendData(creationDate, r1, periodStartDate, periodStartDate2, slr, SEASON_COOL, 0.6, null, sourceName2));
+		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_ANNUAL, 0.6, null, sourceName2));
+		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_WARM, 0.6, null, sourceName2));
+		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_COOL, 0.6, null, sourceName2));
+
+		// PNG
+		session.save(new ObservedTrendData(creationDate, r1, periodStartDate3, periodEndDate, slr, SEASON_ANNUAL, 0.0, null, sourceName2));
 	}
 }

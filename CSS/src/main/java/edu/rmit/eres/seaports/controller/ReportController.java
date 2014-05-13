@@ -725,13 +725,6 @@ public class ReportController {
 		else if (element.getClass().equals(DataElement.class)) {
 			DataElement de = ((DataElement)element);
 			
-			/*if (de.getDataSource() instanceof CsiroDataSource)
-			{
-				CsiroDataSource csiroDataSource = (CsiroDataSource)de.getDataSource();
-				csiroDataSource.init(csiroDataDao);
-				de.setData(csiroDataSource.getData(de));
-				de.getDataSource().flush();
-			}*/
 			try {
 				// Instantiate the data source of the sub-type specified by the data source name
 				String className = "edu.rmit.eres.seaports.model." + WordUtils.capitalize(de.getDataSource().getName()) + "DataSource";
@@ -739,25 +732,29 @@ public class ReportController {
 				constructor.setAccessible(true);
 				
 				// Cast to the correct specific data source type
-			    Class<? extends DataSource> dataSourceClass = Class.forName(className).asSubclass(DataSource.class);
+				Class<? extends DataSource> dataSourceClass = Class.forName(className).asSubclass(DataSource.class);
 			    DataSource ds = dataSourceClass.cast(constructor.newInstance(new Object[] { de.getDataSource() }));
 			    
-				// Retrieves the data and set the field
-			   if (ds instanceof ObservedTrendDataSource)
-					ds.init(observedTrendDataDao);
-			   if (ds instanceof ObservedExtremeDataSource || ds instanceof FutureExtremeDataSource)
-					ds.init(extremeDataDao);
-			   if (ds instanceof FutureTrendDataSource)
-					ds.init(futureTrendDataDao);
-			   try {
-				   List<?> data = ds.getData(de);
-				   de.setData(data);
-			   }
-			   catch (NoResultException e) {
-				  e.printStackTrace();
-			   }
-			   ds.flush();
-			   return de;
+			    // Initiate the data source with an Autowired DAO if needed
+			    if (ds instanceof ObservedTrendDataSource)
+			    	ds.init(observedTrendDataDao);
+			    if (ds instanceof ObservedExtremeDataSource || ds instanceof FutureExtremeDataSource)
+			    	ds.init(extremeDataDao);
+			    if (ds instanceof FutureTrendDataSource)
+			    	ds.init(futureTrendDataDao);
+			    
+			    // Retrieves the data and set the element's data field
+			    try {
+			    	List<?> data = ds.getData(de);
+			    	de.setData(data);
+			    }
+			    catch (NoResultException e) {
+			    	e.printStackTrace();
+			    }
+			    
+			    // Flushes the datasource (dispose of resources not needed such as DAOs)
+			    ds.flush();
+			    return de;
 			}
 			catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException 
 					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
