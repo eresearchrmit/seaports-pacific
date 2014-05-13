@@ -8,11 +8,15 @@
 package edu.rmit.eres.seaports.controller;
 
 import java.security.MessageDigest;
+import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +38,9 @@ public class UserController {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private ReportPublicationDao reportPublicationDao;
 
 	@ModelAttribute("user")
 	@RequestMapping(value = {"/login", "/register"}, method = RequestMethod.GET)
@@ -105,19 +112,22 @@ public class UserController {
 		try {
 			model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
 		}
-		catch (Exception e) {
+		catch (AccessDeniedException | IllegalArgumentException | NoResultException e) {
+			// If no user is logged in, it's not a problem since this is a public page
 		}
 		
 		try {
 			// Retrieve the required user's profile
-			User user = userDao.loadUserByName(username);
-			
+			User user = userDao.find(username);
 			model.addAttribute("userProfile", user);
+			
+			// Retrieve the list of reports published by the user
+			List<ReportPublication> publishedReports = reportPublicationDao.getReportPublications(user);
+			model.addAttribute("publishedReports", publishedReports);
 		}
-		catch (Exception e) {
+		catch (NoResultException e) {
 			model.addAttribute("errorMessage", e.getMessage());
 		}
-		
 		
 		return new ModelAndView("profile");
 	}

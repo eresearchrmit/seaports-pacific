@@ -25,5 +25,5 @@
 	</div>
 </sec:authorize>
 <sec:authorize access="!isAuthenticated()">
-	<a href="/auth/workboard/my-workboard">Log in</a>
+	<a href="/auth/report/my-reports">Log in</a>
 </sec:authorize>

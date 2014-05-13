@@ -147,4 +147,12 @@ function setupTooltips() {
         'color': 'white',
         'border': '2px solid white'
     });
+	
+	new $.Zebra_Tooltips($('.helpTooltipCentered'), {
+        'position': 'center',
+        'max_width': 500,
+        'background_color': '#0561B4',
+        'color': 'white',
+        'border': '2px solid white'
+    });
 }

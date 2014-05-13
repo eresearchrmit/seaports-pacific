@@ -12,7 +12,7 @@
 <%@ page import="org.apache.commons.codec.binary.*"%>
 <%@ page import= "org.springframework.web.servlet.tags.*" %>
 <%@ page import="org.apache.commons.lang.*" %>
-<%@ page language="java" import="edu.rmit.eres.seaports.model.UserStory" %>
+<%@ page language="java" import="edu.rmit.eres.seaports.model.Report" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.User" %>
 <%@ page language="java" import="edu.rmit.eres.seaports.model.DataElement" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
@@ -32,8 +32,7 @@
 				<tr>
 					<th>Name</th>
 					<th>E-mail</th>
-					<th>View Workboard</th>
-					<th>View Stories</th>
+					<th>View Reports</th>
 					<th>Enable / Disable account</th>
 				</tr>
 			</thead>
@@ -42,8 +41,7 @@
 				<tr>
 					<td><a href="/public/user/${user.username}">${user.firstname} ${user.lastname} (${user.username})</a></td>
 					<td><a href="mailto:${user.email}?Subject=Climate Smart Seaports" title="Send an e-mail to this user" target="_blank">${user.email}</a></td>
-					<td class="center"><a href="/auth/workboard?user=${user.username}" title="View the Workboard of this user"><img src="<c:url value="/resources/img/icons/application_side_boxes.png" />" alt="View" /></a></td>
-					<td class="center"><a href="/auth/userstory/list?user=${user.username}" title="View the Stories of this user"><img src="<c:url value="/resources/img/icons/application_view_list.png" />" alt="View" /></a></td>
+					<td class="center"><a href="/auth/report/list?user=${user.username}" title="View the Reports of this user"><img src="<c:url value="/resources/img/icons/application_view_list.png" />" alt="View" /></a></td>
 					<c:choose>
 						<c:when test="${user.roles != 'ROLE_ADMIN' && user.enabled}">
 							<td class="center"><a href="/admin/users/list/disable?user=${user.username}" class="lnkDisableUser" title="Click to disable account"><img src="<c:url value="/resources/img/icons/user.png" />" alt="Enabled" /> Enabled</a></td>

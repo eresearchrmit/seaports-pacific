@@ -15,7 +15,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.model.*;
+import edu.rmit.eres.seaports.model.WeatherEvent;
 
 /**
  * Data Access Object for the weather events (vulnerabilty assessment) 
@@ -46,6 +46,28 @@ public class WeatherEventDao {
 	}
 	
 	/**
+	 * Retrieve a region in the Database by its name. It isn't supposed to be 2 regions with the same name, but if it happened to be the case, only one region would be returned.
+	 * @param name: the name of the region to retrieve
+	 * @return the region matching the given name
+	 * @throws NoResultException: if no region with the given name is found in the database
+	 */
+	@Transactional
+	public WeatherEvent findByElem(int elemId) throws NoResultException {
+		if (elemId <= 0)
+			throw new IllegalArgumentException();
+		
+		try {
+			Query query = entityManager.createQuery("SELECT e FROM " + TABLE_NAME + " e WHERE e.name = :elemId");
+			query.setParameter("elemId", elemId);
+			WeatherEvent weatherEvent = (WeatherEvent)(query.getSingleResult());
+			return weatherEvent;
+		}
+		catch (Exception e) {
+			throw new NoResultException(ERR_NO_RESULT);
+		}
+	}
+	
+	/**
 	 * Saves a given Weather Event into the database, by adding it or updating it
 	 * @param weatherEvent: the Weather Event to save in the database
 	 * @return the saved weather event
@@ -59,7 +81,7 @@ public class WeatherEventDao {
 		else {
 			entityManager.merge(weatherEvent);
 			return weatherEvent;
-		}		
+		}
 	}
 	
 	/**

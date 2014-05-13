@@ -56,13 +56,13 @@ public class UserDao {
 	 * @return the user associated to the given login
 	 * @throws NoResultException if the search didn't return any result
 	 */
-	public User loadUserByName(String username) throws NoResultException {
+	/*public User loadUserByName(String username) throws NoResultException {
 		User user = entityManager.find(User.class, username);
 		if (user == null)
 			throw new NoResultException(ERR_NO_SUCH_USER);
 		
 		return user;
-	}
+	}*/
 	
 	/**
 	 * Retrieve the list of all the users in the Database

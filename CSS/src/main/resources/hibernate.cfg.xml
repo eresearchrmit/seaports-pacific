@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/seaports</property>
+        <property name="connection.username">gprevost</property>
+        <property name="connection.password">P@ssw0rd</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">2</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+        <!-- Enable Hibernate's current session context -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+		
+		<!-- List of the model classes to be used for database mapping -->
+        <mapping class="edu.rmit.eres.seaports.model.User" />
+		<mapping class="edu.rmit.eres.seaports.model.Report" />
+		<mapping class="edu.rmit.eres.seaports.model.ReportPublication" />
+		<mapping class="edu.rmit.eres.seaports.model.Element" />
+		<mapping class="edu.rmit.eres.seaports.model.DataElement" />
+		<mapping class="edu.rmit.eres.seaports.model.InputElement" />
+		<mapping class="edu.rmit.eres.seaports.model.ElementCategory" />
+		<mapping class="edu.rmit.eres.seaports.model.DataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.DataSourceParameter" />
+		<mapping class="edu.rmit.eres.seaports.model.DataSourceParameterOption" />
+		<mapping class="edu.rmit.eres.seaports.model.DisplayType" />
+		
+		<!--<mapping class="edu.rmit.eres.seaports.model.CsiroDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.CmarDataSource" />-->
+		<mapping class="edu.rmit.eres.seaports.model.ObservedTrendDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.ObservedExtremeDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.FutureTrendDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.FutureExtremeDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.VulnerabilityDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.CurrentClimateRiskDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.FutureClimateRiskDataSource" />
+		
+		<mapping class="edu.rmit.eres.seaports.model.Region" />
+		<mapping class="edu.rmit.eres.seaports.model.Seaport" />
+		<mapping class="edu.rmit.eres.seaports.model.ClimateEmissionScenario" />
+		
+		<!--<mapping class="edu.rmit.eres.seaports.model.ClimateModel" />
+		<mapping class="edu.rmit.eres.seaports.model.CsiroVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.CsiroData" />
+		<mapping class="edu.rmit.eres.seaports.model.CmarData" />-->
+		
+		<mapping class="edu.rmit.eres.seaports.model.ObservedTrendVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.ObservedTrendData" />
+		<mapping class="edu.rmit.eres.seaports.model.FutureTrendVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.FutureTrendData" />
+		<mapping class="edu.rmit.eres.seaports.model.ExtremeVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.ExtremeData" />
+		
+		<mapping class="edu.rmit.eres.seaports.model.WeatherEvent" />
+		<mapping class="edu.rmit.eres.seaports.model.CurrentClimateRisk" />
+		<mapping class="edu.rmit.eres.seaports.model.FutureClimateRisk" />
+    </session-factory>
+</hibernate-configuration>

@@ -12,27 +12,27 @@
 	<li class="ic-home${requestScope['javax.servlet.forward.servlet_path'] == '/' ? ' current' : ''}"><a href="/"><span>Home</span></a> </li>
 	
 	<sec:authorize access="isAuthenticated()">
-	<li class="ic-workboard
+	<!--<li class="ic-workboard
 		${requestScope['javax.servlet.forward.servlet_path'] == '/auth/workboard' ? ' current' : ''}">
 		<a href="/auth/workboard?user=${user.username}"><span>My Workboard</span></a>
-	</li>
+	</li>-->
 	
 	<li class="ic-story
 		${requestScope['javax.servlet.forward.servlet_path'] == '/auth/userstory/list' 
 		|| requestScope['javax.servlet.forward.servlet_path'] == '/auth/userstory' 
 		|| requestScope['javax.servlet.forward.servlet_path'] == '/auth/userstory/view' ? ' current' : ''}">
-		<a href="/auth/userstory/list?user=${user.username}"><span>My Reports</span></a>
+		<a href="/auth/report/list?user=${user.username}"><span>My Reports</span></a>
 	</li>
 	</sec:authorize>
 	
 	<li class="ic-browse${requestScope['javax.servlet.forward.servlet_path'] == '/public/reports/list' 
 		|| requestScope['javax.servlet.forward.servlet_path'] == '/public/reports/view' ? ' current' : ''}">
-		<a href="/public/reports/list"><span>Published Reports</span></a>
+		<a href="/public/published-report/list"><span>Published Reports</span></a>
 	</li>
 	
 	<li class="ic-info
-		${requestScope['javax.servlet.forward.servlet_path'] == '/public/guidelines' ? ' current' : ''}">
-		<a href="/public/guidelines" target="_blank"><span>Guidelines</span></a>
+		${requestScope['javax.servlet.forward.servlet_path'] == '/public/help' ? ' current' : ''}">
+		<a href="/public/help"><span>Help</span></a>
 	</li>
 	
 	<sec:authorize access="hasRole('ROLE_ADMIN')">

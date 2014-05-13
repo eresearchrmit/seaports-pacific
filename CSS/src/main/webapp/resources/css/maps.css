@@ -1,0 +1,18 @@
+.cmarMap {
+	height:300px;
+	width: 600px;
+	margin-bottom: 10px;
+}
+
+ .mapLabels {
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   min-width: 50px;
+   white-space: nowrap;
+   z-index: 50;
+ }
+ 
+ img.map-pic {
+ 	display: none;
+ }

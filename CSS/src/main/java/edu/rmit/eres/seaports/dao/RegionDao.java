@@ -56,14 +56,16 @@ public class RegionDao {
 	 */
 	@Transactional
 	public Region find(String name) throws NoResultException {
+		if (name == null)
+			throw new IllegalArgumentException();
+		
 		try {
 			Query query = entityManager.createQuery("SELECT r FROM " + TABLE_NAME + " r WHERE r.name = :name");
 			query.setParameter("name", name);
 			Region region = (Region)(query.getSingleResult());
 			return region;
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			throw new NoResultException(ERR_NO_RESULT);
 		}
 	}

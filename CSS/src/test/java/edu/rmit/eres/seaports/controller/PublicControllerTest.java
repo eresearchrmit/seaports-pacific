@@ -7,6 +7,7 @@
  */
 package edu.rmit.eres.seaports.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
@@ -21,11 +22,13 @@ import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.rmit.eres.seaports.controller.PublicController;
-import edu.rmit.eres.seaports.dao.UserStoryDao;
-import edu.rmit.eres.seaports.model.UserStory;
+import edu.rmit.eres.seaports.dao.ReportDao;
+import edu.rmit.eres.seaports.dao.ReportPublicationDao;
+import edu.rmit.eres.seaports.model.Report;
+import edu.rmit.eres.seaports.model.ReportPublication;
 
 /**
- * 
+ * This test class holds the unit tests regarding the publicly available pages and actions
  * @author Guillaume Prevost
  */
 @ContextConfiguration("/test-context.xml")
@@ -37,7 +40,10 @@ public class PublicControllerTest {
 	private PublicController publicController;
 	
 	@Autowired
-	private UserStoryDao userStoryDao;
+	private ReportDao reportDao;
+	
+	@Autowired
+	ReportPublicationDao reportPublicationDao;
 	
 	/**
 	 * Method executed before starting the unit tests to prepared the data
@@ -50,24 +56,29 @@ public class PublicControllerTest {
 	 * Listing should succeed even though no login is given
 	 */
 	@Test
-	public void getPublishedUserStoriesListSuccessTest() {
+	public void getPublishedReportListSuccessTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		ModelAndView result = publicController.getPublishedUserStoriesList(model);
+		ModelAndView result = publicController.getPublishedReportList(model);
 		
 		Assert.assertNotNull(result);
 		Assert.assertTrue(result.hasView());
-		Assert.assertEquals("userstoryPublicList", result.getViewName());
+		Assert.assertEquals("publishedReportList", result.getViewName());
 		Assert.assertNull(model.get("errorMessage"));
 		Assert.assertEquals("Published Reports", model.get("listingTitle"));
 		
 		// Check that the result is a list of User Stories and that they are all published
 		@SuppressWarnings("unchecked")
-		List<Object> resUserStoriesList = (List<Object>)(result.getModelMap().get("userStoriesList"));
-		Assert.assertEquals(1, resUserStoriesList.size()); // There should be 1 published story in the test database
-		for (Object obj : resUserStoriesList) {
-			if (obj instanceof UserStory) {
-				UserStory us = (UserStory)obj;
-				Assert.assertEquals("published", us.getMode());
+		List<Object> resPublishedReports = (List<Object>)(result.getModelMap().get("publishedReports"));
+		Assert.assertEquals(1, resPublishedReports.size()); // There should be 1 published report in the test database
+		for (Object obj : resPublishedReports) {
+			if (obj instanceof ReportPublication) {
+				ReportPublication publishedReport = (ReportPublication)obj;
+				try {
+					Report report = publishedReport.getReport();
+					Assert.assertEquals(4, report.getId()); // The ID of the referenced report in the test DB is 4
+				} catch (ClassNotFoundException | IOException e) {
+					Assert.fail();
+				}
 			}
 			else
 				Assert.fail();
@@ -78,21 +89,20 @@ public class PublicControllerTest {
 	 * Listing should find no published story
 	 */
 	@Test
-	public void getPublishedUserStoriesListNoresultTest() {
+	@Transactional
+	public void getPublishedReportListNoresultTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
 		
-		UserStory userStory = userStoryDao.find(4); // Published user story
-		userStory.setMode("passive");
-		userStoryDao.save(userStory);
+		ReportPublication publishedReport = reportPublicationDao.find(1); // Published report
+		reportPublicationDao.delete(publishedReport);
 		
-		ModelAndView result = publicController.getPublishedUserStoriesList(model);
+		ModelAndView result = publicController.getPublishedReportList(model);
 		
-		userStory.setMode("published");
-		userStoryDao.save(userStory);
+		reportPublicationDao.save(publishedReport);
 		
 		Assert.assertNotNull(result);
 		Assert.assertTrue(result.hasView());
-		Assert.assertEquals("userstoryPublicList", result.getViewName());
+		Assert.assertEquals("publishedReportList", result.getViewName());
 		
 		Assert.assertEquals("Published Reports", model.get("listingTitle"));
 		Assert.assertNull(model.get("errorMessage"));
@@ -101,66 +111,44 @@ public class PublicControllerTest {
 	}
 	
 	/**
-	 * getUserStoryPublicView should fail because the requested User Story ID doesn't exist
+	 * getPublishedReportView should fail because the requested User Story ID doesn't exist
 	 */
 	@Test
-	public void getUserStoryPublicViewNoResultTest() {
+	public void getPublishedReportViewNoResultTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		ModelAndView result = publicController.getUserStoryPublicView(9999, model); // Non-existing ID
+		ModelAndView result = publicController.viewPublishedReport(9999, model); // Non-existing ID
 		
 		Assert.assertNotNull(result);
 		Assert.assertTrue(result.hasView());
-		Assert.assertEquals("userstoryPublicView", result.getViewName());
+		Assert.assertEquals("reportView", result.getViewName());
 		
 		Assert.assertNotNull(model.get("errorMessage"));
-		Assert.assertEquals(UserStoryDao.ERR_NO_SUCH_USERSTORY, model.get("errorMessage"));
+		Assert.assertEquals(ReportPublicationDao.ERR_NO_SUCH_PUBLICATION, model.get("errorMessage"));
 		
 		Assert.assertNotNull(model.get("publicView"));
 		Assert.assertEquals(true, model.get("publicView"));
 		
-		Assert.assertNull(model.get("userstory"));
+		Assert.assertNull(model.get("report"));
 	}
-	
+
 	/**
-	 * getUserStoryPublicView should fail because the requested User Story is not published
+	 * getPublishedReportViewSuccessTest should succeed
 	 */
 	@Test
-	public void getUserStoryPublicViewNotPublishedTest() {
+	public void getPublishedReportViewSuccessTest() {
 		ExtendedModelMap model = new ExtendedModelMap();
-		ModelAndView result = publicController.getUserStoryPublicView(1, model); // The User Story exists but isn't published
-		
-		Assert.assertNotNull(result);
-		Assert.assertTrue(result.hasView());
-		Assert.assertEquals("userstoryPublicView", result.getViewName());
-		
-		Assert.assertNotNull(model.get("errorMessage"));
-		Assert.assertEquals(PublicController.ERR_REPORT_NOT_PUBLISHED, model.get("errorMessage"));
-		
-		Assert.assertNotNull(model.get("publicView"));
-		Assert.assertEquals(true, model.get("publicView"));
-		
-		Assert.assertNull(model.get("userstory"));
-	}
-	
-	/**
-	 * getUserStoryPublicViewNotPublishedTest should succeed
-	 */
-	@Test
-	public void getUserStoryPublicViewSuccessTest() {
-		ExtendedModelMap model = new ExtendedModelMap();
-		ModelAndView result = publicController.getUserStoryPublicView(4, model);
+		ModelAndView result = publicController.viewPublishedReport(1, model);
 		
 		Assert.assertNotNull(result);
 		Assert.assertTrue(result.hasView());
 		Assert.assertNull(model.get("errorMessage"));
 		
-		Assert.assertEquals("userstoryPublicView", result.getViewName());
+		Assert.assertEquals("reportView", result.getViewName());
 		Assert.assertNotNull(model.get("publicView"));
 		Assert.assertEquals(true, model.get("publicView"));
 		
-		Assert.assertNotNull(model.get("userstory"));
-		UserStory us = (UserStory)(model.get("userstory"));
-		Assert.assertEquals(4, us.getId()); // The User Story with ID 4 should be published
-		Assert.assertEquals("published", us.getMode());
+		Assert.assertNotNull(result.getModelMap().get("report"));
+		Report report = (Report)(result.getModelMap().get("report"));
+		Assert.assertEquals(4, report.getId()); // The report with ID 4 should be published
 	}
 }

@@ -16,8 +16,10 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/nav.css" />"  media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/tabs.css" />"  media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.css" />"  media="screen" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/maps.css" />"  media="screen" />
 <!--[if IE 6]><link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ie6.css" />" media="screen" /><![endif]-->
 <!--[if IE 7]><link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ie.css" />" media="screen" /><![endif]-->
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/lightbox/lightbox.css" />" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/zebra_tooltips.css" />" />
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/print.css" />" />
@@ -30,8 +32,12 @@
 <script type="text/javascript" src="<c:url value="/resources/js/jquery.zebra_tooltips.min.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/highcharts/highcharts.js" />" ></script>
 <script type="text/javascript" src="<c:url value="/resources/js/highcharts/highcharts-more.js" />" ></script>
+<script type="text/javascript" src="<c:url value="/resources/js/lightbox/lightbox.js" />"></script>
 
-<script language="javascript" type="text/javascript" src="<c:url value="/resources/js/setup.js" />"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/MarkerWithLabel.js" />"></script>
+
+<script type="text/javascript" src="<c:url value="/resources/js/setup.js" />"></script>
 
 <script type="text/javascript">
    $(document).ready(function () {

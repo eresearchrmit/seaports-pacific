@@ -68,7 +68,7 @@ public class UserLoginService implements UserDetailsService
     	User user;
     	if (username != null && !username.equals("")) {	
 	    	try {
-	    		user = userDao.loadUserByName(username);
+	    		user = userDao.find(username);
 	    		return user;
 	        }
 	        catch (Exception e) {

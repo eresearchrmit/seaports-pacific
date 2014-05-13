@@ -7,275 +7,178 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import edu.rmit.eres.seaports.model.UserStory;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
- * Class representing a data element of a user story
+ * Class representing a data element of a report
  * @author Guillaume Prevost
  * @since 11th Jan. 2013
  */
 @Entity
-@Table(name = "DataElement")
-@DiscriminatorColumn(name = "type")
-public class DataElement {
-
-	private static final long serialVersionUID = -1308795024262635690L;
-    
-	/**
-	 * The unique ID of the Data Element
-	 */
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+public class DataElement extends Element implements Serializable {
 
 	/**
-	 * The date when this data element has been created
+	 * 
 	 */
-	private Date creationDate;
+	private static final long serialVersionUID = -9021601215200076194L;
+
+	/**
+	 * The source providing data for this data element
+	 */
+	@ManyToOne
+	@JoinColumn(name="data_source_id")
+	protected DataSource dataSource;
 	
+	@Transient
+	protected List<?> data;
+		
 	/**
-	 * The name of the data element
+	 * The selected options for the data source of this element
 	 */
-	@Column
-    private String name;
-
-	/**
-	 * Whether the data element is included or not in the publication of its parent User Story.
-	 */
-    @Column
-    private boolean included;
+    @ManyToMany
+    @JoinTable(name="data_element_option", joinColumns={@JoinColumn(name="data_element_id")}, inverseJoinColumns={@JoinColumn(name="data_source_parameter_option_id")})
+	@LazyCollection(value=LazyCollectionOption.FALSE)
+	private List<DataSourceParameterOption> selectedOptions;
 	
-	/**
-	 * The position of the data element in the user story it belongs to
-	 */
-    @Column
-    private int position;
-    
     /**
-     * The way the data element should be displayed
-     */
-	@Enumerated(EnumType.STRING)
-	private DisplayType displayType;
-    
-    /**
-     * The user story to which this data element belongs
+     * The selected display type for this data element
      */
 	@ManyToOne
-	@JoinColumn(name="user_story_id")
-    private UserStory userStory;
-
+	@JoinColumn(name="display_type_id")
+	protected DisplayType displayType;
+	
+	@ElementCollection
+	@CollectionTable(name="TextInput", joinColumns=@JoinColumn(name="data_element_id"))
+	@Column(name="inputs", columnDefinition = "TEXT")
+	@LazyCollection(value=LazyCollectionOption.FALSE)
+    protected List<String> inputs;
+	
 	/**
 	 * Default constructor of data element
 	 */
 	public DataElement() {
-		setCreationDate(new Date());
-		setDisplayType(DisplayType.UNDEFINED);
+		super();
 	}
 	
 	/**
-	 * Constructor of User specifying all the fields except the display type
+	 * Constructor of data element specifying all the fields
 	 * @param creationDate: the date when the data element was created
 	 * @param name: the name of the data element
-	 * @param included: whether the data element is included or not in the publication of its parent User Story.
-	 * @param position: the position of the data element in the user story it belongs to
-	 * @param userStory: the user story to which this data element belongs
+	 * @param category: the category of the element
+	 * @param report: the report to which this element belongs
+	 * @param included: whether the data element is included or not in the publication of its parent Report.
+	 * @param position: the position of the data element in the report it belongs to
+	 * @param dataSource: the source of the data for this data element
+	 * @param selectedOptions: the selected options for the data source of this element
+	 * @param fullWidth: whether the element takes 2 column (full width) or only one column (half width)
+	 * @param pageBreakAfter: whether there should be a page break after the element
 	 */
-	public DataElement(Date creationDate, String name, boolean included, int position, UserStory userStory) {
-		setCreationDate(creationDate);
-		setName(name);
-		setIncluded(included);
-		setPosition(position);
-		setUserStory(userStory);
-		setDisplayType(DisplayType.UNDEFINED);
+	public DataElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position, 
+			DataSource dataSource, List<DataSourceParameterOption> selectedOptions, boolean fullWidth, boolean pageBreakAfter) {
+		super(creationDate, name, category, report, included, position, fullWidth, pageBreakAfter);
+		setDataSource(dataSource);
+		setSelectedOptions(selectedOptions);
 	}
-
+	
 	/**
-	 * Constructor of User specifying all the fields
+	 * Constructor of data element specifying all the fields
 	 * @param creationDate: the date when the data element was created
 	 * @param name: the name of the data element
-	 * @param included: whether the data element is included or not in the publication of its parent User Story.
-	 * @param position: the position of the data element in the user story it belongs to
+	 * @param category: the category of the element
+	 * @param report: the report to which this element belongs
+	 * @param included: whether the data element is included or not in the publication of its parent Report.
+	 * @param position: the position of the data element in the report it belongs to
+	 * @param dataSource: the source of the data for this data element
+	 * @param selectedOptions: the selected options for the data source of this element
 	 * @param displayType: the way the data element should be displayed
-	 * @param userStory: the user story to which this data element belongs
+	 * @param fullWidth: whether the element takes 2 column (full width) or only one column (half width)
+	 * @param pageBreakAfter: whether there should be a page break after the element
 	 */
-	public DataElement(Date creationDate, String name, boolean included, int position, DisplayType displayType, UserStory userStory) {
-		setCreationDate(creationDate);
-		setName(name);
-		setIncluded(included);
-		setPosition(position);
-		setUserStory(userStory);
+	public DataElement(Date creationDate, String name, ElementCategory category, Report report, boolean included, int position, 
+			DataSource dataSource, List<DataSourceParameterOption> selectedOptions, DisplayType displayType, boolean fullWidth, boolean pageBreakAfter) {
+		super(creationDate, name, category, report, included, position, fullWidth, pageBreakAfter);
+		setDataSource(dataSource);
+		setSelectedOptions(selectedOptions);
 		setDisplayType(displayType);
 	}
-    
+	
+
 	/**
-	 * Getter for the unique ID of the data element
-	 * @return The unique ID of the data element
+	 * Getter for the data source of the element
+	 * @return the data source of the element
 	 */
-	public int getId() {
-		return id;
+	public DataSource getDataSource() {
+		return this.dataSource;
 	}
 	
 	/**
-	 * Setter for the unique ID of the data element
-	 * @param The unique ID of the data element
+	 * Setter for the data source of the element
+	 * @param position: the new data source of the element
 	 */
-	public void setId(int id) {
-		this.id = id ;
-	}
-	
-	/**
-	 * Getter for the creation date of the data element
-	 * @return: the creation date of the data element
-	 */
-	public Date getCreationDate() {
-		return creationDate;
-	}
-	
-	/**
-	 * Setter for the creation date of the data element
-	 * @param value: the new creation date of the data element
-	 */
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-	
-	/**
-	 * Getter for the name of the data element
-	 * @return the current name of the data element
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * Setter for the name of the data element
-	 * @param name: the new name of the data element
-	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
 
 	/**
-	 * Getter for the inclusion of the data element in its parent's publication
-	 * @return the current inclusion of the data element
+	 * Getter for the selected options for the data source of this element
+	 * @return the current selected options for the data source of this element
 	 */
-	public boolean getIncluded() {
-		return this.included;
+	public List<DataSourceParameterOption> getSelectedOptions() {
+		return this.selectedOptions;
 	}
 	
 	/**
-	 * Setter for the inclusion of the data element in its parent's publication
-	 * @param position: the new inclusion of the data element
+	 * Setter for the selected options for the data source of this element
+	 * @param position: the new selected options for the data source of this element
 	 */
-	public void setIncluded(boolean included) {
-		this.included = included;
+	public void setSelectedOptions(List<DataSourceParameterOption> selectedOptions) {
+		this.selectedOptions = selectedOptions;
 	}
 	
 	/**
-	 * Getter for the position of the data element in its user story
-	 * @return the current position of the data element
-	 */
-	public int getPosition() {
-		return this.position;
-	}
-	
-	/**
-	 * Setter for the position of the data element in its user story
-	 * @param position: the new position of the data element
-	 */
-	public void setPosition(int position) {
-		this.position = position;
-	}
-
-	/**
-	 * Getter for the display type of the data element in its user story
-	 * @return the current display type of the data element
+	 * Getter for the display type of the element in its report
+	 * @return the current display type of the element
 	 */
 	public DisplayType getDisplayType() {
 		return this.displayType;
 	}
 	
 	/**
-	 * Setter for the display type of the data element in its user story
-	 * @param position: the new display type of the data element
+	 * Setter for the display type of the element in its report
+	 * @param position: the new display type of the element
 	 */
 	public void setDisplayType(DisplayType displayType) {
 		this.displayType = displayType;
 	}
 	
-	/**
-	 * Getter for the user story containing this data element
-	 * @return The user story currently containing this data element
-	 */
-	public UserStory getUserStory() {
-		return this.userStory;
+	public void setData(List<?> data) {
+		this.data = data;
 	}
 	
-	/**
-	 * Setter for the user story containing this data element
-	 * @param userStory: The new user story currently containing this data element
-	 */
-	public void setUserStory(UserStory userStory) {
-		this.userStory = userStory;
+	public List<?> getData() {
+		return this.data;
 	}
 	
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	/**
-	 * The possible types of display for a data element. Default is UNDEFINED
-	 * @author Guillaume Prevost
-	 * @since 12th Apr. 2013
-	 */
-	public enum DisplayType {
-		UNDEFINED("undefined"),
-		TABLE("table"),
-		PICTURE("picture"),
-		GRAPH("graph"),
-		PLAIN("plain");
-		
-		private String text;
-
-		DisplayType(String text) {
-			this.text = text;
-		}
-
-		public String getText() {
-			return this.text;
-		}
-
-		public static DisplayType fromString(String text) {
-			if (text != null) {
-				for (DisplayType b : DisplayType.values()) {
-					if (text.equalsIgnoreCase(b.text)) {
-						return b;
-					}
-				}
-			}
-			return DisplayType.UNDEFINED;
-		}
-		
-		public String toString() {
-			return text;
-		}
-
-		public boolean equals(String otherText) {
-			return (otherText == null) ? false : text.equals(otherText);
-		}
-	}
+	public List<String> getInputs() {
+    	return this.inputs;
+    }
+    
+    public void setInputs(List<String> inputs) {
+    	this.inputs = inputs;
+    }
 }

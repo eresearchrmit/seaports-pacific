@@ -7,6 +7,7 @@
  */
 package edu.rmit.eres.seaports.controller;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,23 +23,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.rmit.eres.seaports.dao.CsiroDataBaselineDao;
+import edu.rmit.eres.seaports.dao.ReportPublicationDao;
 import edu.rmit.eres.seaports.dao.UserDao;
-import edu.rmit.eres.seaports.dao.UserStoryDao;
-import edu.rmit.eres.seaports.helpers.DataElementPositionComparator;
+import edu.rmit.eres.seaports.dao.ReportDao;
+import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
-import edu.rmit.eres.seaports.model.AbsData;
-import edu.rmit.eres.seaports.model.BitreData;
-import edu.rmit.eres.seaports.model.CsiroData;
-import edu.rmit.eres.seaports.model.DataElement;
-import edu.rmit.eres.seaports.model.DataElementAbs;
-import edu.rmit.eres.seaports.model.DataElementBitre;
-import edu.rmit.eres.seaports.model.DataElementCsiro;
-import edu.rmit.eres.seaports.model.DataElementEngineeringModel;
-import edu.rmit.eres.seaports.model.DataElementFile;
-import edu.rmit.eres.seaports.model.EngineeringModelData;
-import edu.rmit.eres.seaports.model.UserStory;
-
+import edu.rmit.eres.seaports.model.Report;
+import edu.rmit.eres.seaports.model.ReportPublication;
 /**
  * Controller for the public section of the application
  */
@@ -51,17 +42,20 @@ public class PublicController {
 	private UserDao userDao;
 	
 	@Autowired
-	private UserStoryDao userStoryDao;
+	private ReportDao reportDao;
 	
 	@Autowired
-	private CsiroDataBaselineDao csiroDataBaselineDao;
+	private ReportPublicationDao reportPublicationDao;
+	
+	@Autowired
+	ReportController reportController;
 	
 	private void tryGetLoggedInUser(Model model) {
 		try {
 			model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername()));
 		}
 		catch (Exception e) {
-			// User is not logged in. Not a big deal on the home page
+			// User is not logged in. Not a big deal on the public pages
 		}
 	}
 	
@@ -111,22 +105,31 @@ public class PublicController {
 	}
 	
 	/**
+	 * Displays the Guidelines page
+	 */
+	@RequestMapping(value = {"/public/help"}, method = RequestMethod.GET)
+	public ModelAndView help(Model model) {		
+		tryGetLoggedInUser(model);
+		return new ModelAndView("help");
+	}
+	
+	/**
 	 * Listing of all the published reports
 	 */
-	@RequestMapping(value = {"/public/reports/list"}, method = RequestMethod.GET)
-	public ModelAndView getPublishedUserStoriesList(Model model) {
-		logger.info("Inside getPublishedUserStoriesList");
+	@RequestMapping(value = {"/public/published-report/list"}, method = RequestMethod.GET)
+	public ModelAndView getPublishedReportList(Model model) {
+		logger.info("Inside getPublishedReportList");
 
 		tryGetLoggedInUser(model);
 		
-		ModelAndView mav = new ModelAndView("userstoryPublicList");
+		ModelAndView mav = new ModelAndView("publishedReportList");
 		try {
 			// Retrieve all published reports
-			List<UserStory> userStoriesList = userStoryDao.getAllPublishedStories();
-			mav.addObject("userStoriesList", userStoriesList);
+			List<ReportPublication> publishedReports = reportPublicationDao.getAllReportPublications();
+			mav.addObject("publishedReports", publishedReports);
 				
 			model.addAttribute("listingTitle", "Published Reports");
-			if (userStoriesList.size() == 0)
+			if (publishedReports.size() == 0)
 				model.addAttribute("warningMessage", ERR_NO_RESULT);
 		}
 		catch (Exception e) {
@@ -136,62 +139,33 @@ public class PublicController {
 		return mav;
 	}
 	
-	@RequestMapping(value= "/public/reports/view", method = RequestMethod.GET)
-	public ModelAndView getUserStoryPublicView(@RequestParam(value="id",required=true) Integer id, Model model) {
-		logger.info("Inside getUserStoryPublicView");
+	@RequestMapping(value= "/public/published-report/view", method = RequestMethod.GET)
+	public ModelAndView viewPublishedReport(@RequestParam(value="id",required=true) Integer id, Model model) {
+		logger.info("Inside viewPublishedReport");
 		
 		tryGetLoggedInUser(model);
 		
-		UserStory userStory = null;
-		try {			
-			userStory = userStoryDao.find(id);
-			if (!userStory.getMode().equals("published")) {
-				model.addAttribute("errorMessage", ERR_REPORT_NOT_PUBLISHED);
-			}
+		Report report = null;
+		try {
+			ReportPublication pub = reportPublicationDao.find(id);
+			report = pub.getReport();
 		}
-		catch (NoResultException e) {
+		catch (NoResultException | ClassNotFoundException | IOException e) {
 			model.addAttribute("errorMessage", e.getMessage());
-		}
-		
-		if (userStory != null && userStory.getMode().equals("published"))
-		{
-			Collections.sort(userStory.getDataElements(), new DataElementPositionComparator());
-			
-			List<DataElement> dataElements = userStory.getDataElements();
-	 		for (DataElement dataElement : dataElements) {
-	 			if (dataElement.getClass().equals(DataElementAbs.class)) {
-	 				List<AbsData> absDataList = ((DataElementAbs)dataElement).getAbsDataList();
-	 				for (AbsData data : absDataList) {
-	 					data.generateValues();
-	 				}
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementBitre.class)) {
-	 				List<BitreData> bitreDataList = ((DataElementBitre)dataElement).getBitreDataList();
-	 				for (BitreData data : bitreDataList) {
-	 					data.generateValues();
-	 				}
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementFile.class)) {
-	 				((DataElementFile)dataElement).generateStringContent();
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementCsiro.class)) {
-	 				for (CsiroData data : ((DataElementCsiro)dataElement).getCsiroDataList()) {
-	 					data.setBaseline(csiroDataBaselineDao.find(data.getParameters().getRegion(), data.getVariable()));
-	 				}
-	 			}
-	 			else if (dataElement.getClass().equals(DataElementEngineeringModel.class)) {
-	 				List<EngineeringModelData> engineeringModelDataList = ((DataElementEngineeringModel)dataElement).getEngineeringModelDataList();
-	 				for (EngineeringModelData data : engineeringModelDataList) {
-	 					data.generateValues();
-	 				}
-	 			}
-			}
-			model.addAttribute("userstory", userStory);
 		}
 		
 		model.addAttribute("publicView", true);
 		
-		return new ModelAndView("userstoryPublicView");
+		ModelAndView mav = reportController.ModelForReport(model, report);
+		
+		mav.setViewName("reportView");
+		
+		if (report != null)
+		{
+			Collections.sort(report.getElements(), new ElementPositionComparator());
+			mav.addObject("report", report);
+		}
+		return mav;
 	}
 	
 	public static final String ERR_NO_RESULT = "No report has been published yet";

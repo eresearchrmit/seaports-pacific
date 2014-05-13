@@ -46,6 +46,11 @@
 		<put-attribute name="body" value="/WEB-INF/views/guidelines.jsp" />
 	</definition>
 	
+	<definition name="help" extends="public.base.definition">
+		<put-attribute name="title" value="Help - Climate Smart Seaports" />
+		<put-attribute name="body" value="/WEB-INF/views/help.jsp" />
+	</definition>
+	
 	<definition name="register" extends="public.base.definition">
 		<put-attribute name="title" value="Sign Up - Climate Smart Seaports" />
 		<put-attribute name="body" value="/WEB-INF/views/register.jsp" />
@@ -66,14 +71,14 @@
 		<put-attribute name="body" value="/WEB-INF/views/profile.jsp" />
 	</definition>
 	
-	<definition name="userstoryPublicList" extends="public.base.definition">
+	<definition name="publishedReportList" extends="public.base.definition">
 		<put-attribute name="title" value="Published Reports - Climate Smart Seaports" />
-        <put-attribute name="body" value="/WEB-INF/views/userstoryPublicList.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/publishedReportList.jsp" />
 	</definition>
 	
-	<definition name="userstoryPublicView" extends="public.base.definition">
+	<definition name="publishedReportView" extends="public.base.definition">
 		<put-attribute name="title" value="Report - Climate Smart Seaports" />
-		<put-attribute name="body" value="/WEB-INF/views/userstoryView.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/reportView.jsp" />
 	</definition>
 	
 	<!-- Access Denied -->
@@ -84,40 +89,25 @@
 	
 	
 	<!-- Workflow pages -->
-	<definition name="workboardCreation" extends="base.definition">
-		<put-attribute name="title" value="New Workboard - Climate Smart Seaports" />
-        <put-attribute name="body" value="/WEB-INF/views/workboardCreation.jsp" />
+	<definition name="reportCreation" extends="base.definition">
+		<put-attribute name="title" value="New Report - Climate Smart Seaports" />
+        <put-attribute name="body" value="/WEB-INF/views/reportCreation.jsp" />
 	</definition>
 	
-	<definition name="workboardCreated" extends="base.definition">
-		<put-attribute name="title" value="Workboard created - Climate Smart Seaports" />
-        <put-attribute name="body" value="/WEB-INF/views/workboardCreated.jsp" />
+	<definition name="report" extends="base.definition">
+		<put-attribute name="title" value="Report Edition - Climate Smart Seaports" />
+		<put-attribute name="sidemenu" value="/WEB-INF/views/reportToolbox.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/report.jsp" />
 	</definition>
 	
-	<definition name="workboard" extends="base.definition">
-		<put-attribute name="title" value="Workboard - Climate Smart Seaports" />
-		<put-attribute name="sidemenu" value="/WEB-INF/views/workboardToolbox.jsp" />
-        <put-attribute name="body" value="/WEB-INF/views/workboard.jsp" />
-	</definition>
-	
-	<definition name="userstory" extends="base.definition">
-		<put-attribute name="title" value="Report - Climate Smart Seaports" />
-		<put-attribute name="body" value="/WEB-INF/views/userstory.jsp" />
-	</definition>
-	
-	<definition name="userstoryCreated" extends="base.definition">
-		<put-attribute name="title" value="Report created - Climate Smart Seaports" />
-        <put-attribute name="body" value="/WEB-INF/views/userstoryCreated.jsp" />
-	</definition>
-	
-	<definition name="userstoryList" extends="base.definition">
+	<definition name="reportList" extends="base.definition">
 		<put-attribute name="title" value="Reports - Climate Smart Seaports" />
-        <put-attribute name="body" value="/WEB-INF/views/userstoryList.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/reportList.jsp" />
 	</definition>
 	
-	<definition name="userstoryView" extends="base.definition">
+	<definition name="reportView" extends="base.definition">
 		<put-attribute name="title" value="Report - Climate Smart Seaports" />
-		<put-attribute name="body" value="/WEB-INF/views/userstoryView.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/reportView.jsp" />
 	</definition>
 	
 	<!-- Admin page -->

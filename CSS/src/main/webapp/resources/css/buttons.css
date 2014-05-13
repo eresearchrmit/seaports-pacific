@@ -24,6 +24,10 @@
 	position: relative;
 }
 
+.btn-margin {
+	margin-right: 10px;
+}
+
 /* Active/Click state */
 .btn:active, .btn-icon:active, .btn-mini:active { top: 1px; }
 
@@ -137,8 +141,7 @@ a.btn.btn-large, a.btn-icon.btn-large { line-height: 42px; padding-bottom: 0; }
 
 .btn-icon.btn-small span { top: 4px; }
 .btn-icon.btn-large span { top: 12px; }
-@-moz-document url-prefix() { .btn-icon span { left: -24px; top: 0px; } .btn-icon.btn-small span { top: -1px; } .btn-icon.btn-large span { top: 4px; } } 
-
+/*@-moz-document url-prefix() { .btn-icon span { left: 0px; top: 0px; } .btn-icon.btn-small span { top: -1px; } .btn-icon.btn-large span { top: 4px; } }*/
 
 /* Mini Buttons */
 .btn-mini 
@@ -175,7 +178,7 @@ a.btn.btn-large, a.btn-icon.btn-large { line-height: 42px; padding-bottom: 0; }
 .btn-comment span { background-position: -112px 0; }
 .btn-heart span { background-position: -96px 0; }
 .btn-star span { background-position: -80px 0; }
-.btn-cart span { background-position: -64px 0; }
+.btn-save span { background-position: -64px 0; }
 .btn-print span { background-position: -128px 0; }
 .btn-rss span { background-position: -144px 0; }
 .btn-person span { background-position: 0 -16px; }
@@ -193,3 +196,8 @@ a.btn.btn-large, a.btn-icon.btn-large { line-height: 42px; padding-bottom: 0; }
 /* Transparent Button Styles */
 .btn-transparent, .btn-transparent:hover { background-image: url(../img/theme/bg-lite.png); background-color: transparent; filter: none; border-color: transparent\0/; border-color: rgba(0,0,0,.4) !important; margin: 0 1em 0 0; }
 *+html .btn-transparent { border: none; }
+
+td .btn {
+	margin: 5px 0;
+}
+}

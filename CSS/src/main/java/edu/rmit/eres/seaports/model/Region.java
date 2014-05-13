@@ -7,6 +7,7 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -28,7 +29,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  */
 @Entity
 @Table(name = "Region")
-public class Region {
+public class Region implements Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;
 	
@@ -126,5 +127,9 @@ public class Region {
 	 */
 	public void setPorts(List<Seaport> ports) {
 		this.ports = ports;
+	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

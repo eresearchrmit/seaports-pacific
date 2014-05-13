@@ -28,34 +28,38 @@
 		
 		<h5>Reports published by ${userProfile.firstname} ${userProfile.lastname}:</h5>
 		<c:choose> 
-			<c:when test="${not empty userProfile.userStories}">
-				<table class="data display datatable" id="tblUserStoryList">
+			<c:when test="${not empty publishedReports}">
+				<table class="data display datatable" id="tblPublishedReportList">
 					<thead>
 						<tr>
 							<th>Title</th>
 							<th>Author</th>
 							<th>Published on</th>
-							<th>NRM Region</th>
-							<th>View</th>
+							<th>Region</th>
+							<th class="sorting_desc_disabled">View</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${userProfile.userStories}" var="story" varStatus="status">
-							<c:if test="${story.mode == 'published'}">
+						<c:forEach items="${publishedReports}" var="publishedReport" varStatus="status">
 							<tr>
-								<td><c:out value="${story.name}" /></td>
-								<td>${story.owner.firstname} ${story.owner.lastname}</td>
-								<td><fmt:formatDate value="${story.publishDate}" pattern="dd MMM yyyy" /></td>
-								<td>${story.seaport.region.name}</td>
-								<td><a href="/public/reports/view?id=${story.id}" title="View this Story" target="_blank"><img src="<c:url value="/resources/img/icons/page_white.png" />" alt="View" /></a></td>
+								<td><c:out value="${publishedReport.name}" /></td>
+								<td>${publishedReport.owner.firstname} ${publishedReport.owner.lastname}</td>
+								<td><fmt:formatDate value="${report.creationDate}" pattern="dd MMM yyyy" /></td>
+								<td>${publishedReport.report.seaport.region.name}</td>
+								<td>
+									<a href="/public/published-report/view?id=${publishedReport.report.id}" title="View this Report" target="_blank">
+										<button id="btnViewReport" type="button" class="btn btn-small btn-icon btn-blue btn-doc" style="margin-top: 5px" >
+											<span></span>View
+										</button>
+									</a>
+								</td>
 							</tr>
-							</c:if>
 						</c:forEach>
 					</tbody>
 				</table>
 				<script type="text/javascript">
 					$(document).ready(function () {
-						$('#tblUserStoryList').dataTable();
+						$('#tblPublishedReportList').dataTable();
 					});
 			 	</script>
 			</c:when>

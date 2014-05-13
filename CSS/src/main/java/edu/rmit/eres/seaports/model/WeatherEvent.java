@@ -7,24 +7,23 @@
  */
 package edu.rmit.eres.seaports.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
- * Class representing a weather event that have impacted a seaport
+ * Class representing a climate variable
  * @author Guillaume Prevost
- * @since 26th Mar. 2013
+ * @since 20th Dec. 2012
  */
-@Entity
-@Table(name = "WeatherEvent")
-public class WeatherEvent
-{
+public class WeatherEvent implements Serializable {
+	
 	private static final long serialVersionUID = -1308795024262635690L;
 	
 	/**
@@ -38,6 +37,13 @@ public class WeatherEvent
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
+	
+	/**
+	 * The data element containing the weather event
+	 */
+	@ManyToOne
+	@JoinColumn(name="data_element_id")
+	private DataElement element;
 	
 	/**
 	 * The type of the weather event
@@ -91,7 +97,6 @@ public class WeatherEvent
 	 * Default constructor of WeatherEvent
 	 */
 	public WeatherEvent() {
-		
 	}
 	
 	/**
@@ -121,7 +126,7 @@ public class WeatherEvent
 		setResponseAdequate(responseAdequate);
 		setChanges(changes);
 	}
-
+	
 	/**
 	 * Getter for the unique ID of the Weather Event
 	 * @return: the current unique ID of the Weather Event
@@ -180,7 +185,7 @@ public class WeatherEvent
 	
 	/**
 	 * Setter for whether the event had direct or indirect impact
-	 * @param year: true if the weather event had direct impact, false if indirect
+	 * @param direct: true if the weather event had direct impact, false if indirect
 	 */
 	public void setDirect(Boolean direct) {
 		this.direct = direct;
@@ -280,6 +285,15 @@ public class WeatherEvent
 			throw new IllegalArgumentException(ERR_CONSEQUENCE_RATING_OUT_OF_RANGE);
 		
 		return weatherEventConsequence;
+	}
+	
+	/**
+	 * String representation of a WeatherEvent object
+	 * @return the short name and the unit of measure of the WeatherEvent, as a string
+	 */
+	@Override
+	public String toString() {
+		return (this.type + " of " + this.year + " (Consequences rating: " + this.consequencesRating + ")");
 	}
 	
 	// Information, success, warning and error messages 
