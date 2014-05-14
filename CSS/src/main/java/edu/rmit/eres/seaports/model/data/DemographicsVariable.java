@@ -5,36 +5,38 @@
  * This code is under the BSD license. See 'license.txt' for details.
  * Project hosted at: https://code.google.com/p/climate-smart-seaports/
  */
-package edu.rmit.eres.seaports.model;
+package edu.rmit.eres.seaports.model.data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import edu.rmit.eres.seaports.model.Variable;
+
 /**
- * Class representing an observed trend variable
+ * Class representing a trade variable
  * @author Guillaume Prevost
- * @since 29th Apr. 2014
+ * @since 14th May. 2014
  */
 @Entity
-@Table(name = "ExtremeVariable")
-public class ExtremeVariable extends Variable {
+@Table(name = "DemographicsVariable")
+public class DemographicsVariable extends Variable {
 	
 	private static final long serialVersionUID = -2491294078433221153L;
 
 	/**
-	 * Default constructor of ObservedExtremeVariable
+	 * Default constructor of DemographicsVariable
 	 */
-	public ExtremeVariable() {
+	public DemographicsVariable() {
 	}
 	
 	/**
-	 * Constructor of ObservedExtremeVariable
+	 * Constructor of DemographicsVariable
 	 * @param name: the name of the variable
 	 * @param shortName: the short name for the variable
 	 * @param description: the description of the variable
 	 * @param uom: the unit of measure of the variable
 	 */
-	public ExtremeVariable(String name, String shortName, String description, String uom) {
+	public DemographicsVariable(String name, String shortName, String description, String uom) {
 		this.name = name;
 		this.shortName = shortName;
 		this.description = description;
@@ -43,14 +45,14 @@ public class ExtremeVariable extends Variable {
 	}
 	
 	/**
-	 * Constructor of ObservedExtremeVariable
+	 * Constructor of DemographicsVariable
 	 * @param name: the name of the variable
 	 * @param shortName: the short name for the variable
 	 * @param description: the description of the variable
 	 * @param uom: the unit of measure of the variable
 	 * @param uomVariation: the unit of measure of the variation of the variable
 	 */
-	public ExtremeVariable(String name, String shortName, String description, String uom, String uomVariation) {
+	public DemographicsVariable(String name, String shortName, String description, String uom, String uomVariation) {
 		this.name = name;
 		this.shortName = shortName;
 		this.description = description;

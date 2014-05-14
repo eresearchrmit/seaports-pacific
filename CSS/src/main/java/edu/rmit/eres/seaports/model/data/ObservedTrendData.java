@@ -5,7 +5,7 @@
  * This code is under the BSD license. See 'license.txt' for details.
  * Project hosted at: https://code.google.com/p/climate-smart-seaports/
  */
-package edu.rmit.eres.seaports.model;
+package edu.rmit.eres.seaports.model.data;
 
 import java.util.Date;
 
@@ -18,21 +18,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import edu.rmit.eres.seaports.model.Region;
+
 import java.io.Serializable;
 
 /**
- * Class representing the future trend data
+ * Class representing the observed trend data
  * @author Guillaume Prevost
- * @since 5th May. 2014
+ * @since 29th Apr. 2014
  */
 @Entity
-@Table(name = "FutureTrendData")
-public class FutureTrendData implements Serializable
+@Table(name = "ObservedTrendData")
+public class ObservedTrendData implements Serializable
 {
 	private static final long serialVersionUID = -7141765080300638805L;
 
 	/**
-	 * The unique ID of the Future Trend Data
+	 * The unique ID of the Observed Trend Data
 	 */
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -51,24 +53,22 @@ public class FutureTrendData implements Serializable
 	private Region region;
 	
 	/**
-	 * The year for which this data is projected
+	 * The start date of the period this data relates to
 	 */
-	private Integer year;
+	private Date periodStart;
+	
+	/**
+	 * The end date of the period this data relates to
+	 */
+	private Date periodEnd;
 	
 	/**
 	 * The variable that this data represents
 	 */
 	@ManyToOne
 	@JoinColumn(name="variable_id")
-	private FutureTrendVariable variable;
+	private ObservedTrendVariable variable;
 
-	/**
-	 * The CO2 emissions scenario
-	 */
-	@ManyToOne
-	@JoinColumn(name="climate_emission_scenario_id")
-	private ClimateEmissionScenario emissionScenario;
-	
 	/**
 	 * The season when the data is measured (annual, warm season, cool season)
 	 */
@@ -76,16 +76,16 @@ public class FutureTrendData implements Serializable
 	private String measureSeason;
 	
 	/**
-	 * The projected value of the data
+	 * The numerical value of the data
 	 */
 	@Column
 	private Double value;
 	
 	/**
-	 * The possible variation (error margin) of the data due to uncertainty of projections
+	 * The value in term of percentage
 	 */
 	@Column
-	private Double variation;
+	private Double percentageValue;
 	
 	/**
 	 * The name of the source of the data
@@ -96,32 +96,32 @@ public class FutureTrendData implements Serializable
 	/**
 	 * Default constructor of ObservedTrendData
 	 */
-	public FutureTrendData() {
+	public ObservedTrendData() {
 		setCreationDate(new Date());
 	}
 	
 	/**
-	 * Constructor of FutureTrendData
+	 * Constructor of ObservedTrendData
 	 * @param creationDate: the date when this data has been created
 	 * @param region: the region to which the data is related
-	 * @param year: the year for which this data is projected
+	 * @param periodStart: the start date of the period this data relates to
+	 * @param periodEnd: the end date of the period this data relates to
 	 * @param variable: variable that this data represents
-	 * @param emissionScenario: CO2 emissions scenario
 	 * @param measureSeason: season when the data is measured (annual, warm season, cool season)
 	 * @param value: numerical value of the data
-	 * @param variation: possible variation (error margin) of the data due to uncertainty of projections
+	 * @param percentageValue: value in term of percentage
 	 * @param picture: the picture representing the data
 	 * @param sourceName: the name of the source of the data
 	 */
-	public FutureTrendData(Date creationDate, Region region, Integer year, FutureTrendVariable variable, ClimateEmissionScenario emissionScenario, String measureSeason, Double value, Double variation, String sourceName) {
+	public ObservedTrendData(Date creationDate, Region region, Date periodStart, Date periodEnd, ObservedTrendVariable variable, String measureSeason, Double value, Double percentageValue, String sourceName) {
 		setCreationDate(creationDate);
 		setRegion(region);
-		setYear(year);
+		setPeriodStart(periodStart);
+		setPeriodEnd(periodEnd);
 		setVariable(variable);
-		setEmissionScenario(emissionScenario);
 		setMeasureSeason(measureSeason);
 		setValue(value);
-		setVariation(variation);
+		setPercentageValue(percentageValue);
 		setSourceName(sourceName);
 	}
 
@@ -166,26 +166,42 @@ public class FutureTrendData implements Serializable
 	}
 	
 	/**
-	 * Getter for the year for which this data is projected
-	 * @return the start year for which this data is projected
+	 * Getter for the start date of the period this data relates to
+	 * @return the start date of the period this data relates to
 	 */
-	public Integer getYear() {
-		return this.year;
+	public Date getPeriodStart() {
+		return this.periodStart;
 	}
 	
 	/**
-	 * Setter for the year for which this data is projected
-	 * @param year: the new year for which this data is projected
+	 * Setter for the start date of the period this data relates to
+	 * @param year: the new start date of the period this data relates to
 	 */
-	public void setYear(Integer year) {
-		this.year = year;
+	public void setPeriodStart(Date periodStart) {
+		this.periodStart = periodStart;
+	}
+	
+	/**
+	 * Getter for the end date of the period this data relates to
+	 * @return the end date of the period this data relates to
+	 */
+	public Date getPeriodEnd() {
+		return this.periodEnd;
+	}
+	
+	/**
+	 * Setter for the end date of the period this data relates to
+	 * @param year: the new end date of the period this data relates to
+	 */
+	public void setPeriodEnd(Date periodEnd) {
+		this.periodEnd = periodEnd;
 	}
 	
 	/**
 	 * Getter for the variable that this Data represent
-	 * @return: the current variable represented by this data
+	 * @return: the variable represented by this data
 	 */
-	public FutureTrendVariable getVariable() {
+	public ObservedTrendVariable getVariable() {
 		return variable;
 	}
 	
@@ -193,24 +209,8 @@ public class FutureTrendData implements Serializable
 	 * Setter for the variable that this Data represent
 	 * @param variable: the new variable represented by this data
 	 */
-	public void setVariable(FutureTrendVariable variable) {
+	public void setVariable(ObservedTrendVariable variable) {
 		this.variable = variable;
-	}
-	
-	/**
-	 * Getter for the CO2 emissions scenario
-	 * @return: the current CO2 emissions scenario
-	 */
-	public ClimateEmissionScenario getEmissionScenario() {
-		return emissionScenario;
-	}
-	
-	/**
-	 * Setter for the CO2 emissions scenario
-	 * @param variable: the new CO2 emissions scenario
-	 */
-	public void setEmissionScenario(ClimateEmissionScenario emissionScenario) {
-		this.emissionScenario = emissionScenario;
 	}
 	
 	/**
@@ -246,19 +246,19 @@ public class FutureTrendData implements Serializable
 	}
 	
 	/**
-	 * Getter for the possible variation (error margin) of the data due to uncertainty of projections
-	 * @return: the current possible variation
+	 * Getter for the value in term of percentage
+	 * @return: the current value in term of percentage
 	 */
-	public Double getVariation() {
-		return variation;
+	public Double getPercentageValue() {
+		return percentageValue;
 	}
 	
 	/**
-	 * Getter for the possible variation (error margin) of the data due to uncertainty of projections
-	 * @param data: the new possible variation
+	 * Getter for the value in term of percentage
+	 * @param data: the new value in term of percentage
 	 */
-	public void setVariation(Double variation) {
-		this.variation = variation;
+	public void setPercentageValue(Double percentageValue) {
+		this.percentageValue = percentageValue;
 	}
 	
 	/**
@@ -269,8 +269,8 @@ public class FutureTrendData implements Serializable
 		char oldChar = ' ';
 		char newChar = '-';
 		String variableName = this.variable.getShortName().toLowerCase().replace(oldChar, newChar);
-		String emissionScenario = this.emissionScenario.getName().toLowerCase().replace(oldChar, newChar);
-		return String.format("%s-%s-%d", variableName, emissionScenario, this.year);
+		String regionName = this.region.getName().toLowerCase().replace(oldChar, newChar);
+		return String.format("trend-%s-%s", variableName, regionName);
 	}
 	
 	/**

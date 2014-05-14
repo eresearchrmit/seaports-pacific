@@ -5,7 +5,7 @@
  * This code is under the BSD license. See 'license.txt' for details.
  * Project hosted at: https://code.google.com/p/climate-smart-seaports/
  */
-package edu.rmit.eres.seaports.model;
+package edu.rmit.eres.seaports.model.data;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import edu.rmit.eres.seaports.model.DataElement;
 
 /**
  * Class representing a climate variable

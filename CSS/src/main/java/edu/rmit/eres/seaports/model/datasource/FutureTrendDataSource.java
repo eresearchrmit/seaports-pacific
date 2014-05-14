@@ -5,7 +5,7 @@
  * This code is under the BSD license. See 'license.txt' for details.
  * Project hosted at: https://code.google.com/p/climate-smart-seaports/
  */
-package edu.rmit.eres.seaports.model;
+package edu.rmit.eres.seaports.model.datasource;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,6 +15,14 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import edu.rmit.eres.seaports.dao.FutureTrendDataDao;
+import edu.rmit.eres.seaports.model.DataElement;
+import edu.rmit.eres.seaports.model.DataSource;
+import edu.rmit.eres.seaports.model.DataSourceParameter;
+import edu.rmit.eres.seaports.model.DataSourceParameterOption;
+import edu.rmit.eres.seaports.model.DisplayType;
+import edu.rmit.eres.seaports.model.Region;
+import edu.rmit.eres.seaports.model.Seaport;
+import edu.rmit.eres.seaports.model.data.FutureTrendData;
 
 /**
  * Class representing a source of data

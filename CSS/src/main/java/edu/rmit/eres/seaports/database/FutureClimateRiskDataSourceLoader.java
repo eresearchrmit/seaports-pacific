@@ -17,6 +17,7 @@ import org.hibernate.cfg.ImprovedNamingStrategy;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import edu.rmit.eres.seaports.model.*;
+import edu.rmit.eres.seaports.model.datasource.FutureClimateRiskDataSource;
 
 /**
  * Class used to load CSIRO Data Source in the database

@@ -15,7 +15,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.model.WeatherEvent;
+import edu.rmit.eres.seaports.model.data.WeatherEvent;
 
 /**
  * Data Access Object for the weather events (vulnerabilty assessment) 

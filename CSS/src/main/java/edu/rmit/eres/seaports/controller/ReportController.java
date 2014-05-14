@@ -41,6 +41,12 @@ import edu.rmit.eres.seaports.helpers.ElementPositionComparator;
 import edu.rmit.eres.seaports.helpers.FileTypeHelper;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
 import edu.rmit.eres.seaports.model.*;
+import edu.rmit.eres.seaports.model.datasource.DemographicsDataSource;
+import edu.rmit.eres.seaports.model.datasource.FutureExtremeDataSource;
+import edu.rmit.eres.seaports.model.datasource.FutureTrendDataSource;
+import edu.rmit.eres.seaports.model.datasource.ObservedExtremeDataSource;
+import edu.rmit.eres.seaports.model.datasource.ObservedTrendDataSource;
+import edu.rmit.eres.seaports.model.datasource.TradeDataSource;
 
 @Controller
 @RequestMapping("auth/report")
@@ -89,6 +95,9 @@ public class ReportController {
 	
 	@Autowired
 	private TradeDataDao tradeDataDao;
+	
+	@Autowired
+	private DemographicsDataDao demographicsDataDao;
 	
 	@RequestMapping(value= "/my-reports", method = RequestMethod.GET)
 	public String myReports(Model model) {
@@ -730,7 +739,7 @@ public class ReportController {
 			
 			try {
 				// Instantiate the data source of the sub-type specified by the data source name
-				String className = "edu.rmit.eres.seaports.model." + WordUtils.capitalize(de.getDataSource().getName()) + "DataSource";
+				String className = "edu.rmit.eres.seaports.model.datasource." + WordUtils.capitalize(de.getDataSource().getName()) + "DataSource";
 				Constructor<?> constructor = Class.forName(className).getDeclaredConstructor(DataSource.class);
 				constructor.setAccessible(true);
 				
@@ -747,6 +756,8 @@ public class ReportController {
 			    	ds.init(futureTrendDataDao);
 			    if (ds instanceof TradeDataSource)
 			    	ds.init(tradeDataDao);
+			    if (ds instanceof DemographicsDataSource)
+			    	ds.init(demographicsDataDao);
 			    
 			    // Retrieves the data and set the element's data field
 			    try {
@@ -768,44 +779,6 @@ public class ReportController {
 		}
 		return element;
 	}
-	
-	/*
-	@RequestMapping(value = "/publish", method=RequestMethod.GET) 
-	public String publishReport(@RequestParam(value="id", required=true) Integer reportId, RedirectAttributes attributes) {
-		logger.debug("Inside publishReport");
-		
-		Report report= null;
-		try {
-			report = reportDao.find(reportId);
-			
-			if (!(SecurityHelper.IsCurrentUserAllowedToAccess(report))) // Security: ownership check
-    			throw new AccessDeniedException(ERR_ACCESS_DENIED);
-			
-			if (!report.getMode().equals("published")) {
-				report.setAccess("public");
-				report.setMode("published");
-				report.setPublishDate(new Date());
-								
-				reportDao.save(report);
-				
-				attributes.addFlashAttribute("successMessage", MSG_REPORT_PUBLISHED);
-			}
-			else
-				attributes.addFlashAttribute("warningMessage", ERR_REPORT_ALREADY_PUBLISHED);
-		}
-		catch (IllegalArgumentException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT);
-		}
-		catch (NoResultException e) {
-			attributes.addFlashAttribute("errorMessage", ERR_PUBLISH_REPORT);
-		}
-
-		if (report != null)
-			return "redirect:/auth/report/view?id=" + report.getId();
-		else
-			return "redirect:/auth/report/list?user=" + SecurityHelper.getCurrentlyLoggedInUsername();
-	}
-	*/
 	
 	public ModelAndView ModelForReport(Model model, Report report) {
 		logger.info("Inside ModelForReport");

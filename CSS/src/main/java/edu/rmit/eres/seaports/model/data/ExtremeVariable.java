@@ -5,36 +5,38 @@
  * This code is under the BSD license. See 'license.txt' for details.
  * Project hosted at: https://code.google.com/p/climate-smart-seaports/
  */
-package edu.rmit.eres.seaports.model;
+package edu.rmit.eres.seaports.model.data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import edu.rmit.eres.seaports.model.Variable;
+
 /**
- * Class representing a future trend variable
+ * Class representing an observed trend variable
  * @author Guillaume Prevost
- * @since 5th May. 2014
+ * @since 29th Apr. 2014
  */
 @Entity
-@Table(name = "FutureTrendVariable")
-public class FutureTrendVariable extends Variable {
+@Table(name = "ExtremeVariable")
+public class ExtremeVariable extends Variable {
 	
 	private static final long serialVersionUID = -2491294078433221153L;
 
 	/**
-	 * Default constructor of FutureTrendVariable
+	 * Default constructor of ObservedExtremeVariable
 	 */
-	public FutureTrendVariable() {
+	public ExtremeVariable() {
 	}
 	
 	/**
-	 * Constructor of FutureTrendVariable
+	 * Constructor of ObservedExtremeVariable
 	 * @param name: the name of the variable
 	 * @param shortName: the short name for the variable
 	 * @param description: the description of the variable
 	 * @param uom: the unit of measure of the variable
 	 */
-	public FutureTrendVariable(String name, String shortName, String description, String uom) {
+	public ExtremeVariable(String name, String shortName, String description, String uom) {
 		this.name = name;
 		this.shortName = shortName;
 		this.description = description;
@@ -43,14 +45,14 @@ public class FutureTrendVariable extends Variable {
 	}
 	
 	/**
-	 * Constructor of FutureTrendVariable
+	 * Constructor of ObservedExtremeVariable
 	 * @param name: the name of the variable
 	 * @param shortName: the short name for the variable
 	 * @param description: the description of the variable
 	 * @param uom: the unit of measure of the variable
 	 * @param uomVariation: the unit of measure of the variation of the variable
 	 */
-	public FutureTrendVariable(String name, String shortName, String description, String uom, String uomVariation) {
+	public ExtremeVariable(String name, String shortName, String description, String uom, String uomVariation) {
 		this.name = name;
 		this.shortName = shortName;
 		this.description = description;

@@ -19,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.model.ClimateEmissionScenario;
-import edu.rmit.eres.seaports.model.FutureTrendData;
 import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.Variable;
+import edu.rmit.eres.seaports.model.data.ClimateEmissionScenario;
+import edu.rmit.eres.seaports.model.data.FutureTrendData;
 
 /**
  * Data Access Object for the Future Trend data

@@ -41,7 +41,7 @@
 				<td class="top nowrap">${tradeData.variable.name}</td>
 			</c:if>
 			
-				<td class="top nowrap">${tradeData.value}</td>
+				<td class="top nowrap"><fmt:formatNumber type="number" maxFractionDigits="0" value="${tradeData.value}" /></td>
 				<c:set var="previousProduct" value="${tradeData.variable.name}" />
 			</c:forEach>
 			

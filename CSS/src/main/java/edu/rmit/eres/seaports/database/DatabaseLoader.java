@@ -69,6 +69,7 @@ public class DatabaseLoader {
 		CurrentClimateRiskDataSourceLoader.LoadCurrentClimateRiskDataSource(session);
 		FutureClimateRiskDataSourceLoader.LoadFutureClimateRiskDataSource(session);
 		TradeDataSourceLoader.LoadTradeDataSource(session);
+		DemographicsDataSourceLoader.LoadDemographicsDataSource(session);
 		
 		session.getTransaction().commit();
 		

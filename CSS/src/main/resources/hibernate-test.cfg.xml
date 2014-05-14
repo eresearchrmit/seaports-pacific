@@ -39,36 +39,32 @@
 		<mapping class="edu.rmit.eres.seaports.model.DataSourceParameterOption" />
 		<mapping class="edu.rmit.eres.seaports.model.DisplayType" />
 		
-		<!--<mapping class="edu.rmit.eres.seaports.model.CsiroDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.CmarDataSource" />-->
-		<mapping class="edu.rmit.eres.seaports.model.ObservedTrendDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.ObservedExtremeDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.FutureTrendDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.FutureExtremeDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.VulnerabilityDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.CurrentClimateRiskDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.FutureClimateRiskDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.TradeDataSource" />
-		
 		<mapping class="edu.rmit.eres.seaports.model.Region" />
 		<mapping class="edu.rmit.eres.seaports.model.Seaport" />
-		<mapping class="edu.rmit.eres.seaports.model.ClimateEmissionScenario" />
 		
-		<!--<mapping class="edu.rmit.eres.seaports.model.ClimateModel" />
-		<mapping class="edu.rmit.eres.seaports.model.CsiroVariable" />
-		<mapping class="edu.rmit.eres.seaports.model.CsiroData" />
-		<mapping class="edu.rmit.eres.seaports.model.CmarData" />-->
+		<mapping class="edu.rmit.eres.seaports.model.datasource.ObservedTrendDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.ObservedExtremeDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.FutureTrendDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.FutureExtremeDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.VulnerabilityDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.CurrentClimateRiskDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.FutureClimateRiskDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.TradeDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.DemographicsDataSource" />
 		
-		<mapping class="edu.rmit.eres.seaports.model.ObservedTrendVariable" />
-		<mapping class="edu.rmit.eres.seaports.model.ObservedTrendData" />
-		<mapping class="edu.rmit.eres.seaports.model.FutureTrendVariable" />
-		<mapping class="edu.rmit.eres.seaports.model.FutureTrendData" />
-		<mapping class="edu.rmit.eres.seaports.model.ExtremeVariable" />
-		<mapping class="edu.rmit.eres.seaports.model.TradeVariable" />
-		<mapping class="edu.rmit.eres.seaports.model.TradeData" />
-		
-		<mapping class="edu.rmit.eres.seaports.model.WeatherEvent" />
-		<mapping class="edu.rmit.eres.seaports.model.CurrentClimateRisk" />
-		<mapping class="edu.rmit.eres.seaports.model.FutureClimateRisk" />
+		<mapping class="edu.rmit.eres.seaports.model.data.ClimateEmissionScenario" />
+		<mapping class="edu.rmit.eres.seaports.model.data.ObservedTrendVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.data.ObservedTrendData" />
+		<mapping class="edu.rmit.eres.seaports.model.data.FutureTrendVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.data.FutureTrendData" />
+		<mapping class="edu.rmit.eres.seaports.model.data.ExtremeVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.data.ExtremeData" />
+		<mapping class="edu.rmit.eres.seaports.model.data.TradeVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.data.TradeData" />
+		<mapping class="edu.rmit.eres.seaports.model.data.DemographicsVariable" />
+		<mapping class="edu.rmit.eres.seaports.model.data.DemographicsData" />
+		<mapping class="edu.rmit.eres.seaports.model.data.WeatherEvent" />
+		<mapping class="edu.rmit.eres.seaports.model.data.CurrentClimateRisk" />
+		<mapping class="edu.rmit.eres.seaports.model.data.FutureClimateRisk" />
     </session-factory>
 </hibernate-configuration>

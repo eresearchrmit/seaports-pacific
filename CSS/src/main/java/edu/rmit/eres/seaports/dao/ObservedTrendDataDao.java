@@ -19,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.model.ObservedTrendData;
 import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.Variable;
+import edu.rmit.eres.seaports.model.data.ObservedTrendData;
 
 /**
  * Data Access Object for the Observed Trend data

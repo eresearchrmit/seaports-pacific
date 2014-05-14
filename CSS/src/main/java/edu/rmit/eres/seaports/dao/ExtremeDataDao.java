@@ -19,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.rmit.eres.seaports.model.ExtremeData;
 import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.Variable;
+import edu.rmit.eres.seaports.model.data.ExtremeData;
 
 /**
  * Data Access Object for the Extreme data

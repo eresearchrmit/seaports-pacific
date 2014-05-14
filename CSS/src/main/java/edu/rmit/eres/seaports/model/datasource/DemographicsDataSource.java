@@ -5,7 +5,7 @@
  * This code is under the BSD license. See 'license.txt' for details.
  * Project hosted at: https://code.google.com/p/climate-smart-seaports/
  */
-package edu.rmit.eres.seaports.model;
+package edu.rmit.eres.seaports.model.datasource;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,26 +14,33 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import edu.rmit.eres.seaports.dao.ExtremeDataDao;
+import edu.rmit.eres.seaports.dao.DemographicsDataDao;
+import edu.rmit.eres.seaports.model.DataElement;
+import edu.rmit.eres.seaports.model.DataSource;
+import edu.rmit.eres.seaports.model.DataSourceParameter;
+import edu.rmit.eres.seaports.model.DisplayType;
+import edu.rmit.eres.seaports.model.Region;
+import edu.rmit.eres.seaports.model.Seaport;
+import edu.rmit.eres.seaports.model.data.DemographicsData;
 
 /**
  * Class representing a source of data
  * @author Guillaume Prevost
- * @since 29th Apr. 2014
+ * @since 14th May 2014
  */
 @Entity
-@DiscriminatorValue(value="ObservedExtreme")
-public class ObservedExtremeDataSource extends DataSource implements Serializable {
+@DiscriminatorValue(value="Demographics")
+public class DemographicsDataSource extends DataSource implements Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;
 	
 	@Transient
-	private ExtremeDataDao extremeDataDao;
+	private DemographicsDataDao demographicsDataDao;
 	
 	/**
 	 * Default constructor of data source
 	 */
-	public ObservedExtremeDataSource() {
+	public DemographicsDataSource() {
 		super();
 	}
 	
@@ -45,14 +52,14 @@ public class ObservedExtremeDataSource extends DataSource implements Serializabl
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 */
-	public ObservedExtremeDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
+	public DemographicsDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
 		super(name, displayName, helpText, parameters, seaports);
 	}
 	
 	/**
 	 * Copy constructor of data source
 	 */
-	public ObservedExtremeDataSource(DataSource dataSource) {
+	public DemographicsDataSource(DataSource dataSource) {
 		super(dataSource);
 	}
 
@@ -65,37 +72,30 @@ public class ObservedExtremeDataSource extends DataSource implements Serializabl
 	 * @param seaports: the list of seaports for which this data source is available
 	 * @param displayTypes: the display types available for this data source
 	 */
-	public ObservedExtremeDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
+	public DemographicsDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
 		super(name, displayName, helpText, parameters, seaports, displayTypes);
 	}
 	
 	@Override
 	public void init(Object obj) {
-		ExtremeDataDao dataDao = (ExtremeDataDao)obj;
-		this.extremeDataDao = (ExtremeDataDao) dataDao;
+		DemographicsDataDao dataDao = (DemographicsDataDao)obj;
+		this.demographicsDataDao = (DemographicsDataDao) dataDao;
 	}
 	
 	@Override
 	public void flush() {
-		this.extremeDataDao = null;
+		this.demographicsDataDao = null;
 	}
 	
 	/**
 	 * Retrieves the data according to the given parameters
 	 */
 	@Override
-	public List<ExtremeData> getData(DataElement dataElement) {
+	public List<DemographicsData> getData(DataElement dataElement) {
 		
 		Region region = dataElement.getReport().getSeaport().getRegion();
 		
-		String variableName = "";
-		for (DataSourceParameterOption opt : dataElement.getSelectedOptions())
-		{
-			if (opt.getParameter().getName().equals("Variable"))
-				variableName = opt.getValue();
-		}
-		
-		List<ExtremeData> data = this.extremeDataDao.find(region, variableName, 2011);
+		List<DemographicsData> data = this.demographicsDataDao.find(region);
 				
 		return data;
 	}

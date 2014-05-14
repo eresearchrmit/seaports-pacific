@@ -20,8 +20,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.rmit.eres.seaports.model.Region;
-import edu.rmit.eres.seaports.model.TradeData;
 import edu.rmit.eres.seaports.model.Variable;
+import edu.rmit.eres.seaports.model.data.TradeData;
 
 /**
  * Data Access Object for the Extreme data
@@ -104,12 +104,12 @@ public class TradeDataDao {
 	 */
 	private List<TradeData> performQueryAndCheckResultList(Query query) {
 		try {
-			List<TradeData> observedTradeData = new ArrayList<TradeData>();
+			List<TradeData> tradeData = new ArrayList<TradeData>();
 			for (Object obj : query.getResultList()) {
 				if (obj instanceof TradeData)
-					observedTradeData.add((TradeData)(obj));
+					tradeData.add((TradeData)(obj));
 			}
-			return observedTradeData;
+			return tradeData;
 		}
 		catch (NoResultException e) {
 			return null;
