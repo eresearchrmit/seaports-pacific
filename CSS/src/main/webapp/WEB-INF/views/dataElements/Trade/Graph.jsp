@@ -17,10 +17,10 @@
 	<c:if test="${not empty category}">
 		<c:set var="graphId" scope="request" value="${category}"/>
 	</c:if>
-	
+		
 	<div class="centered">
 		<h5 style="color: rgb(69, 114, 167); font-weight:normal">
-			Projected ${element.data[0].variable.description}
+			Value of the top ${element.data[0].imported ? 'imported': 'exported'} Goods in ${element.data[0].region.name}
 		</h5>
 	</div>
 	
@@ -28,7 +28,7 @@
 		$(function () {
 			setTimeout(function(){
 				
-	        $('#${graphId}-futureExtreme-Graph${element.id}').highcharts({
+	        $('#${graphId}-trade-Graph${element.id}').highcharts({
 	            chart: {
 	                zoomType: 'x',
 	                spacingRight: 20
@@ -45,14 +45,12 @@
 	            },
 	            yAxis: {
 	                title: {
-	                	text: "Return Period (years)"
+	                	text: "${element.data[0].variable.shortName} (${element.data[0].variable.uom})"
 	                }
 	            },
 	            tooltip: {
 	                shared: true,
-	                useHTML: true,
-	                xDateFormat: '%Y',
-	                valueSuffix: ' ${element.data[0].variable.uom}'
+	                valueSuffix: " ${element.data[0].variable.uom}"
 	            },
 	            legend: {
 	                enabled: false
@@ -81,19 +79,21 @@
 	            },
 	            
 	            series: [
-	                <c:forEach items="${element.data}" var="futureExtremeData" varStatus="loop">
+	                <c:forEach items="${element.data}" var="tradeData" varStatus="loop">
 	                
-		                <c:if test="${not empty previousLocation && futureExtremeData.location != previousLocation}" >
+		                <c:if test="${not empty previousProduct && tradeData.variable.name != previousProduct}" >
 		                	]},
 		                </c:if>
-		                <c:if test="${(empty previousLocation) || (not empty previousLocation && futureExtremeData.location != previousLocation)}" >
+		                <c:if test="${(empty previousProduct) || (not empty previousProduct && tradeData.variable.name != previousProduct)}" >
 			                {
-		                	name: "<c:out value="${futureExtremeData.location}" />",
+		                	name: "<c:out value="${tradeData.variable.name}" />",
+		                	pointInterval: 365 * 24 * 3600 * 1000, // 5 years
+		                    pointStart: Date.UTC(${element.data[0].year}, 0, 01),
 		                    data: [
 	                    </c:if>
                     
-						[Date.UTC(${futureExtremeData.year}, 0, 1), ${futureExtremeData.value}],
-						<c:set var="previousLocation" value="${futureExtremeData.location}" />
+						${tradeData.value},
+						<c:set var="previousProduct" value="${tradeData.variable.name}" />
 	                
 	            </c:forEach>
 	            	]}
@@ -102,7 +102,7 @@
 			},3);
 	    });
 	</script>
-	<div id="${graphId}-futureExtreme-Graph${element.id}" class="highcharts" style="width:95%; margin-bottom:30px">
+	<div id="${graphId}-trade-Graph${element.id}" class="highcharts" style="width:95%; margin-bottom:30px">
 	</div>
 	
 	<i class="credits">(Source: ${element.data[0].sourceName}, <fmt:formatDate value="${element.data[0].creationDate}" pattern="yyyy" />).</i>

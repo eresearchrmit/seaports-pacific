@@ -87,6 +87,9 @@ public class ReportController {
 	@Autowired
 	private ExtremeDataDao extremeDataDao;
 	
+	@Autowired
+	private TradeDataDao tradeDataDao;
+	
 	@RequestMapping(value= "/my-reports", method = RequestMethod.GET)
 	public String myReports(Model model) {
 		logger.info("Inside myReports");
@@ -742,6 +745,8 @@ public class ReportController {
 			    	ds.init(extremeDataDao);
 			    if (ds instanceof FutureTrendDataSource)
 			    	ds.init(futureTrendDataDao);
+			    if (ds instanceof TradeDataSource)
+			    	ds.init(tradeDataDao);
 			    
 			    // Retrieves the data and set the element's data field
 			    try {

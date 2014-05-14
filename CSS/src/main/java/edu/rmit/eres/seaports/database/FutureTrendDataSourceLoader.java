@@ -153,7 +153,7 @@ public class FutureTrendDataSourceLoader {
 	{
 		// Regions
 		Region r1 = (Region)(session.get(Region.class, 1)); // Fiji
-		Region r2 = (Region)(session.get(Region.class, 2)); // PNG
+		//Region r2 = (Region)(session.get(Region.class, 2)); // PNG
 		
 		
 		// Emission Scenarios

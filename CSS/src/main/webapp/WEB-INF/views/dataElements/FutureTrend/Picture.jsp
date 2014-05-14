@@ -67,6 +67,8 @@
 	
 	<c:if test="${not empty pictureDisplayed}">
 	<br />
+	<img name="${element.name}" src="/resources/img/data/futureTrend/${fn:toLowerCase(element.data[0].variable.shortName)}-legend.png" style="max-width:80%; max-height: 50px;" />
+	<br />
 	<i class="credits">(Source: ${element.data[0].sourceName}, <fmt:formatDate value="${element.data[0].creationDate}" pattern="yyyy" />).</i>
 	</c:if>
 </c:if>
