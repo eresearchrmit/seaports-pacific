@@ -1,5 +1,5 @@
-Climate Smart Seaports v1.0
----------------------------
+Climate Smart Seaports - Pacific v1.0
+-------------------------------------
 
 
 1. Introduction
@@ -44,7 +44,6 @@ You can also run the "main" methods in the Java files under
 "src/main/java/database" to programatically load the data in the databases
 (make sure you edit the files "hibernate.cfg.xml" and "hibernate-test.cfg.xml" 
 to add your databases credentials before using these Java loading files).
-
 
 b. Build the application
 ------------------------

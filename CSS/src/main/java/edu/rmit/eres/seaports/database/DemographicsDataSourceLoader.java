@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2013, RMIT University, Australia.
+ * Copyright (c) 2014, RMIT University, Australia.
  * All rights reserved.
  * 
  * This code is under the BSD license. See 'license.txt' for details.
- * Project hosted at: https://code.google.com/p/climate-smart-seaports/
+ * Project hosted at: https://bitbucket.org/eresearchrmit/seaports-pacific.git
  */
 package edu.rmit.eres.seaports.database;
 
@@ -110,7 +110,7 @@ public class DemographicsDataSourceLoader {
 	{
 		// Regions
 		Region r1 = (Region)(session.get(Region.class, 1)); // Fiji
-		//Region r2 = (Region)(session.get(Region.class, 2)); // PNG
+		Region r2 = (Region)(session.get(Region.class, 2)); // PNG
 		
 		// Variables
 		DemographicsVariable pop = new DemographicsVariable("Total Population", "Total Population", "", "people", "");
@@ -124,11 +124,8 @@ public class DemographicsDataSourceLoader {
 			creationDate = new Date();
 		}
 		
-		// Fiji
+		// Population Fiji
 		String sourceName = "Fiji Bureau of Statistics";
-		
-		
-		// Population
 		session.save(new DemographicsData(creationDate, r1, 1911, pop, 139541.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1921, pop, 157266.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1936, pop, 198379.0, sourceName));
@@ -138,5 +135,11 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r1, 1986, pop, 715375.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1996, pop, 755077.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 2007, pop, 837271.0, sourceName));
+		
+		// Population PNG
+		sourceName = "National Statistical Office of Papua New Guinea";
+		session.save(new DemographicsData(creationDate, r2, 1980, pop, 2978057.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 1990, pop, 3582333.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 2000, pop, 5171548.0, sourceName));
 	}
 }

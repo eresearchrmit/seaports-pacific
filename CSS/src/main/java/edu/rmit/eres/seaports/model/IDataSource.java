@@ -3,7 +3,7 @@
  * All rights reserved.
  * 
  * This code is under the BSD license. See 'license.txt' for details.
- * Project hosted at: https://code.google.com/p/climate-smart-seaports/
+ * Project hosted at: https://bitbucket.org/eresearchrmit/seaports-pacific.git
  */
 package edu.rmit.eres.seaports.model;
 

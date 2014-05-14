@@ -1,6 +1,8 @@
-database
-helpers
-security
-war.controller
-war.dao
-war.model
+edu.rmit.eres.seaports.controller
+edu.rmit.eres.seaports.dao
+edu.rmit.eres.seaports.database
+edu.rmit.eres.seaports.helpers
+edu.rmit.eres.seaports.model
+edu.rmit.eres.seaports.model.data
+edu.rmit.eres.seaports.model.datasource
+edu.rmit.eres.seaports.security
