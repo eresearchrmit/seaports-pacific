@@ -137,7 +137,6 @@ public class UserControllerTest {
 		Assert.assertEquals(userForTest.getFirstname(), newUser.getFirstname());
 		Assert.assertEquals(userForTest.getLastname(), newUser.getLastname());
 		Assert.assertEquals(userForTest.getRoles(), newUser.getRoles());
-		Assert.assertEquals(userForTest.getNlaNumber(), newUser.getNlaNumber());
 		Assert.assertEquals(userForTest.getEnabled(), newUser.getEnabled());
 		Assert.assertEquals(userForTest.getNonLocked(), newUser.getNonLocked());
 	}

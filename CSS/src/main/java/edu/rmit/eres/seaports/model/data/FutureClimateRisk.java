@@ -31,22 +31,22 @@ public class FutureClimateRisk implements Serializable {
 	/**
 	 * A list of allowed climate events types
 	 */
-	public static final String[] eventTypes = new String[] {"Sea current", "Wave climate", "Sea Surface Temperature", "Sea acidity", "Storm surge", "Cyclone", "Intense rainfall", "Wind speed/direction", "Heat wave", "Drought"};
+	public final String[] eventTypes = new String[] {"Sea current", "Wave climate", "Sea Surface Temperature", "Sea acidity", "Storm surge", "Cyclone", "Intense rainfall", "Wind speed/direction", "Heat wave", "Drought"};
 		
 	/**
 	 * A list of the allowed risk areas
 	 */
-	public static final String[] riskAreas = new String[] {"Marine Infrastructure", "Port Infrastructure", "Port Superstructure", "Supply Chain", "Operations", "Workforce", "Financial", "Legal/Regulations", "Environment", "Stakeholders", "Reputation"};
+	public final String[] riskAreas = new String[] {"Marine Infrastructure", "Port Infrastructure", "Port Superstructure", "Supply Chain", "Operations", "Workforce", "Financial", "Legal/Regulations", "Environment", "Stakeholders", "Reputation"};
 	
 	/**
 	 * A list of the allowed consequence ratings
 	 */
-	public static final String[] consequencesRatings = new String[] {"Not vulnerable", "Could be vulnerable", "Somewhat vulnerable", "Moderately vulnerable", "Significantly vulnerable"};
+	public final String[] consequencesRatings = new String[] {"None or Negligible", "Minor", "Medium", "Major", "Extreme"};
 	
 	/**
 	 * A list of the allowed likelihood rating
 	 */
-	public static final String[] likelihoodRatings = new String[] {"Rare", "Unlikely", "Possible", "Probable", "Almost Certain"};
+	public final String[] likelihoodRatings = new String[] {"Rare", "Unlikely", "Possible", "Probable", "Almost Certain"};
 
 	
 	/**
@@ -264,6 +264,14 @@ public class FutureClimateRisk implements Serializable {
 	}
 	
 	/**
+	 * Getter for a string representation of the rating of the consequences of the risk
+	 * @return: the current string representation for the rating of the consequences of the risk
+	 */
+	public String getConsequencesRatingString() {
+		return this.consequencesRatings[this.consequencesRating - 1]; // -1 because rating start at 1 and array index start at 0 
+	}
+	
+	/**
 	 * Getter for the rating of the likelihood of the risk to happen
 	 * @return: the current rating of the likelihood of the risk to happen
 	 */
@@ -277,6 +285,14 @@ public class FutureClimateRisk implements Serializable {
 	 */
 	public void setLikelihoodRating(Integer likelihoodRating) {
 		this.likelihoodRating = likelihoodRating;
+	}
+	
+	/**
+	 * Getter for a string representation of the rating of the likelihood of the risk
+	 * @return: the current string representation for the rating of the likelihood of the risk
+	 */
+	public String getLikelihoodRatingString() {
+		return this.likelihoodRatings[this.likelihoodRating - 1]; // -1 because rating start at 1 and array index start at 0 
 	}
 	
 	/**

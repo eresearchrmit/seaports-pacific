@@ -8,13 +8,15 @@
 package edu.rmit.eres.seaports.model.datasource;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import edu.rmit.eres.seaports.dao.FutureTrendDataDao;
+import edu.rmit.eres.seaports.dao.ExtremeDataDao;
 import edu.rmit.eres.seaports.model.DataElement;
 import edu.rmit.eres.seaports.model.DataSource;
 import edu.rmit.eres.seaports.model.DataSourceParameter;
@@ -22,26 +24,26 @@ import edu.rmit.eres.seaports.model.DataSourceParameterOption;
 import edu.rmit.eres.seaports.model.DisplayType;
 import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.Seaport;
-import edu.rmit.eres.seaports.model.data.FutureTrendData;
+import edu.rmit.eres.seaports.model.data.ExtremeData;
 
 /**
  * Class representing a source of data
  * @author Guillaume Prevost
- * @since 5th May. 2014
+ * @since 29th Apr. 2014
  */
 @Entity
-@DiscriminatorValue(value="FutureTrend")
-public class FutureTrendDataSource extends DataSource implements Serializable {
+@DiscriminatorValue(value="ProjectedClimateExtreme")
+public class ProjectedClimateExtremeDataSource extends DataSource implements Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;
 	
 	@Transient
-	private FutureTrendDataDao futureTrendDataDao;
+	private ExtremeDataDao extremeDataDao;
 	
 	/**
 	 * Default constructor of data source
 	 */
-	public FutureTrendDataSource() {
+	public ProjectedClimateExtremeDataSource() {
 		super();
 	}
 	
@@ -53,14 +55,14 @@ public class FutureTrendDataSource extends DataSource implements Serializable {
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 */
-	public FutureTrendDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
+	public ProjectedClimateExtremeDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
 		super(name, displayName, helpText, parameters, seaports);
 	}
 	
 	/**
 	 * Copy constructor of data source
 	 */
-	public FutureTrendDataSource(DataSource dataSource) {
+	public ProjectedClimateExtremeDataSource(DataSource dataSource) {
 		super(dataSource);
 	}
 
@@ -73,26 +75,26 @@ public class FutureTrendDataSource extends DataSource implements Serializable {
 	 * @param seaports: the list of seaports for which this data source is available
 	 * @param displayTypes: the display types available for this data source
 	 */
-	public FutureTrendDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
+	public ProjectedClimateExtremeDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
 		super(name, displayName, helpText, parameters, seaports, displayTypes);
 	}
 	
 	@Override
 	public void init(Object obj) {
-		FutureTrendDataDao dataDao = (FutureTrendDataDao)obj;
-		this.futureTrendDataDao = (FutureTrendDataDao) dataDao;
+		ExtremeDataDao dataDao = (ExtremeDataDao)obj;
+		this.extremeDataDao = (ExtremeDataDao) dataDao;
 	}
 	
 	@Override
 	public void flush() {
-		this.futureTrendDataDao = null;
+		this.extremeDataDao = null;
 	}
 	
 	/**
 	 * Retrieves the data according to the given parameters
 	 */
 	@Override
-	public List<FutureTrendData> getData(DataElement dataElement) {
+	public List<ExtremeData> getData(DataElement dataElement) {
 		
 		Region region = dataElement.getReport().getSeaport().getRegion();
 		
@@ -103,10 +105,19 @@ public class FutureTrendDataSource extends DataSource implements Serializable {
 				variableName = opt.getValue();
 		}
 
-		List<FutureTrendData> data = this.futureTrendDataDao.find(region, variableName);
-				
+		List<ExtremeData> data = this.extremeDataDao.find(region, variableName);
+		Collections.sort(data, new ExtremeDataComparator());
+		
 		return data;
 	}
+	
+	public static class ExtremeDataComparator implements Comparator<ExtremeData> {
+	      @Override
+	      public int compare(ExtremeData s, ExtremeData t) {
+	         int f = s.getLocation().compareTo(t.getLocation());
+	         return (f != 0) ? f : s.getYear().compareTo(t.getYear());
+	      }
+	  }
 	
 	public static long getSerialversionuid() {
 		return serialVersionUID;

@@ -22,25 +22,25 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.rmit.eres.seaports.model.Region;
 import edu.rmit.eres.seaports.model.Variable;
 import edu.rmit.eres.seaports.model.data.ClimateEmissionScenario;
-import edu.rmit.eres.seaports.model.data.FutureTrendData;
+import edu.rmit.eres.seaports.model.data.ProjectedClimateChangeData;
 
 /**
- * Data Access Object for the Future Trend data
+ * Data Access Object for the Projected Climate Change data
  * @author Guillaume Prevost
  */
 @Repository
-public class FutureTrendDataDao {
+public class ProjectedClimateChangeDataDao {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
 	@Autowired
-	private FutureTrendVariableDao futureTrendVariableDao;
+	private ProjectedClimateChangeVariableDao projectedClimateChangeVariableDao;
 	
 	/**
 	 * The name of the table in the database where the Future Trend Data are stored
 	 */
-	public final static String TABLE_NAME = "FutureTrendData";
+	public final static String TABLE_NAME = "ProjectedClimateChangeData";
 	
 	/**
 	 * Retrieve an FutureTrendData in the CSS Database from it's unique ID
@@ -48,8 +48,8 @@ public class FutureTrendDataDao {
 	 * @return the FutureTrendData object corresponding to the given unique ID
 	 * @throws NoResultException if the search didn't return any result
 	 */
-	public FutureTrendData find(Integer id) throws NoResultException {
-		FutureTrendData data = entityManager.find(FutureTrendData.class, id);
+	public ProjectedClimateChangeData find(Integer id) throws NoResultException {
+		ProjectedClimateChangeData data = entityManager.find(ProjectedClimateChangeData.class, id);
 		if (data == null)
 			throw new NoResultException(ERR_NO_RESULT);
 		return data;
@@ -63,9 +63,9 @@ public class FutureTrendDataDao {
 	 * @throws NoResultException if no FutureTrendData matches the given parameter
 	 */
 	@Transactional
-	public List<FutureTrendData> find(Region region, String variableName) throws NoResultException {
+	public List<ProjectedClimateChangeData> find(Region region, String variableName) throws NoResultException {
 		
-		Variable variable = futureTrendVariableDao.find(variableName);		
+		Variable variable = projectedClimateChangeVariableDao.find(variableName);		
 		try {
 			Query query = entityManager.createQuery("SELECT d FROM " + TABLE_NAME + " d WHERE d.region = :region AND d.variable = :variable");
 			query.setParameter("region", region);
@@ -86,9 +86,9 @@ public class FutureTrendDataDao {
 	 * @throws NoResultException if no FutureTrendData matches the given parameter
 	 */
 	@Transactional
-	public List<FutureTrendData> find(Region region, String variableName, ClimateEmissionScenario emissionScenario) throws NoResultException {
+	public List<ProjectedClimateChangeData> find(Region region, String variableName, ClimateEmissionScenario emissionScenario) throws NoResultException {
 		
-		Variable variable = futureTrendVariableDao.find(variableName);		
+		Variable variable = projectedClimateChangeVariableDao.find(variableName);		
 		try {
 			Query query = entityManager.createQuery("SELECT d FROM " + TABLE_NAME + " d WHERE d.region = :region AND d.variable = :emissionScenario AND d.emissionScenario = :emissionScenario");
 			query.setParameter("region", region);
@@ -111,9 +111,9 @@ public class FutureTrendDataDao {
 	 * @throws NoResultException if no FutureTrendData matches the given parameter
 	 */
 	@Transactional
-	public List<FutureTrendData> find(Region region, String variableName, Integer year) throws NoResultException {
+	public List<ProjectedClimateChangeData> find(Region region, String variableName, Integer year) throws NoResultException {
 		
-		Variable variable = futureTrendVariableDao.find(variableName);		
+		Variable variable = projectedClimateChangeVariableDao.find(variableName);		
 		try {
 			Query query = entityManager.createQuery("SELECT d FROM " + TABLE_NAME + " d WHERE d.region = :region AND d.variable = :variable AND d.year = :year");
 			query.setParameter("region", region);
@@ -131,12 +131,12 @@ public class FutureTrendDataDao {
 	 * @param query: the query to execute
 	 * @return the list of ObservedTrendData returned by the query and checked
 	 */
-	private List<FutureTrendData> performQueryAndCheckResultList(Query query) {
+	private List<ProjectedClimateChangeData> performQueryAndCheckResultList(Query query) {
 		try {
-			List<FutureTrendData> futureTrendData = new ArrayList<FutureTrendData>();
+			List<ProjectedClimateChangeData> futureTrendData = new ArrayList<ProjectedClimateChangeData>();
 			for (Object obj : query.getResultList()) {
-				if (obj instanceof FutureTrendData)
-					futureTrendData.add((FutureTrendData)(obj));
+				if (obj instanceof ProjectedClimateChangeData)
+					futureTrendData.add((ProjectedClimateChangeData)(obj));
 			}
 			return futureTrendData;
 		}
@@ -151,7 +151,7 @@ public class FutureTrendDataDao {
 	 * @return the saved data
 	 */
 	@Transactional
-	public FutureTrendData save(FutureTrendData futureTrendData) {
+	public ProjectedClimateChangeData save(ProjectedClimateChangeData futureTrendData) {
 		if (futureTrendData.getId() == 0) {
 			entityManager.persist(futureTrendData);
 			return futureTrendData;
@@ -163,5 +163,5 @@ public class FutureTrendDataDao {
 	} 
 	
 	// Information, success, warning and error messages
-	public static final String ERR_NO_RESULT = "No Future Trend data found corresponding to the specified parameters";
+	public static final String ERR_NO_RESULT = "No Projected Climate Change data found corresponding to the specified parameters";
 }

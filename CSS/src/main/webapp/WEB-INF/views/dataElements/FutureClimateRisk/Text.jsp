@@ -19,6 +19,6 @@
 	<c:out value="${futureClimateRisk.eventType}" /> have been identified as a <c:out value="${futureClimateRisk.priority}" /> priority risk on <c:out value="${futureClimateRisk.area}" />.
 	The risk consists in '<c:out value="${futureClimateRisk.description}" />' . 
 	The current thresholds for this risk are: '<c:out value="${futureClimateRisk.details}" />'
-	The consequences of this risk in the future are identified as '<c:out value="${futureClimateRisk.futureConsequences}" />'.
-	</p>
+	The consequences of this risk in the future are identified as '<c:out value="${futureClimateRisk.futureConsequences}" />'. 
+	The priority was calculated based on the '<i>${futureClimateRisk.consequencesRatingString}</i>' consequences rating and the '<i>${futureClimateRisk.likelihoodRatingString}</i>' likelihood rating of the event.</p>
 </c:if>

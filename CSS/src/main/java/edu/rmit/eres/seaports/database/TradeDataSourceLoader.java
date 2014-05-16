@@ -76,7 +76,7 @@ public class TradeDataSourceLoader {
 		TradeDataSource dsTrade = new TradeDataSource("trade", "Trade Data", "", null, null, displayTypes);
 		
 		// Parameter Import/Export, letting the user choose between import trade data or export trade data
-		DataSourceParameter importExportParam = new DataSourceParameter("Import/Export", "<h6>Import/Export</h6><p>Choose 'import' to get the values of top 10 goods imports over a decade</p><p>Choose 'export' to get the values of top 10 goods exports over a decade</p>",
+		DataSourceParameter importExportParam = new DataSourceParameter("Import/Export", "<h6>Import/Export</h6><p>Choose 'import' to get the top 10 imports by monetary value over a decade.</p><p>Choose 'export' to get the top 10 exports by monetary value over a decade.</p>",
 				dsTrade, null, DataSourceParameter.Display.RADIO);
 		session.save(importExportParam);
 		DataSourceParameterOption importOption = new DataSourceParameterOption("Import", "Import", importExportParam, 1);

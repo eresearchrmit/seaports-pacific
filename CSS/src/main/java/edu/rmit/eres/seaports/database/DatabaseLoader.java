@@ -63,8 +63,8 @@ public class DatabaseLoader {
 		// Loads the various data sources
 		ObservedTrendDataSourceLoader.LoadObservedTrendDataSource(session);
 		ObservedExtremeDataSourceLoader.LoadObservedExtremeDataSource(session);
-		FutureTrendDataSourceLoader.LoadFutureTrendDataSource(session);
-		FutureExtremeDataSourceLoader.LoadFutureExtremeDataSource(session);
+		ProjectedClimateChangeDataSourceLoader.LoadProjectedClimateChangeDataSource(session);
+		ProjectedClimateExtremeDataSourceLoader.LoadProjectedClimateExtremeDataSource(session);
 		VulnerabilityDataSourceLoader.LoadVulnerabilityDataSource(session);
 		CurrentClimateRiskDataSourceLoader.LoadCurrentClimateRiskDataSource(session);
 		FutureClimateRiskDataSourceLoader.LoadFutureClimateRiskDataSource(session);

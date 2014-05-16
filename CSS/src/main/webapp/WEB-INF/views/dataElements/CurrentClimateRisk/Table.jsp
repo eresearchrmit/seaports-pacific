@@ -40,7 +40,7 @@
 			<c:forEach items="${consequenceRatings}" var="rating" varStatus="ratingsLoopStatus">
 				<tr class="${ratingsLoopStatus.index % 2 == 0 ? 'even' : 'odd'}">
 					<td class="top">${consequencesCategories[ratingsLoopStatus.index]}</td>
-					<c:forEach var="i" begin="0" end="4">
+					<c:forEach var="i" begin="1" end="5">
 					   <td class="top"><c:if test="${i == rating}">X</c:if></td>
 					</c:forEach>
 				</tr>

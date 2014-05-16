@@ -28,7 +28,7 @@ import edu.rmit.eres.seaports.model.data.CurrentClimateRisk;
  * @since 04th Mar. 2014
  */
 @Entity
-@DiscriminatorValue(value="FutureClimateRisk")
+@DiscriminatorValue(value="CurrentClimateRisk")
 public class CurrentClimateRiskDataSource extends DataSource implements Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;

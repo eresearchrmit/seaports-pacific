@@ -57,7 +57,7 @@
 		</tr>
 		<tr>
 			<td valign="top">
-				<label style="font-size:13px">Region Selection <a href="#" class="helpTooltip" title="Hover over a Natural Resource Management region and click to select the region you want. <a href=&quot;/public/guidelines#css-workboard&quot; target=&quot;_blank&quot;>Read more...</a>"><img src="<c:url value="/resources/img/icons/help.png" />" alt="Help" /></a>:</label>
+				<label style="font-size:13px">Region Selection <a href="#" class="helpTooltip" title="Hover over a region and click to select the region you want. <a href=&quot;/public/guidelines#css-workboard&quot; target=&quot;_blank&quot;>Read more...</a>"><img src="<c:url value="/resources/img/icons/help.png" />" alt="Help" /></a>:</label>
 			</td>
 			<td class="col2" valign="top">
 				<div id="displayReportRegion" style="display:inline; font-size:13px" ><span class="hint"><i>Select a region using the map then select a seaport within it.</i></span></div>
@@ -109,7 +109,7 @@
 		
 		<tr>
 			<td class="top">
-				<label style="font-size:13px">Sections headings <a href="#" class="helpTooltip" title="Should the sections be pre-filled with default headings ? These can be edited or deleted later.</a>" ><img src="<c:url value="/resources/img/icons/help.png" />" alt="Help" /></a>:</label>
+				<label style="font-size:13px">Sections headings <a href="#" class="helpTooltip" title="Selecting this will pre-fill your report with default category headings. These can be edited or deleted later."><img src="<c:url value="/resources/img/icons/help.png" />" alt="Help" /></a>:</label>
 			</td>
 			<td class="col2" valign="top">
 				<input type="checkbox" id="chkReportPrefill" name="prefillReport"  />
@@ -121,7 +121,7 @@
 	</table>
 	
 	<div align="center">
-	<button id="btnCreateReport" type="submit" class="btn btn-icon btn-blue btn-arrow-right" >
+	<button id="btnCreateReport" type="submit" class="btn btn-icon btn-blue btn-arrow-right" title="Create the report">
 		<span></span>Create
 	</button>
 	</div>

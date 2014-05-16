@@ -23,13 +23,13 @@ import edu.rmit.eres.seaports.model.Region;
 import java.io.Serializable;
 
 /**
- * Class representing the future trend data
+ * Class representing the projected climate change data
  * @author Guillaume Prevost
  * @since 5th May. 2014
  */
 @Entity
-@Table(name = "FutureTrendData")
-public class FutureTrendData implements Serializable
+@Table(name = "ProjectedClimateChangeData")
+public class ProjectedClimateChangeData implements Serializable
 {
 	private static final long serialVersionUID = -7141765080300638805L;
 
@@ -62,7 +62,7 @@ public class FutureTrendData implements Serializable
 	 */
 	@ManyToOne
 	@JoinColumn(name="variable_id")
-	private FutureTrendVariable variable;
+	private ProjectedClimateChangeVariable variable;
 
 	/**
 	 * The CO2 emissions scenario
@@ -98,12 +98,12 @@ public class FutureTrendData implements Serializable
 	/**
 	 * Default constructor of ObservedTrendData
 	 */
-	public FutureTrendData() {
+	public ProjectedClimateChangeData() {
 		setCreationDate(new Date());
 	}
 	
 	/**
-	 * Constructor of FutureTrendData
+	 * Constructor of ProjectedClimateChangeData
 	 * @param creationDate: the date when this data has been created
 	 * @param region: the region to which the data is related
 	 * @param year: the year for which this data is projected
@@ -115,7 +115,7 @@ public class FutureTrendData implements Serializable
 	 * @param picture: the picture representing the data
 	 * @param sourceName: the name of the source of the data
 	 */
-	public FutureTrendData(Date creationDate, Region region, Integer year, FutureTrendVariable variable, ClimateEmissionScenario emissionScenario, String measureSeason, Double value, Double variation, String sourceName) {
+	public ProjectedClimateChangeData(Date creationDate, Region region, Integer year, ProjectedClimateChangeVariable variable, ClimateEmissionScenario emissionScenario, String measureSeason, Double value, Double variation, String sourceName) {
 		setCreationDate(creationDate);
 		setRegion(region);
 		setYear(year);
@@ -128,8 +128,8 @@ public class FutureTrendData implements Serializable
 	}
 
 	/**
-	 * Getter for the unique ID of the Observed Trend Data
-	 * @return: the unique ID of the Observed Trend Data
+	 * Getter for the unique ID of the Projected Climate Change Data
+	 * @return: the unique ID of the Projected Climate Change Data
 	 */
 	public int getId() {
 		return id;
@@ -187,7 +187,7 @@ public class FutureTrendData implements Serializable
 	 * Getter for the variable that this Data represent
 	 * @return: the current variable represented by this data
 	 */
-	public FutureTrendVariable getVariable() {
+	public ProjectedClimateChangeVariable getVariable() {
 		return variable;
 	}
 	
@@ -195,7 +195,7 @@ public class FutureTrendData implements Serializable
 	 * Setter for the variable that this Data represent
 	 * @param variable: the new variable represented by this data
 	 */
-	public void setVariable(FutureTrendVariable variable) {
+	public void setVariable(ProjectedClimateChangeVariable variable) {
 		this.variable = variable;
 	}
 	

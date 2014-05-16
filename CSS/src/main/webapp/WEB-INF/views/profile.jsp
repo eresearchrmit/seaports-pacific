@@ -22,8 +22,7 @@
 	
 		<div style="font-size: 1.2em; margin-bottom: 40px">
 			<strong>Username</strong>: ${userProfile.username}<br />
-			<strong>E-mail address</strong>: ${userProfile.email}<br />
-			<strong>NLA Number</strong>: ${not empty userProfile.nlaNumber ? userProfile.nlaNumber : 'N/A'} 
+			<strong>E-mail address</strong>: ${userProfile.email}
 		</div>
 		
 		<h5>Reports published by ${userProfile.firstname} ${userProfile.lastname}:</h5>

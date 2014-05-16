@@ -63,7 +63,7 @@ public class FutureClimateRiskDataSourceLoader {
 		
 		
 		// Data Source
-		FutureClimateRiskDataSource dsFutureClimateRisk = new FutureClimateRiskDataSource("futureClimateRisk", "Future Climate Risk Assessment", "<p><i>?.</i></p>", 
+		FutureClimateRiskDataSource dsFutureClimateRisk = new FutureClimateRiskDataSource("futureClimateRisk", "Future Climate Risk Assessment", "<p><i>Click <a href=\"/resources/docs/matrix-future-climate-risk.docx\" target=\"_blank\">here</a> to download a document to help you to prepare this assessment.</i></p>", 
 				null, null, displayTypesFutureClimateRisk);
 		
 		
@@ -182,6 +182,7 @@ public class FutureClimateRiskDataSourceLoader {
 		// Availability of data sources for each element category
 		List<ElementCategory> categories = new ArrayList<ElementCategory>();
 		categories.add((ElementCategory)(session.get(ElementCategory.class, 2))); // Category 2 = Future climate & marine
+		categories.add((ElementCategory)(session.get(ElementCategory.class, 4))); // Category 4 = Applications
 		dsFutureClimateRisk.setCategories(categories);
 		
 		session.save(dsFutureClimateRisk);

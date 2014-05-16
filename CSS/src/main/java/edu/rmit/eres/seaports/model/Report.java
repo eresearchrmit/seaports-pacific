@@ -310,7 +310,7 @@ public class Report implements Serializable {
 		for (Element element : this.elements) {        	
  			if (element.getClass().equals(DataElement.class)) {
  				DataElement e = (DataElement)element;
- 				String dataSourceName = e.getDataSource().getName() + " data";
+ 				String dataSourceName = e.getDataSource().getDisplayName() + " data";
  				if (!dataSourcesUsed.contains(dataSourceName))
  					dataSourcesUsed += dataSourceName + ", ";
  			}

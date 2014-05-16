@@ -55,7 +55,7 @@
 				<span></span>Delete Report
 			</button>
 		</a>
-		<a href="javascript: $('#reportOrderForm${category.id}').submit();" id="lnkSaveReportOrder" class="floatright btn-margin" title="Save order of element within the selected category">
+		<a href="javascript: $('#reportOrderForm${category.id}').submit();" id="lnkSaveReportOrder" class="floatright btn-margin" title="Save order of elements within the selected category">
 			<button id="btnSaveReportOrder" type="button" class="btn btn-icon btn-grey btn-save">
 				<span></span>Save order
 			</button>
@@ -221,7 +221,7 @@
 										<c:forEach items="${report.elements}" var="positionLoopElements" varStatus="elementPositionLoopStatus">
 											<c:if test="${positionLoopElements.category.id == element.category.id + 1}">
 											<option value="${positionLoopElements.position}"${elementPositionLoopStatus.index == 0 ? ' selected' : ''}>
-												${positionLoopElements.name} [${positionLoopElements.position}]
+												${positionLoopElements.name} [position ${positionLoopElements.position + 1}]
 											</option>
 											</c:if>
 										</c:forEach>
@@ -269,7 +269,7 @@
 										<c:forEach items="${report.elements}" var="positionLoopElements" varStatus="elementPositionLoopStatus">
 											<c:if test="${positionLoopElements.category.id == element.category.id + 1}">
 											<option value="${positionLoopElements.position}"${elementPositionLoopStatus.index == 0 ? ' selected' : ''}>
-												${positionLoopElements.name} [${positionLoopElements.position}]
+												${positionLoopElements.name} [position ${positionLoopElements.position + 1}]
 											</option>
 											</c:if>
 										</c:forEach>
@@ -383,14 +383,14 @@
 									</button>
 									
 									<div class="floatright btn-margin">
-										<span class="hint">Insert file after:</span>
+										<span class="hint">Insert data after:</span>
 										<form:select id="cbb${datasource.name}ElementPosition" name="position" path="position">
 											<option value="0">[Insert in 1st position]</option>
 											<c:if test="${not empty report.elements}">
 												<c:forEach items="${report.elements}" var="positionLoopElements" varStatus="elementPositionLoopStatus">
 													<c:if test="${positionLoopElements.category.id == element.category.id + 1}">
 													<option value="${positionLoopElements.position}"${elementPositionLoopStatus.index == 0 ? ' selected' : ''}>
-														${positionLoopElements.name} [${positionLoopElements.position}]
+														${positionLoopElements.name} [position ${positionLoopElements.position + 1}]
 													</option>
 													</c:if>
 												</c:forEach>
@@ -471,15 +471,15 @@
 											<input id="hdnElementToEditId" type="hidden" name="elementId" value="${element.id}" />
 											
 											<!-- Page Break Checkbox -->
-											<input type="checkbox" id="chkPageBreak" name="pageBreakAfter" onchange="submit();" class="floatright btn-margin" style="margin-top: 3px" ${element.pageBreakAfter == true ? ' checked' : ''}  />
-											<label for="ddlDisplayType${element.id}" class="floatright" >Page Break:</label>
+											<input type="checkbox" id="chkPageBreak" name="pageBreakAfter" onchange="submit();" class="floatright btn-margin" style="margin-top: 3px" ${element.pageBreakAfter == true ? ' checked' : ''} title="Checking this creates a page break after this element. Click on 'Preview' to view these changes." />
+											<label for="ddlDisplayType${element.id}" class="floatright" title="Checking this creates a page break after this element. Click on 'Preview' to view these changes.">Page Break:</label>
 										
 											<!-- Full-width or Half-width -->	
-											<select id="ddlFullWidth${element.id}" name="fullWidth" onchange="submit();" class="floatright btn-margin">
+											<select id="ddlFullWidth${element.id}" name="fullWidth" onchange="submit();" class="floatright btn-margin" title="Sets the width of the element in the final report. Click on 'Preview' to view these changes.">
 												<option value="0" ${element.fullWidth == false ? 'selected' : ''}>50%</option>
 												<option value="1" ${element.fullWidth == true ? 'selected' : ''}>100%</option>
 											</select>
-											<label for="ddlFullWidth${element.id}" class="floatright">Width:</label>
+											<label for="ddlFullWidth${element.id}" class="floatright" title="Sets the width of the element in the final report. Click on 'Preview' to view these changes.">Width:</label>
 										</form:form>
 										
 										<!-- 'Edit text' button for plain text elements -->

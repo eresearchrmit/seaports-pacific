@@ -21,11 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.rmit.eres.seaports.model.Variable;
 
 /**
- * Data Access Object for the Future Trend Variables
+ * Data Access Object for the Projected Climate Change Variables
  * @author Guillaume Prevost
  */
 @Repository
-public class FutureTrendVariableDao {
+public class ProjectedClimateChangeVariableDao {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,7 +33,7 @@ public class FutureTrendVariableDao {
 	/**
 	 * The name of the table in the database where the Future Trends Variables are stored
 	 */
-	public final static String TABLE_NAME = "FutureTrendVariable";
+	public final static String TABLE_NAME = "ProjectedClimateChangeVariable";
 	
 	/**
 	 * Retrieve the variable in the database associated to a unique ID
@@ -85,5 +85,5 @@ public class FutureTrendVariableDao {
 	}
 	
 	// Information, success, warning and error messages
-	public static final String ERR_NO_RESULT = "No future trend variable found corresponding to the specified name";
+	public static final String ERR_NO_RESULT = "No Projected Climate Change Variable found corresponding to the specified name";
 }

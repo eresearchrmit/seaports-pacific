@@ -176,14 +176,14 @@ public class RIFCSController {
         p.addName(name);
         
         Identifier id = p.newIdentifier();
-        if (user.getNlaNumber() != null && user.getNlaNumber().length() > 0) {
+        /*if (user.getNlaNumber() != null && user.getNlaNumber().length() > 0) {
         	id.setType("AU-ANL:PEAU");
         	id.setValue(user.getNlaNumber());
         }
-        else {
+        else {*/
         	id.setType("uri");
         	id.setValue(CSS_URL + "public/user/" + user.getUsername());
-        }
+        /*}*/
         p.addIdentifier(id);
         
         // Location

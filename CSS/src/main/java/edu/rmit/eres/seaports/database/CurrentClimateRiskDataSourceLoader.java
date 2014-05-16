@@ -54,16 +54,14 @@ public class CurrentClimateRiskDataSourceLoader {
 	public static void LoadCurrentClimateRiskDataSource(Session session)
 	{
 		// Display Types offered by this data source
-		DisplayType textDisplayType = (DisplayType)(session.get(DisplayType.class, 1));
-		DisplayType tableDisplayType = (DisplayType)(session.get(DisplayType.class, 3));
+		DisplayType tableDisplayType = (DisplayType)(session.get(DisplayType.class, 3)); // Table
 		
 		List<DisplayType> displayTypesCurrentClimateRisk = new ArrayList<DisplayType>();
-		displayTypesCurrentClimateRisk.add(textDisplayType);
 		displayTypesCurrentClimateRisk.add(tableDisplayType);
 		
 		
 		// Data Source
-		CurrentClimateRiskDataSource dsCurrentClimateRisk = new CurrentClimateRiskDataSource("currentClimateRisk", "Current Climate Risk Assessment", "<p><i>?.</i></p>", 
+		CurrentClimateRiskDataSource dsCurrentClimateRisk = new CurrentClimateRiskDataSource("currentClimateRisk", "Current Climate Risk Assessment", "<p><i>Click <a href=\"/resources/docs/matrix-current-climate-vulnerability.docx\" target=\"_blank\">here</a> to download a document to help you to prepare this assessment.</i></p><p><i>Select an event type and assess the vulnerability of the Seaport in the different domains listed below.</i></p>", 
 				null, null, displayTypesCurrentClimateRisk);
 		
 		
@@ -91,32 +89,6 @@ public class CurrentClimateRiskDataSourceLoader {
 		DataSourceParameterOption weatherEventTypeDrought = new DataSourceParameterOption("Drought", "Drought", weatherEventTypeParam, 10);
 		session.save(weatherEventTypeDrought);
 		
-		// Parameter Risk Areas
-		/*DataSourceParameter riskAreasParam = new DataSourceParameter("Risk Area", "", dsCurrentClimateRisk, null, DataSourceParameter.Display.DROPDOWN);		
-		session.save(riskAreasParam);
-		DataSourceParameterOption riskAreasMarineInfrastructure = new DataSourceParameterOption("", "Marine Infrastructure", riskAreasParam, 1);
-		session.save(riskAreasMarineInfrastructure);
-		DataSourceParameterOption riskAreasPortInfrastructure = new DataSourceParameterOption("Port Infrastructure", "Port Infrastructure", riskAreasParam, 2);
-		session.save(riskAreasPortInfrastructure);
-		DataSourceParameterOption riskAreasPortSuperstructure = new DataSourceParameterOption("Port Superstructure", "Port Superstructure", riskAreasParam, 3);
-		session.save(riskAreasPortSuperstructure);
-		DataSourceParameterOption riskAreasOperations = new DataSourceParameterOption("Operations", "Operations", riskAreasParam, 4);
-		session.save(riskAreasOperations);
-		DataSourceParameterOption riskAreasSupplychain = new DataSourceParameterOption("Supply Chain", "Supply Chain", riskAreasParam, 5);
-		session.save(riskAreasSupplychain);
-		DataSourceParameterOption riskAreasWorkforce = new DataSourceParameterOption("Workforce", "Workforce", riskAreasParam, 6);
-		session.save(riskAreasWorkforce);
-		DataSourceParameterOption riskAreasFinancial = new DataSourceParameterOption("Financial", "Financial", riskAreasParam, 7);
-		session.save(riskAreasFinancial);
-		DataSourceParameterOption riskAreasLegal = new DataSourceParameterOption("Legal/Regulations", "Legal/Regulations", riskAreasParam, 8);
-		session.save(riskAreasLegal);
-		DataSourceParameterOption riskAreasEnvironment = new DataSourceParameterOption("Environment", "Environment", riskAreasParam, 9);
-		session.save(riskAreasEnvironment);
-		DataSourceParameterOption riskAreasStakeholders = new DataSourceParameterOption("Stakeholders", "Stakeholders", riskAreasParam, 10);
-		session.save(riskAreasStakeholders);
-		DataSourceParameterOption riskAreasReputation = new DataSourceParameterOption("Reputation", "Reputation", riskAreasParam, 11);
-		session.save(riskAreasReputation);*/
-				
 		// Rating of the consequence of risk
 		DataSourceParameter consequence1 = new DataSourceParameter("Marine Infrastructure", "<p>1: No impact or slight reduction in efficiency.</p><p>2: Interruption measured in hours, slight delays.</p><p>3: Interruption measured in days.</p><p>4: Operations halted for weeks.</p><p>5: Operations suspended indefinitely.</p>", 
 				dsCurrentClimateRisk, null, DataSourceParameter.Display.RADIO);
@@ -248,6 +220,7 @@ public class CurrentClimateRiskDataSourceLoader {
 		// Availability of data sources for each element category
 		List<ElementCategory> categories = new ArrayList<ElementCategory>();
 		categories.add((ElementCategory)(session.get(ElementCategory.class, 1))); // Category 1 = Observed climate & marine
+		categories.add((ElementCategory)(session.get(ElementCategory.class, 4))); // Category 4 = Applications
 		dsCurrentClimateRisk.setCategories(categories);
 		
 		session.save(dsCurrentClimateRisk);

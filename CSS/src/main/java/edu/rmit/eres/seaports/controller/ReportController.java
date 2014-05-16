@@ -42,8 +42,8 @@ import edu.rmit.eres.seaports.helpers.FileTypeHelper;
 import edu.rmit.eres.seaports.helpers.SecurityHelper;
 import edu.rmit.eres.seaports.model.*;
 import edu.rmit.eres.seaports.model.datasource.DemographicsDataSource;
-import edu.rmit.eres.seaports.model.datasource.FutureExtremeDataSource;
-import edu.rmit.eres.seaports.model.datasource.FutureTrendDataSource;
+import edu.rmit.eres.seaports.model.datasource.ProjectedClimateExtremeDataSource;
+import edu.rmit.eres.seaports.model.datasource.ProjectedClimateChangeDataSource;
 import edu.rmit.eres.seaports.model.datasource.ObservedExtremeDataSource;
 import edu.rmit.eres.seaports.model.datasource.ObservedTrendDataSource;
 import edu.rmit.eres.seaports.model.datasource.TradeDataSource;
@@ -88,7 +88,7 @@ public class ReportController {
 	private ObservedTrendDataDao observedTrendDataDao;
 	
 	@Autowired
-	private FutureTrendDataDao futureTrendDataDao;
+	private ProjectedClimateChangeDataDao projectedClimateChangeDataDao;
 	
 	@Autowired
 	private ExtremeDataDao extremeDataDao;
@@ -750,10 +750,10 @@ public class ReportController {
 			    // Initiate the data source with an Autowired DAO if needed
 			    if (ds instanceof ObservedTrendDataSource)
 			    	ds.init(observedTrendDataDao);
-			    if (ds instanceof ObservedExtremeDataSource || ds instanceof FutureExtremeDataSource)
+			    if (ds instanceof ObservedExtremeDataSource || ds instanceof ProjectedClimateExtremeDataSource)
 			    	ds.init(extremeDataDao);
-			    if (ds instanceof FutureTrendDataSource)
-			    	ds.init(futureTrendDataDao);
+			    if (ds instanceof ProjectedClimateChangeDataSource)
+			    	ds.init(projectedClimateChangeDataDao);
 			    if (ds instanceof TradeDataSource)
 			    	ds.init(tradeDataDao);
 			    if (ds instanceof DemographicsDataSource)

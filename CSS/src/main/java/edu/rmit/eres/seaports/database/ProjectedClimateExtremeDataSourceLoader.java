@@ -23,17 +23,17 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 import edu.rmit.eres.seaports.model.*;
 import edu.rmit.eres.seaports.model.data.ExtremeData;
 import edu.rmit.eres.seaports.model.data.ExtremeVariable;
-import edu.rmit.eres.seaports.model.datasource.FutureExtremeDataSource;
+import edu.rmit.eres.seaports.model.datasource.ProjectedClimateExtremeDataSource;
 
 /**
- * Class used to load CSIRO Data Source in the database
+ * Class used to load Projected Climate Extreme Data Source in the database
  * @author Guillaume Prevost
  */
 @SuppressWarnings("deprecation")
-public class FutureExtremeDataSourceLoader {
+public class ProjectedClimateExtremeDataSourceLoader {
 		
 	/**
-	 * Main method used to load  the CSIRO Data Source only.
+	 * Main method used to load the Projected Climate Extreme Data Source only.
 	 * On an existing database, this may duplicate data.
 	 * @param args: no parameters
 	 */
@@ -48,19 +48,19 @@ public class FutureExtremeDataSourceLoader {
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();	
 		
-		LoadFutureExtremeDataSource(session);
+		LoadProjectedClimateExtremeDataSource(session);
 		
 		session.getTransaction().commit();
 	}
 	
 	/**
-	 * Loads the Future Extreme Data Source in the database
+	 * Loads the Projected Climate Extreme Data Source in the database
 	 * @param session: the Hibernate Session object which takes care of persisting objects in the database
 	 */
-	public static void LoadFutureExtremeDataSource(Session session)
+	public static void LoadProjectedClimateExtremeDataSource(Session session)
 	{
 		// Loads the underlying Observed Trend dataset
-		FutureExtremeDataSourceLoader.LoadFutureExtremeData(session);
+		ProjectedClimateExtremeDataSourceLoader.LoadProjectedClimateExtremeData(session);
 		
 		
 		// Display Types offered by this data source
@@ -73,7 +73,7 @@ public class FutureExtremeDataSourceLoader {
 		
 		
 		// Data Source
-		FutureExtremeDataSource dsExtreme = new FutureExtremeDataSource("futureExtreme", "Future Extreme", "", null, null, displayTypes);
+		ProjectedClimateExtremeDataSource dsExtreme = new ProjectedClimateExtremeDataSource("projectedClimateExtreme", "Projected Climate Extreme", "", null, null, displayTypes);
 		
 		// Parameters Climate Variable, with options Temperature, Wind Speed, Rainfall and Relative Humidity
 		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<h6>?</h6>",
@@ -126,10 +126,10 @@ public class FutureExtremeDataSourceLoader {
 	
 
 	/**
-	 * Loads the Future Extreme dataset in the database
+	 * Loads the Projected Climate Extreme dataset in the database
 	 * @param session: the Hibernate Session object which takes care of persisting objects in the database
 	 */
-	public static void LoadFutureExtremeData(Session session)
+	public static void LoadProjectedClimateExtremeData(Session session)
 	{
 		// Regions
 		Region r1 = (Region)(session.get(Region.class, 1)); // Fiji

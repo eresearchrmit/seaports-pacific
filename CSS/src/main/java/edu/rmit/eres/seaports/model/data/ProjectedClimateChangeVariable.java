@@ -18,25 +18,25 @@ import edu.rmit.eres.seaports.model.Variable;
  * @since 5th May. 2014
  */
 @Entity
-@Table(name = "FutureTrendVariable")
-public class FutureTrendVariable extends Variable {
+@Table(name = "ProjectedClimateChangeVariable")
+public class ProjectedClimateChangeVariable extends Variable {
 	
 	private static final long serialVersionUID = -2491294078433221153L;
 
 	/**
-	 * Default constructor of FutureTrendVariable
+	 * Default constructor of ProjectedClimateChangeVariable
 	 */
-	public FutureTrendVariable() {
+	public ProjectedClimateChangeVariable() {
 	}
 	
 	/**
-	 * Constructor of FutureTrendVariable
+	 * Constructor of ProjectedClimateChangeVariable
 	 * @param name: the name of the variable
 	 * @param shortName: the short name for the variable
 	 * @param description: the description of the variable
 	 * @param uom: the unit of measure of the variable
 	 */
-	public FutureTrendVariable(String name, String shortName, String description, String uom) {
+	public ProjectedClimateChangeVariable(String name, String shortName, String description, String uom) {
 		this.name = name;
 		this.shortName = shortName;
 		this.description = description;
@@ -45,14 +45,14 @@ public class FutureTrendVariable extends Variable {
 	}
 	
 	/**
-	 * Constructor of FutureTrendVariable
+	 * Constructor of ProjectedClimateChangeVariable
 	 * @param name: the name of the variable
 	 * @param shortName: the short name for the variable
 	 * @param description: the description of the variable
 	 * @param uom: the unit of measure of the variable
 	 * @param uomVariation: the unit of measure of the variation of the variable
 	 */
-	public FutureTrendVariable(String name, String shortName, String description, String uom, String uomVariation) {
+	public ProjectedClimateChangeVariable(String name, String shortName, String description, String uom, String uomVariation) {
 		this.name = name;
 		this.shortName = shortName;
 		this.description = description;

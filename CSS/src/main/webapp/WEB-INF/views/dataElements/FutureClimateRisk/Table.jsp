@@ -37,4 +37,6 @@
 			</tr>
 		</tbody>
 	</table>
+	<br />
+	<p>The priority was calculated based on the '<i>${futureClimateRisk.consequencesRatingString}</i>' consequences rating and the '<i>${futureClimateRisk.likelihoodRatingString}</i>' likelihood rating of the event.</p>
 </c:if>

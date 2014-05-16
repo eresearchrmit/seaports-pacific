@@ -32,7 +32,7 @@
 	
 	<li class="ic-info
 		${requestScope['javax.servlet.forward.servlet_path'] == '/public/help' ? ' current' : ''}">
-		<a href="/public/help"><span>Help</span></a>
+		<a href="/public/help"><span>Help & Resources</span></a>
 	</li>
 	
 	<sec:authorize access="hasRole('ROLE_ADMIN')">

@@ -69,13 +69,6 @@
 				    		<span id="emailErrorMessage" style="color:red;"></span>
 				    	</td>
 				    </tr>
-				    <tr>
-				    	<td class="col1" align="right">NLA Number:</td>
-				    	<td class="col2" align="left">
-				    		<form:input id="txtNlaNumber" path="nlaNumber" />&nbsp;
-				    		Please specify your NLA number if you have one.
-				    	</td>
-				    </tr>
 				</table>
 				<input type="submit" value="Sign Up" id="btnSignUp" class="btn btn-blue" />
 			</form:form>
