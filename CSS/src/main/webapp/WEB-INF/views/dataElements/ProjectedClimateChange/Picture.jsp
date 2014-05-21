@@ -12,8 +12,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <c:if test="${not empty element.data}">
-	<h6>Projected ${element.data[0].variable.name} trend (${element.data[0].variable.uom})</h6>
+	<h6>Projected changes in ${element.data[0].variable.name} (${element.data[0].variable.uom}) relative to 1990</h6>
 	<br />
+	<p>${element.data[0].variable.description}</p>
 	
 	<table>
 	

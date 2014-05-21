@@ -20,7 +20,7 @@
 		
 	<div class="centered">
 		<h5 style="color: rgb(69, 114, 167); font-weight:normal">
-			Value of the top ${element.data[0].imported ? 'imported': 'exported'} Goods in ${element.data[0].region.name}
+			Value of the top ${element.data[0].imported ? 'imported': 'exported'} goods in ${element.data[0].region.name} (${element.data[0].variable.uom})
 		</h5>
 	</div>
 	
@@ -53,7 +53,7 @@
 	                valueSuffix: " ${element.data[0].variable.uom}"
 	            },
 	            legend: {
-	                enabled: false
+	                enabled: true
 	            },
 	            plotOptions: {
 	                area: {

@@ -38,7 +38,7 @@
 	
 	<%-- Action buttons --%>
 	<div id="actionButtons">
-		<a id="lnkPublishReport" href="/auth/report/publish?id=${report.id}" class="floatright btn-margin" title="Publish the Report">
+		<a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport floatright btn-margin" title="Publish the Report">
 			<button id="btnConvertToUserStory" type="button" class="btn btn-icon btn-blue btn-globe" >
 				<span></span>Publish Report
 			</button>
@@ -50,8 +50,8 @@
 			</button>
 		</a>
 		
-		<a id="lnkDeleteReport" href="/auth/report/delete?id=${report.id}" class="floatright btn-margin" title="Delete the Report">
-			<button id="btnDeleteWorkboard" type="button" class="btn btn-icon btn-blue btn-cross" >
+		<a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport floatright btn-margin" title="Delete the Report">
+			<button id="btnDeleteReport" type="button" class="btn btn-icon btn-blue btn-cross" >
 				<span></span>Delete Report
 			</button>
 		</a>
@@ -61,11 +61,11 @@
 			</button>
 		</a>
 					
-		<div style="display:none" id="confirmWorkboardDeletionModalWindow" title="Delete this report ?">
+		<div style="display:none" id="confirmReportDeletionModalWindow" title="Delete this report ?">
 			<p class="message"><span class="error"><b>Warning : Deleting this report will also delete all the data it contains. This action cannot be undone !</b></span></p>
 			<p>Are you sure you want to permanently delete this report ?</p> 
 		</div>
-		<div style="display:none" id="confirmConvertToUserStoryModalWindow" title="Publish this report ?">
+		<div style="display:none" id="confirmReportPublishModalWindow" title="Publish this report ?">
 			<p>The current status of this report is about to be published. You will be able to make further changes to the report but not the published version.</p> 
 			<p>Are you sure you want to publish this report now ?</p>
 		</div>
@@ -144,8 +144,8 @@
 			// Initialise target of the link of the "Save Order" button
 			$("#lnkSaveReportOrder").attr("href", "javascript: $('#reportOrderForm-" + window.location.hash.substring(1).replace('#', '') + "').submit();");
 			
-			setupConfirmBox("confirmConvertToUserStoryModalWindow", "lnkPublishReport");
-			setupConfirmBox("confirmWorkboardDeletionModalWindow", "lnkDeleteReport");
+			setupConfirmBox("confirmReportPublishModalWindow", "lnkPublishReport");
+			setupConfirmBox("confirmReportDeletionModalWindow", "lnkDeleteReport");
 			setupConfirmBox("confirmDataElementDeletionModalWindow", "lnkDeleteElement");
 			
 			// Help tooltips activation
@@ -451,7 +451,7 @@
 							
 							<li class="sortableItem sortable${category.id}Item" id="element${element.id}">
 								<div class="box round${element.included == false ? ' box-disabled' : ''}">
-									<div class="box-header">
+									<div class="box-header handle">
 									<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
 										<!-- Delete button -->
 										<a class="lnkDeleteElement" href="/auth/report/delete-element?id=${element.id}" title="Delete this Element">
@@ -538,6 +538,8 @@
 							
 							// Enables the sortable list
 							$( "#sortable${category.id}" ).sortable({
+								handle: '.box-header',
+								cancel: '.box-header input, .box-header select',
 								placeholder: "sortable-placeholder",
 								cursor: 'crosshair',
 								start: function(event, ui) {
@@ -558,7 +560,6 @@
 									$("#btnSaveReportOrder").effect( "highlight", {color:"#FF7F24"}, 2000 );
 					            }
 							});
-							$( "#sortable${category.id}" ).disableSelection();
 						});
 					</script>
 				</c:if>

@@ -134,10 +134,10 @@ public class ObservedExtremeDataSourceLoader {
 		//Region r2 = (Region)(session.get(Region.class, 2)); // PNG
 		
 		// Climate Variables
-		ExtremeVariable extremeTemp = new ExtremeVariable("Extreme maximum temperature", "T > 35&#8451", "Return periods of exceeding maximum temperature of 35&#8451", "y");
-		ExtremeVariable extremeRF = new ExtremeVariable("Extreme rainfall", "RF > 200mm", "Return periods of exceeding daily extreme rainfall (200mm)", "y");
-		ExtremeVariable extremeWind = new ExtremeVariable("Extreme wind", "WS > 80kt", "Return periods of exceeding daily extreme wind of 80 knot (148km/h)", "y");
-		ExtremeVariable extremeSeaLevel = new ExtremeVariable("Extreme sea level", "Extreme SL", "Return periods of extreme sea level (2.4m/2.8m)", "y");
+		ExtremeVariable extremeTemp = new ExtremeVariable("Extreme maximum temperature", "T > 35&#8451", "Return periods of exceeding maximum temperature of 35&#8451", "year");
+		ExtremeVariable extremeRF = new ExtremeVariable("Extreme rainfall", "RF > 200mm", "Return periods of exceeding daily extreme rainfall (200mm)", "year");
+		ExtremeVariable extremeWind = new ExtremeVariable("Extreme wind", "WS > 80kt", "Return periods of exceeding daily extreme wind of 80 knot (148km/h)", "year");
+		ExtremeVariable extremeSeaLevel = new ExtremeVariable("Extreme sea level", "Extreme SL", "Return periods of extreme sea level (2.4m/2.8m)", "year");
 		session.save(extremeTemp);
 		session.save(extremeRF);
 		session.save(extremeWind);

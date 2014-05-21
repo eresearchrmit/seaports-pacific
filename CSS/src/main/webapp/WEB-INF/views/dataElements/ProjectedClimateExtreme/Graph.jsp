@@ -20,7 +20,7 @@
 	
 	<div class="centered">
 		<h5 style="color: rgb(69, 114, 167); font-weight:normal">
-			Projected ${element.data[0].variable.description}
+			Projected ${element.data[0].variable.description} (${element.data[0].variable.uom})
 		</h5>
 	</div>
 	
@@ -45,7 +45,7 @@
 	            },
 	            yAxis: {
 	                title: {
-	                	text: "Return Period (years)"
+	                	text: "Return Period (${element.data[0].variable.uom})"
 	                }
 	            },
 	            tooltip: {
@@ -55,7 +55,7 @@
 	                valueSuffix: ' ${element.data[0].variable.uom}'
 	            },
 	            legend: {
-	                enabled: false
+	                enabled: true
 	            },
 	            plotOptions: {
 	                area: {

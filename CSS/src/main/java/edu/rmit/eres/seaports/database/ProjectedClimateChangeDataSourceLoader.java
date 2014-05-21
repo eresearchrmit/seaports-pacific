@@ -158,7 +158,7 @@ public class ProjectedClimateChangeDataSourceLoader {
 		
 		// Climate Variables
 		ProjectedClimateChangeVariable temp = new ProjectedClimateChangeVariable("Surface Air Temperature", "T", "Projected multi-model mean changes in annual mean surface air temperature for 2030, 2055 and 2090, relative to 1990, under the A2 (high), A1B (medium) and B1 (low) emissions scenarios. All models agree on warming in all locations.", "&#8451;", "");
-		ProjectedClimateChangeVariable rf = new ProjectedClimateChangeVariable("Total Rainfall", "RF", "Projected multi-modal mean changes in annual rainfall (mm/day) for 2030, 2055 and 2090, relative to 1990, under the A2 (high); A1B (medium) and B1 (low) emissions scenarios. Regions where at least 80% of the models agree on the direction of change are stippled.", "%", "");
+		ProjectedClimateChangeVariable rf = new ProjectedClimateChangeVariable("Total Rainfall", "RF", "Projected multi-modal mean changes in annual rainfall (mm/day) for 2030, 2055 and 2090, relative to 1990, under the A2 (high); A1B (medium) and B1 (low) emissions scenarios. Regions where at least 80% of the models agree on the direction of change are stippled.", "mm/day", "");
 		//ObservedTrendVariable rh = new ObservedTrendVariable("Relative Humidity", "RH", "Trend in relative humidity", "%", "%");
 		session.save(temp);
 		session.save(rf);

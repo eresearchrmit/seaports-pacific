@@ -144,7 +144,7 @@ public class DemographicsDataSourceLoader {
 		
 		// Population Fiji
 		session.save(new DemographicsData(creationDate, r1, 1960, pop, 393383.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1961, pop, 407152.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r1, 1961, pop, 407152.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1962, pop, 421576.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1963, pop, 436208.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1964, pop, 450452.0, sourceName));
@@ -152,9 +152,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r1, 1966, pop, 476329.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1967, pop, 487911.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1968, pop, 498887.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1969, pop, 509659.0, sourceName));
+		session.save(new DemographicsData(creationDate, r1, 1969, pop, 509659.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r1, 1970, pop, 520529.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1971, pop, 531601.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r1, 1971, pop, 531601.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1972, pop, 542811.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1973, pop, 554109.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1974, pop, 565386.0, sourceName));
@@ -162,9 +162,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r1, 1976, pop, 587522.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1977, pop, 598256.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1978, pop, 609344.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1979, pop, 621537.0, sourceName));
+		session.save(new DemographicsData(creationDate, r1, 1979, pop, 621537.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r1, 1980, pop, 635256.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1981, pop, 650966.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r1, 1981, pop, 650966.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1982, pop, 668219.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1983, pop, 685422.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1984, pop, 700394.0, sourceName));
@@ -172,9 +172,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r1, 1986, pop, 718493.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1987, pop, 721594.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1988, pop, 722707.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1989, pop, 724355.0, sourceName));
+		session.save(new DemographicsData(creationDate, r1, 1989, pop, 724355.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r1, 1990, pop, 728339.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1991, pop, 735209.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r1, 1991, pop, 735209.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1992, pop, 744340.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1993, pop, 754923.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1994, pop, 765664.0, sourceName));
@@ -182,9 +182,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r1, 1996, pop, 784647.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1997, pop, 793098.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 1998, pop, 800616.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 1999, pop, 806857.0, sourceName));
+		session.save(new DemographicsData(creationDate, r1, 1999, pop, 806857.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r1, 2000, pop, 811647.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 2001, pop, 814700.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r1, 2001, pop, 814700.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 2002, pop, 816237.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 2003, pop, 817224.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 2004, pop, 818995.0, sourceName));
@@ -192,14 +192,14 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r1, 2006, pop, 828060.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 2007, pop, 835392.0, sourceName));
 		session.save(new DemographicsData(creationDate, r1, 2008, pop, 843851.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 2009, pop, 852479.0, sourceName));
+		session.save(new DemographicsData(creationDate, r1, 2009, pop, 852479.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r1, 2010, pop, 860559.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 2011, pop, 867921.0, sourceName));
-		session.save(new DemographicsData(creationDate, r1, 2012, pop, 874742.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r1, 2011, pop, 867921.0, sourceName));
+		session.save(new DemographicsData(creationDate, r1, 2012, pop, 874742.0, sourceName));*/
 		
 		// Population PNG
 		session.save(new DemographicsData(creationDate, r2, 1960, pop, 1966957.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1961, pop, 2001048.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r2, 1961, pop, 2001048.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1962, pop, 2037164.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1963, pop, 2075629.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1964, pop, 2116831.0, sourceName));
@@ -207,9 +207,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r2, 1966, pop, 2208421.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1967, pop, 2258876.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1968, pop, 2313016.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1969, pop, 2371514.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 1969, pop, 2371514.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r2, 1970, pop, 2434754.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1971, pop, 2503073.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r2, 1971, pop, 2503073.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1972, pop, 2576093.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1973, pop, 2652585.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1974, pop, 2730859.0, sourceName));
@@ -217,9 +217,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r2, 1976, pop, 2888510.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1977, pop, 2967620.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1978, pop, 3047769.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1979, pop, 3130125.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 1979, pop, 3130125.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r2, 1980, pop, 3215483.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1981, pop, 3304188.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r2, 1981, pop, 3304188.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1982, pop, 3395798.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1983, pop, 3489402.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1984, pop, 3583707.0, sourceName));
@@ -227,9 +227,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r2, 1986, pop, 3771592.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1987, pop, 3865448.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1988, pop, 3960314.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1989, pop, 4057467.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 1989, pop, 4057467.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r2, 1990, pop, 4157903.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1991, pop, 4261797.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r2, 1991, pop, 4261797.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1992, pop, 4369087.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1993, pop, 4480243.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1994, pop, 4595761.0, sourceName));
@@ -237,9 +237,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r2, 1996, pop, 4841020.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1997, pop, 4970823.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 1998, pop, 5104516.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 1999, pop, 5240941.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 1999, pop, 5240941.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r2, 2000, pop, 5379226.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 2001, pop, 5518971.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r2, 2001, pop, 5518971.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 2002, pop, 5660267.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 2003, pop, 5803302.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 2004, pop, 5948461.0, sourceName));
@@ -247,9 +247,9 @@ public class DemographicsDataSourceLoader {
 		session.save(new DemographicsData(creationDate, r2, 2006, pop, 6245797.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 2007, pop, 6397623.0, sourceName));
 		session.save(new DemographicsData(creationDate, r2, 2008, pop, 6550877.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 2009, pop, 6704829.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 2009, pop, 6704829.0, sourceName));*/
 		session.save(new DemographicsData(creationDate, r2, 2010, pop, 6858945.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 2011, pop, 7012977.0, sourceName));
-		session.save(new DemographicsData(creationDate, r2, 2012, pop, 7167010.0, sourceName));
+		/*session.save(new DemographicsData(creationDate, r2, 2011, pop, 7012977.0, sourceName));
+		session.save(new DemographicsData(creationDate, r2, 2012, pop, 7167010.0, sourceName));*/
 	}
 }

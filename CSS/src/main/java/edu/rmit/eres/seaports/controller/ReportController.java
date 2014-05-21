@@ -357,7 +357,7 @@ public class ReportController {
 					options.add(dataSourceParameterOptionDao.find(selectedOption.getId()));
 			}
 			
-			String title = dataSource.getDisplayName() + " Data Element";
+			String title = dataSource.getDisplayName();
 			int insertPosition = dataElement.getPosition() + 1;
 			
 			reorderReportElementsAfterPosition(report, insertPosition);

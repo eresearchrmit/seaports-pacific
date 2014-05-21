@@ -74,7 +74,7 @@
 						</td>
 						
 						<td>
-							<a href="/auth/report/publish?id=${report.id}" title="Publish this Report">
+							<a href="/auth/report/publish?id=${report.id}" class="lnkPublishReport" title="Publish this Report">
 								<button id="btnPublishReport" type="button" class="btn btn-small btn-icon btn-blue btn-globe" style="margin-top: 5px" >
 									<span></span>Publish
 								</button>
@@ -82,7 +82,7 @@
 						</td>
 						
 						<td>
-							<a href="/auth/report/delete?id=${report.id}" title="Delete this Report">
+							<a href="/auth/report/delete?id=${report.id}" class="lnkDeleteReport" title="Delete this Report">
 								<button id="btnDeleteReport" type="button" class="btn btn-small btn-icon btn-blue btn-cross" style="margin-top: 5px" >
 									<span></span>Delete
 								</button>
@@ -101,7 +101,7 @@
 		<c:otherwise>
 			<p><i>You don't have any report.</i></p>
 			<p><i>Click on the 'New Report' button to start.</i></p>
-			<a class="lnkConvertToUserStory" href="/auth/report/create">
+			<a href="/auth/report/create">
 				<button id="btnConvertToUserStory" type="button" class="btn btn-icon btn-blue btn-plus" >
 					<span></span>New Report
 				</button>
@@ -160,15 +160,15 @@
 	</c:choose>
 
 	<div id="confirmReportPublishModalWindow" title="Really publish this report ?" style="display:none">
-		<p class="message"><span class="error"><b>Publishing this report will make the current version of this report public, available for anyone to read.</b></span></p>
-		<p>Are you sure you want to publish this report ?</p> 
+		<p>The current status of this report is about to be published. You will be able to make further changes to the report but not the published version.</p> 
+		<p>Are you sure you want to publish this report now ?</p>
 	</div>
 	<div id="confirmReportUnpublishModalWindow" title="Unpublish the report ?" style="display:none">
 		<p class="message"><span class="error"><b>Warning: This publication will be permanently deleted !</b></span></p>
 		<p>Are you sure you want to unpublish this report ?</p> 
 	</div>
 	<div id="confirmReportDeletionModalWindow" title="Permanently delete the report ?" style="display:none">
-		<p class="message"><span class="error"><b>Warning: this will also delete all the data elements and texts contained in this report. This action cannot be undone !</b></span></p>
+		<p class="message"><span class="error"><b>Warning : Deleting this report will also delete all the data it contains. This action cannot be undone !</b></span></p>
 		<p>Are you sure you want to permanently delete this report ?</p> 
 	</div>
 	<script type="text/javascript">
