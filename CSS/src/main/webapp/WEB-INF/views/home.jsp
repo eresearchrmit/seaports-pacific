@@ -16,22 +16,26 @@
 		<h5>Information: BETA version</h5> 
 		<p>This is a BETA version of the tool that currently has data for two South Pacific regions. Please refer to the Limitations section of the Guidance document for further process and data limitations.</p>
 	</div>
-	<br />
+	<br />	
 	<sec:authorize access="!isAuthenticated()">
 	<center>
-		<input type="button" class="btn btn-blue btn-large" value="Log in" onclick="location.href='/auth/report/my-reports'" />&nbsp;
+		<input type="button" class="btn btn-blue btn-large" value="Log in" onclick="location.href='/auth/report/my-reports'" />
 		<input type="button" class="btn btn-blue btn-large" value="Sign up" onclick="location.href='/register'" />
 	</center>
 	<br />
 	</sec:authorize>
+	<sec:authorize access="isAuthenticated()">
+	<center>
+		<input type="button" class="btn btn-blue btn-large" value="Go to my reports" onclick="location.href='/auth/report/my-reports'" />
+	</center>
+	<br />
+	</sec:authorize>
 	
-	<p class="info-paragraph">The Climate Smart Seaports Tool enables interested users to begin the process of a climate risk assessment. It assists them to identify current and historical climate trends and variability, as well as future climate projections under a variety of scenarios.</p> 
+	<p class="info-paragraph">The Climate Smart Seaports Tool enables interested users to begin the process of a climate risk assessment. It assists them to identify current and historical climate trends and variability, as well as future climate projections under a variety of scenarios.</p>
 	
 	<p class="info-paragraph">Population and trade data is included, and users can add port-specific information to round out their analysis.</p>
 	
-	<p class="info-paragraph">Adapting to climate change is still in its infancy and all organisations are learning how to manage the risks posed by the changing climate. One way to learn is by communication. One of the aims of this tool is that users will publish their generated reports to the Climate Smart Seaports site, promoting peer-to-peer learning and the spread of knowledge.</p>
+	<p class="info-paragraph">Often risk management is confined to specific areas of a business operation, eg. risks related to trade, to supply chains to the workplace functions or infrastructure. However, climate change poses a risk to all areas of a business. This tool attempts to bring the thinking about climate risks in different areas of the business into one report, beginning the creation of an integrated climate risk assessment.</p> 
 	
-	<p class="info-paragraph">Often risk management is confined to specific areas of a business operation, eg. risks related to trade, to supply chains to the workplace functions or infrastructure. However, climate change poses a risk to all areas of a business. This tool attempts to bring the thinking about climate risks in different areas of the business into one report, beginning the creation of an integrated climate risk assessment.</p>	
-	
-	<a href="/public/guidelines#introduction">Read more...</a>
+	<p class="info-paragraph">Adapting to climate change is still in its early stages and we are all learning how to manage the risks posed by the changing climate. One way to learn is by communication. One of the aims of this tool is that users will publish their generated reports to the Climate Smart Seaports site, promoting peer-to-peer learning and the spread of knowledge.</p>
 </div>

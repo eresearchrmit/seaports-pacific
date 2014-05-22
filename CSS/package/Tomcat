@@ -1,0 +1,75 @@
+#!/bin/bash
+# chkconfig: 2345 20 80 
+# description: Starting and Stopping Tomcat. Please move 
+# this script to '/etc/init.d/' and set 'execute' 
+# permission (chmod +x Tomcat) on the file.
+
+# To enable this script at startup
+# chkconfig --add Tomcat
+# chkconfig --level 2345 Tomcat on
+
+
+
+# Source function library.
+  . /etc/init.d/functions
+
+# Replace with the path to your Java home folder
+JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.55.x86_64/jre
+PATH=${JAVA_HOME}/bin:${PATH}
+
+# Replace with the path to your Tomcat bin folder
+TOMCAT_BIN=/opt/apache-tomcat-8.0.0-RC10/bin/
+TOMCAT_START=${TOMCAT_BIN}/startup.sh
+TOMCAT_STOP=${TOMCAT_BIN}/shutdown.sh
+
+export JAVA_HOME PATH
+
+start()
+{
+        if [ -x ${TOMCAT_START} ]; then
+                echo "Starting tomcat server..."
+                ${TOMCAT_START} &
+        else
+                echo "Cannot start tomcat server"
+        fi
+}
+
+stop()
+{
+        if [ -x ${TOMCAT_STOP} ]; then
+                echo "Stopping tomcat server..."
+                ${TOMCAT_STOP} &
+        else
+                echo "Cannot stop tomcat server"
+        fi
+}
+
+restart()
+{
+        stop
+        sleep 10
+        start
+}
+
+status()
+{
+        echo "No status available for tomcat server"
+}
+
+case "$1" in
+'start')
+        start
+        ;;
+'stop')
+        stop
+        ;;
+'restart')
+        restart
+        ;;
+'status')
+        status
+        ;;
+*)
+        echo "Please supply an argument [start|stop|restart]"
+esac
+
