@@ -18,14 +18,14 @@ import org.hibernate.cfg.ImprovedNamingStrategy;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import edu.rmit.eres.seaports.model.*;
-import edu.rmit.eres.seaports.model.datasource.VulnerabilityDataSource;
+import edu.rmit.eres.seaports.model.datasource.PastClimateImpactDescriptionDataSource;
 
 /**
  * Class used to load CSIRO Data Source in the database
  * @author Guillaume Prevost
  */
 @SuppressWarnings("deprecation")
-public class VulnerabilityDataSourceLoader {
+public class PastClimateImpactDescriptionDataSourceLoader {
 
 	/**
 	 * Main method used to load  the CSIRO Data Source only.
@@ -43,7 +43,7 @@ public class VulnerabilityDataSourceLoader {
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();	
 		
-		LoadVulnerabilityDataSource(session);
+		LoadPastClimateImpactDescriptionDataSource(session);
 		
 		session.getTransaction().commit();
 	}
@@ -52,7 +52,7 @@ public class VulnerabilityDataSourceLoader {
 	 * Loads the Vulnerability Assessment Data Source in the database
 	 * @param session: the Hibernate Session object which takes care of persisting objects in the database
 	 */
-	public static void LoadVulnerabilityDataSource(Session session)
+	public static void LoadPastClimateImpactDescriptionDataSource(Session session)
 	{
 		// Display Types offered by this data source
 		DisplayType graphDisplayType = (DisplayType)(session.get(DisplayType.class, 2));
@@ -64,11 +64,11 @@ public class VulnerabilityDataSourceLoader {
 		
 		
 		// Data Source
-		VulnerabilityDataSource dsVulnerability = new VulnerabilityDataSource("vulnerability", "Vulnerability Assessment", "<p><i>This section identifies your current vulnerability to particular climate related events. When considering the questions below, think of the impact on all aspects of port's business: infrastructure (dredging, drainage, berths, storage, rail, road), port assets (machinery, buildings, equipment), people (injuries, work disruptions), legal (regulatory requirements, contract negotiations), financial (loss of income, increased costs), reputation.</i></p><p><i>Please complete this page for each different climate related event that has impacted the port in recent years.</i></p>", 
+		PastClimateImpactDescriptionDataSource dsVulnerability = new PastClimateImpactDescriptionDataSource("pastClimateImpactDescription", "Past Climate Impact Description", "<p><i>This section identifies your current vulnerability to particular climate related events. When considering the questions below, think of the impact on all aspects of port's business: infrastructure (dredging, drainage, berths, storage, rail, road), port assets (machinery, buildings, equipment), people (injuries, work disruptions), legal (regulatory requirements, contract negotiations), financial (loss of income, increased costs), reputation.</i></p><p><i>Please complete this page for each different climate related event that has impacted the port in recent years.</i><p>Rate the effect that the impact will have on the port:<br />1: No impact or slight reduction in efficiency / no real cost<br />2: Interruption measured in hours, slight delays / small cost<br />3: Interruption measured in days / some costs<br />4: Operations halted for weeks / significant costs<br />5: Operations suspended indefinitely / major costs<br /></p>", 
 				null, null, displayTypesVulnerability);
 		
 		// Parameters Weather Event Type
-		DataSourceParameter weatherEventTypeParam = new DataSourceParameter("Weather Event", "<p>Disruptive climate-related events are those that caused a significant alteration to the &quote;normal&quot; functioning of the port, whether this was for a few hours, or a few weeks.</p>",
+		DataSourceParameter weatherEventTypeParam = new DataSourceParameter("Weather Event", "<p>Disruptive climate-related events are those that caused a significant alteration to the &quote;normal&quot; functioning of the port, whether this was for a few hours, a few weeks, or longer.</p>",
 				dsVulnerability, null, DataSourceParameter.Display.DROPDOWN);		
 		session.save(weatherEventTypeParam);
 		DataSourceParameterOption weatherEventTypeHeatwave = new DataSourceParameterOption("Heatwave", "Heatwave", weatherEventTypeParam, 1);
@@ -99,7 +99,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(weatherEventTypeOther);
 		
 		// Parameter Date
-		DataSourceParameter dateParam = new DataSourceParameter("Date", "<p>The year the disruptive event occured</p>",
+		DataSourceParameter dateParam = new DataSourceParameter("Date", "<p>The year the disruptive event occured.</p>",
 				dsVulnerability, null, DataSourceParameter.Display.DROPDOWN);		
 		session.save(dateParam);
 		int endYear = Calendar.getInstance().get(Calendar.YEAR) - 1;
@@ -111,7 +111,7 @@ public class VulnerabilityDataSourceLoader {
 		}
 		
 		// Parameter "Direct or Indirect"
-		DataSourceParameter climateEmissionScnParam = new DataSourceParameter("Direct or indirect impact", "<p>Direct impacts are those that specifically impacted the port, for example, heavy rain on site. Indirect impacts are those that impacted the supply chain to the port, causing a flow-on impact to the port business. Select either Direct or Indirect. If the event caused both Direct and Indirect impacts, select the one that was MORE significant.</p>", 
+		DataSourceParameter climateEmissionScnParam = new DataSourceParameter("Direct or indirect impact", "<p>Direct impacts are those that specifically impacted the port, for example, heavy rain on site. Indirect impacts are those that causing a flow-on impact to the port business, for example, shut down of electricity supply due to climate impacts, leaving the port without power. Select either Direct or Indirect. If the event caused both Direct and Indirect impacts, select the one that was MORE significant.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(climateEmissionScnParam);
 		DataSourceParameterOption mediumEmScn = new DataSourceParameterOption("Direct", "1", climateEmissionScnParam, 1);
@@ -120,13 +120,13 @@ public class VulnerabilityDataSourceLoader {
 		session.save(highEmScn);
 		
 		// Impact
-		DataSourceParameter impactParam = new DataSourceParameter("Impact", "<p>Describe how the climate related event impacted your business. E.g.: Rain caused onsite flooding; the cyclone damaged rail-lines from suppliers to the port.</p>", 
+		DataSourceParameter impactParam = new DataSourceParameter("Impact", "<p>Describe how the climate related event impacted your business. E.g.: Rain caused onsite flooding; the cyclone damaged roads bringing cargo to the port.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.TEXT);
 		session.save(impactParam);
 		session.save(new DataSourceParameterOption("", "", impactParam, 1));
 		
 		// Rating of the consequence of events
-		DataSourceParameter consequence1 = new DataSourceParameter("Marine infrastructure", "<p>Changes to dredging schedules, alterations to channels.</p>", 
+		DataSourceParameter consequence1 = new DataSourceParameter("Marine infrastructure", "<p>Impacts on dredging schedules, alterations to channels, navigation aids, impacts to shipping.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence1);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence1, 1));
@@ -135,7 +135,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Major", "3", consequence1, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence1, 5));
 		
-		DataSourceParameter consequence2 = new DataSourceParameter("Port infrastructure", "<p>Repair/replace seawalls, revetments, berths, piers.</p>", 
+		DataSourceParameter consequence2 = new DataSourceParameter("Port infrastructure", "<p>Impact on seawalls, revetments, berths, piers.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence2);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence2, 1));
@@ -144,7 +144,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Major", "3", consequence2, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence2, 5));
 		
-		DataSourceParameter consequence3 = new DataSourceParameter("Port superstructure", "Repair/replace paving, drainage systems, warehouses, silos, buildings, equipment.", 
+		DataSourceParameter consequence3 = new DataSourceParameter("Port superstructure", "Impact on paving, drainage systems, warehouses, silos, buildings.", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence3);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence3, 1));
@@ -153,7 +153,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Major", "3", consequence3, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence3, 5));
 		
-		DataSourceParameter consequence4 = new DataSourceParameter("Supply chain", "Repair/replace road, rail, inland waterways.", 
+		DataSourceParameter consequence4 = new DataSourceParameter("Supply chain", "Impact on road, rail, inland waterways.", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence4);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence4, 1));
@@ -162,7 +162,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Major", "3", consequence4, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence4, 5));
 		
-		DataSourceParameter consequence5 = new DataSourceParameter("Operations", "<p>A halt to moving goods/bulk commodities to and from boats, and across the port; impacts to storage on site.</p>", 
+		DataSourceParameter consequence5 = new DataSourceParameter("Operations", "<p>Impact  to moving goods/bulk commodities to and from boats and across the port; impact on equipment.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence5);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence5, 1));
@@ -207,7 +207,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Major", "3", consequence9, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence9, 5));
 		
-		DataSourceParameter consequence10 = new DataSourceParameter("Trade", "<p>Impact on trade throughput due to climate event at port or elsewhere; change in shipping schedule; change to trade goods; impact on partners.</p>", 
+		DataSourceParameter consequence10 = new DataSourceParameter("Trade", "<p>Impact on trade throughput due to a climate event at port or elsewhere; change in shipping schedule; change to trade goods.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence10);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence10, 1));
@@ -216,7 +216,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Major", "3", consequence10, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence10, 5));
 		
-		DataSourceParameter consequence11 = new DataSourceParameter("Community", "<p>Community opposition; need to improve relationships, creation of social programs, resettlement plans, stakeholder opposition.</p>", 
+		DataSourceParameter consequence11 = new DataSourceParameter("Stakeholders", "<p>Impact on partners, leaseholders or community from climate events at the port.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence11);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence11, 1));
@@ -225,7 +225,7 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Major", "3", consequence11, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence11, 5));
 		
-		DataSourceParameter consequence12 = new DataSourceParameter("Reputation", "<p>Loss of good name; impact on stakeholders, community, other.</p>", 
+		DataSourceParameter consequence12 = new DataSourceParameter("Reputation", "<p>Loss of good name; impact on stakeholders.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence12);
 		session.save(new DataSourceParameterOption("No Impact", "0", consequence12, 1));
@@ -233,31 +233,22 @@ public class VulnerabilityDataSourceLoader {
 		session.save(new DataSourceParameterOption("Moderate", "2", consequence12, 3));
 		session.save(new DataSourceParameterOption("Major", "3", consequence12, 4));
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence12, 5));
-		
-		DataSourceParameter consequence13 = new DataSourceParameter("Other", "", 
-				dsVulnerability, null, DataSourceParameter.Display.RADIO);
-		session.save(consequence13);
-		session.save(new DataSourceParameterOption("No Impact", "0", consequence13, 1));
-		session.save(new DataSourceParameterOption("Insignificant", "1", consequence13, 2));
-		session.save(new DataSourceParameterOption("Moderate", "2", consequence13, 3));
-		session.save(new DataSourceParameterOption("Major", "3", consequence13, 4));
-		session.save(new DataSourceParameterOption("Extreme", "4", consequence13, 5));
-		
+				
 		// Other Consequences
-		DataSourceParameter consequenceOtherParam = new DataSourceParameter("Other business consequences", "<p>Specify in the text box below any other business consequences not listed above.</p>", 
+		DataSourceParameter consequenceOtherParam = new DataSourceParameter("Other business consequences", "<p>Specify in the text box provided any other business consequences not listed above.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.TEXT);
 		session.save(consequenceOtherParam);
 		session.save(new DataSourceParameterOption("", "", consequenceOtherParam, 1));
 		
 		// Adequate Response Parameter
-		DataSourceParameter responseAdequateParam = new DataSourceParameter("Would you say your response was adequate?", "", 
+		DataSourceParameter responseAdequateParam = new DataSourceParameter("Would you say your response was adequate?", "<p>What did the Port learn from the event? Did it ignore the event or make changes?</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.RADIO);
 		session.save(responseAdequateParam);
 		session.save(new DataSourceParameterOption("Yes", "1", responseAdequateParam, 1));
 		session.save(new DataSourceParameterOption("No", "0", responseAdequateParam, 2));
 		
 		// Changes implemented after event
-		DataSourceParameter changesParam = new DataSourceParameter("What were the changes implemented as a result of this event?", "<p>Changes may be to management systems, to safety protocols, maintenance processes, communication protocols and so forth.</p>", 
+		DataSourceParameter changesParam = new DataSourceParameter("What were the changes implemented as a result of this event?", "<p>Changes may be to management systems, to safety protocols, maintenance processes, communication protocols, insurance coverage and so forth.</p>", 
 				dsVulnerability, null, DataSourceParameter.Display.TEXT);
 		session.save(changesParam);
 		session.save(new DataSourceParameterOption("", "", changesParam, 1));

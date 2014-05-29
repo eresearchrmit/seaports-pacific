@@ -91,7 +91,7 @@ public class ObservedTrendDataSourceLoader {
 		ObservedTrendDataSource dsTrend = new ObservedTrendDataSource("observedTrend", "Observed Trend", "", null, null, displayTypes);
 		
 		// Parameters Climate Variable, with options Temperature, Wind Speed, Rainfall and Relative Humidity
-		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<h6>MIN/MAX TEMPERATURE</h6><p>Minimum/Maximum air temperature in degrees Celsius (&#176;C) as measured at 2 m above ground. Values are given as change from modelled baseline (1981-2000) climate.</p><h6>RAINFALL</h6><p>Mean rainfall in millimetres (mm). Values are given as change from modelled baseline (1981-2000) climate.</p></p><h6>SEA LEVEL</h6><p>???.</p>",
+		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<h6>MIN/MAX TEMPERATURE</h6><p>Minimum/Maximum air temperature in degrees Celsius (&#176;C).</p><h6>RAINFALL</h6><p>Mean rainfall in millimetres (mm).</p></p><h6>SEA LEVEL</h6><p>Change in sea level (cm).</p><p>Values are given as change from modelled baseline (1981-2000) climate.</p>",
 				dsTrend, null, DataSourceParameter.Display.DROPDOWN);		
 		session.save(variableParam);
 		DataSourceParameterOption variableMinTemp = new DataSourceParameterOption("Minimum Temperatures", "Minimum Temperatures", variableParam, 1);

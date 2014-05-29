@@ -245,7 +245,7 @@
 						<table width="auto" height="auto" class="form">
 							<tr>
 								<td>Select a file to upload&nbsp;
-									<a href="#" class="helpTooltip" title="Port authorities have extensive data regarding their organisation's characteristics, throughput and local context. Therefore, this section allows the user to upload custom data files.<br /><br />These files may include graphic depictions of the port system and its assets, information regarding organisational objectives and/or current risks, or data on throughput volume or the types of activity that characterise the port.<br /><br />Acceptable formats are Text (.txt) or Image (.jpeg or .jpg) formats."><img src="<c:url value="/resources/img/icons/help.png" />" alt="Help" /></a>:
+									<a href="#" class="helpTooltip" title="Port authorities have extensive data regarding their organisation's characteristics and local context. This section allows the user to upload custom data files. These files may include any information that is relevant including: graphic depictions of the port system and its assets, information regarding organisational objectives and/or current risks, or data on types of activity that characterise the port.<br /><br />Acceptable formats are Text (.txt) or Image (.jpeg or .jpg) formats."><img src="<c:url value="/resources/img/icons/help.png" />" alt="Help" /></a>:
 								</td>
 								<td class="col2">
 									<input type="file" name="file" id="customFileUpload" />
@@ -484,7 +484,6 @@
 										
 										<!-- 'Edit text' button for plain text elements -->
 										<% Element element = (Element)(request.getAttribute("element"));
-											System.out.print(element.getClass().getName());
 											if (element instanceof InputElement) {
 												if (FileTypeHelper.IsContentTypePlaintext(((InputElement)element).getContentType())) { %>
 											<button id="btnOpenEditTextElementModalWindow" class="btn btn-small btn-icon btn-blue btn-edit floatright btn-margin btnEditText"
@@ -510,7 +509,7 @@
 									<input type="hidden" name="elements[${status.index}].id" value="${element.id}" id="elements[${status.index}].id" >
 									<input type="hidden" name="elements[${status.index}].position" value="${element.position}" id="elements[${status.index}].position" class="dataElementPosition">
 									
-									<div class="box-content">
+									<div class="box-content" ${element.included == false ? ' style="opacity: 0.5"' : ''}>
 										<c:set var="element" scope="request" value="${element}" />
 										<jsp:include page="element.jsp" />
 									</div>
@@ -595,21 +594,62 @@
 				<c:forEach items="${allCategories}" var="category" varStatus="status">
 					<c:forEach items="${report.elements}" var="element" varStatus="status">
 						<c:if test="${element.category.id == category.id}">
+						<c:set var="element" scope="request" value="${element}"/>
+						<c:set var="elementCount" value="${elementCount + 1}"/>
+						
 						<div class="box round${element.included == false ? ' box-disabled' : ''}">
 							<div class="box-header">
 							<h5 class="floatleft">${element.name}<%--<c:if test="${dataelement.class.simpleName == 'DataElementFile'}">.${dataelement.filetype}</c:if>--%></h5>
 								<!--  Delete Element Button -->
 								<a class="lnkDeleteDataElement" href="/auth/report/delete-element?id=${element.id}">
-									<button type="button" class="btn btn-icon btn-blue btn-small btn-cross floatright" >
-										<span></span>Delete
-									</button>
+									<button type="button" class="btn btn-icon btn-blue btn-mini btn-cross floatright" >
+										<span></span>
 								</a>
 								<!-- 'Include/Exclude' button -->
 								<a class="lnkIcludeExcludeElement" href="/auth/report/include-element?id=${element.id}&included=${!element.included}" title="${element.included == false ? 'Include in the report' : 'Exclude from the report'}">
-									<button type="button" class="btn btn-icon btn-small btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
-										<span></span>${element.included == false ? 'Include' : 'Exclude'}
+									<button type="button" class="btn btn-icon btn-mini btn-blue ${element.included == false ? ' btn-plus' : ' btn-minus'} floatright btn-margin">
+										<span></span>
 									</button>
 								</a>
+								
+								
+								<form:form id="editElementDisplayForm${element.id}" method="post" action="/auth/report/edit-element-display" class="floatright btn-margin"> 
+									<input id="hdnElementToEditId" type="hidden" name="elementId" value="${element.id}" />
+									
+									<!-- Page Break Checkbox -->
+									<input type="checkbox" id="chkPageBreak" name="pageBreakAfter" onchange="submit();" class="floatright btn-margin" style="margin-top: 3px" ${element.pageBreakAfter == true ? ' checked' : ''} title="Checking this creates a page break after this element. Click on 'Preview' to view these changes." />
+									<label for="ddlDisplayType${element.id}" class="floatright" title="Checking this creates a page break after this element. Click on 'Preview' to view these changes.">Page Break:</label>
+								
+									<!-- Full-width or Half-width -->	
+									<select id="ddlFullWidth${element.id}" name="fullWidth" onchange="submit();" class="floatright btn-margin" title="Sets the width of the element in the final report. Click on 'Preview' to view these changes.">
+										<option value="0" ${element.fullWidth == false ? 'selected' : ''}>50%</option>
+										<option value="1" ${element.fullWidth == true ? 'selected' : ''}>100%</option>
+									</select>
+									<label for="ddlFullWidth${element.id}" class="floatright" title="Sets the width of the element in the final report. Click on 'Preview' to view these changes.">Width:</label>
+								</form:form>
+								
+								<!-- 'Edit text' button for plain text elements -->
+								<% Element element = (Element)(request.getAttribute("element"));
+									if (element instanceof InputElement) {
+										if (FileTypeHelper.IsContentTypePlaintext(((InputElement)element).getContentType())) { %>
+									<button id="btnOpenEditTextElementModalWindow" class="btn btn-small btn-icon btn-blue btn-edit floatright btn-margin btnEditText"
+									 onclick="$('#hdnTextElementToEditId').val(${element.id}); tinyMCE.get('txtElementToEditContent').setContent('${fn:escapeXml(element.escapedStringContent)}');">
+										<span></span>Edit text
+									</button>
+								<% 		}
+									} else if (element instanceof DataElement) { %>
+									<form:form id="editDataElementDisplayTypeForm${element.id}" method="post" action="/auth/report/edit-display-type" class="floatright btn-margin"> 
+										<input id="hdnDataElementToEditId" type="hidden" name="elementId" value="${element.id}" />
+										
+										<select id="ddlDisplayType${element.id}" name="displayType" onchange="submit();">
+											<c:forEach items="${element.dataSource.displayTypes}" var="displayType" varStatus="displayLoopStatus">
+												<option value="${displayType.name}" ${displayType.name == element.displayType.name ? ' selected' : ''} /> ${displayType.name}</option>
+											</c:forEach>
+										</select>
+									</form:form>
+									<label for="ddlDisplayType${element.id}" class="floatright">Display:</label>
+								<% } %>
+								
 								<div class="clear"></div>
 							</div>
 
@@ -617,7 +657,7 @@
 							<input type="hidden" name="elements[${status.index}].name" value="${element.name}" id="elements[${status.index}].name">
 							<input type="hidden" name="elements[${status.index}].position" value="${element.position}" id="elements[${status.index}].position" class="dataElementPosition">
 							
-							<div class="box-content">
+							<div class="box-content" ${element.included == false ? ' style="opacity: 0.5"' : ''}>
 								<c:set var="element" scope="request" value="${element}" />
 								<jsp:include page="element.jsp" />
 							</div>

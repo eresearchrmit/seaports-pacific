@@ -47,8 +47,8 @@
 		<mapping class="edu.rmit.eres.seaports.model.datasource.ObservedExtremeDataSource" />
 		<mapping class="edu.rmit.eres.seaports.model.datasource.ProjectedClimateChangeDataSource" />
 		<mapping class="edu.rmit.eres.seaports.model.datasource.ProjectedClimateExtremeDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.datasource.VulnerabilityDataSource" />
-		<mapping class="edu.rmit.eres.seaports.model.datasource.CurrentClimateRiskDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.PastClimateImpactDescriptionDataSource" />
+		<mapping class="edu.rmit.eres.seaports.model.datasource.CurrentClimateVulnerabilityDataSource" />
 		<mapping class="edu.rmit.eres.seaports.model.datasource.FutureClimateRiskDataSource" />
 		<mapping class="edu.rmit.eres.seaports.model.datasource.TradeDataSource" />
 		<mapping class="edu.rmit.eres.seaports.model.datasource.DemographicsDataSource" />
@@ -65,7 +65,7 @@
 		<mapping class="edu.rmit.eres.seaports.model.data.DemographicsVariable" />
 		<mapping class="edu.rmit.eres.seaports.model.data.DemographicsData" />
 		<mapping class="edu.rmit.eres.seaports.model.data.WeatherEvent" />
-		<mapping class="edu.rmit.eres.seaports.model.data.CurrentClimateRisk" />
+		<mapping class="edu.rmit.eres.seaports.model.data.CurrentClimateVulnerability" />
 		<mapping class="edu.rmit.eres.seaports.model.data.FutureClimateRisk" />
     </session-factory>
 </hibernate-configuration>

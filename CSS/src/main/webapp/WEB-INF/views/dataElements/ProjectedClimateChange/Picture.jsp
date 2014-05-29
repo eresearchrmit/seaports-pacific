@@ -12,7 +12,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <c:if test="${not empty element.data}">
-	<h6>Projected changes in ${element.data[0].variable.name} (${element.data[0].variable.uom}) relative to 1990</h6>
+	<h6>Projected changes in ${element.data[0].variable.name} (${element.data[0].variable.uom}) relative to 1981-2000</h6>
 	<br />
 	<p>${element.data[0].variable.description}</p>
 	
@@ -48,7 +48,7 @@
 					<c:if test="${not empty futureTrendData.picture}">
 					<ul class="prettygallery clearfix">
 						<li>
-							<a href="/resources/img/data/futureTrend/${futureTrendData.picture}.png" target="_blank" rel="lightbox" title="Projected trend of ${futureTrendData.variable.name} (${futureTrendData.variable.uom}) centred on ${futureTrendData.year} under a ${futureTrendData.emissionScenario.description} emission scenario (${futureTrendData.emissionScenario.name})" class="centered">
+							<a href="/resources/img/data/futureTrend/${futureTrendData.picture}.png" target="_blank" rel="lightbox" title="Projected trend of ${futureTrendData.variable.name} (${futureTrendData.variable.uom}) for the ${futureTrendData.emissionScenario.name} emission scenario (${futureTrendData.emissionScenario.description}) centred on ${futureTrendData.year}" class="centered">
 								<img name="${element.name}" src="/resources/img/data/futureTrend/${futureTrendData.picture}.png" style="max-width:80%; max-height: 500px;" />
 							</a>
 				    	</li>
@@ -57,7 +57,6 @@
 					<c:set var="previousScenario" value="${futureTrendData.emissionScenario.id}" />
 					<c:set var="previousSeason" value="${futureTrendData.measureSeason}" />
 					</c:if>
-				
 			</td>
 			
 			</c:if>

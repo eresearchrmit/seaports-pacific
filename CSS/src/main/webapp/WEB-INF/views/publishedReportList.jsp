@@ -35,13 +35,13 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${publishedReports}" var="publishedReport" varStatus="status"> 
-				<tr onclick="document.location.href = '/public/published-report/view?id=${publishedReport.id}'" class="clickable">
+				<tr>
 					<td><c:out value="${publishedReport.name}" /></td>
 					<td><a href="/public/user/${publishedReport.owner.username}" title="View profile">${publishedReport.owner.firstname} ${publishedReport.owner.lastname}</a></td>
 					<td><fmt:formatDate value="${publishedReport.creationDate}" pattern="dd MMM yyyy" /></td>
 					<td>${publishedReport.report.seaport.region.name}</td>
 					<td>
-						<a href="/public/published-report/view?id=${publishedReport.report.id}" title="View this Report" target="_blank">
+						<a href="/public/published-report/view?id=${publishedReport.id}" title="View this Report" target="_blank">
 							<button id="btnViewReport" type="button" class="btn btn-small btn-icon btn-blue btn-doc" style="margin-top: 5px" >
 								<span></span>View
 							</button>

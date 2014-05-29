@@ -18,7 +18,7 @@
 		<thead>
 			<tr>
 				<th>Locations</th>
-				<th>Observed return periods (${element.data[0].variable.uom})</th>
+				<th>2010 - Observed return periods (${element.data[0].variable.uom})</th>
 			</tr>
 		</thead>
 		<tbody>

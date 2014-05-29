@@ -18,7 +18,7 @@
 	<table class="data display datatable">
 		<thead>
 			<tr>
-				<th>Climate Change Effect</th>
+				<th></th>
 				<th>Risk Area</th>
 				<th>Risk Description</th>
 				<th>Details of Risk</th>

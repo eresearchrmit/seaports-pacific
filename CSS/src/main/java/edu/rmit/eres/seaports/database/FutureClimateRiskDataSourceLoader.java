@@ -68,7 +68,7 @@ public class FutureClimateRiskDataSourceLoader {
 		
 		
 		// Parameters Weather Event Type
-		DataSourceParameter weatherEventTypeParam = new DataSourceParameter("Event Type", "", dsFutureClimateRisk, null, DataSourceParameter.Display.DROPDOWN);		
+		DataSourceParameter weatherEventTypeParam = new DataSourceParameter("Event Type", "<p>Disruptive climate-related events are those that caused a significant alteration to the &quot;the normal&quot; functioning of the port, whether this was for a few hours,  a few weeks, or longer</p>", dsFutureClimateRisk, null, DataSourceParameter.Display.DROPDOWN);		
 		session.save(weatherEventTypeParam);
 		DataSourceParameterOption weatherEventTypeSeaCurrent = new DataSourceParameterOption("Sea current", "Sea current", weatherEventTypeParam, 1);
 		session.save(weatherEventTypeSeaCurrent);
@@ -92,7 +92,7 @@ public class FutureClimateRiskDataSourceLoader {
 		session.save(weatherEventTypeDrought);
 		
 		// Parameter Risk Areas
-		DataSourceParameter riskAreasParam = new DataSourceParameter("Risk Area", "", dsFutureClimateRisk, null, DataSourceParameter.Display.DROPDOWN);		
+		DataSourceParameter riskAreasParam = new DataSourceParameter("Risk Area", "<p>Area of port business that might be impacted.</p>", dsFutureClimateRisk, null, DataSourceParameter.Display.DROPDOWN);		
 		session.save(riskAreasParam);
 		DataSourceParameterOption riskAreasMarineInfrastructure = new DataSourceParameterOption("Marine Infrastructure", "Marine Infrastructure", riskAreasParam, 1);
 		session.save(riskAreasMarineInfrastructure);
@@ -118,22 +118,22 @@ public class FutureClimateRiskDataSourceLoader {
 		session.save(riskAreasReputation);
 				
 		// Description
-		DataSourceParameter descriptionParam = new DataSourceParameter("Description", "", dsFutureClimateRisk, null, DataSourceParameter.Display.TEXT);
+		DataSourceParameter descriptionParam = new DataSourceParameter("Description", "<p>Describe the type of climate risk, for example, storms lead to sediment moving and channels need clearing for navigation</p>", dsFutureClimateRisk, null, DataSourceParameter.Display.TEXT);
 		session.save(descriptionParam);
 		session.save(new DataSourceParameterOption("", "", descriptionParam, 1));
 		
 		// Details of Risk
-		DataSourceParameter detailsParam = new DataSourceParameter("Details of Risk", "Current thresolds", dsFutureClimateRisk, null, DataSourceParameter.Display.TEXT);
+		DataSourceParameter detailsParam = new DataSourceParameter("Details of Risk (threshold)", "<p>Include details of the climate risk and identify thresholds if possible, for example, if storms are more frequent and shipping channels are affected; more dredging will be needed. Dredging is currently carried out annually.</p>", dsFutureClimateRisk, null, DataSourceParameter.Display.TEXT);
 		session.save(detailsParam);
 		session.save(new DataSourceParameterOption("", "", detailsParam, 1));
 		
 		// Future Consequences
-		DataSourceParameter futureConsequencesParam = new DataSourceParameter("Future Consequences", "", dsFutureClimateRisk, null, DataSourceParameter.Display.TEXT);
+		DataSourceParameter futureConsequencesParam = new DataSourceParameter("Future Consequences", "<p>Detail the consequences of the future risk, for example, if more dredging will be needed; dredging is currently carried out annually but it might have to be scheduled more frequently.  Consequences are:  the dredger will be hired more frequently and shipping lanes will be closed more often.</p>", dsFutureClimateRisk, null, DataSourceParameter.Display.TEXT);
 		session.save(futureConsequencesParam);
 		session.save(new DataSourceParameterOption("", "", futureConsequencesParam, 1));
 				
 		// Rating of the consequence of risk
-		DataSourceParameter consequence = new DataSourceParameter("Consequence Rating", "", dsFutureClimateRisk, null, DataSourceParameter.Display.RADIO);
+		DataSourceParameter consequence = new DataSourceParameter("Consequence Rating", "<p>Rate the effect that the impact will have on the port. This rating will be combined with your rating of how likely the climate event is to occur, to give you a Risk Level in the Climate Risk Assessment Table.</p><p>1: No impact or slight reduction in efficiency / no real cost<br />2: Interruption measured in hours, slight delays / small cost<br />3: Interruption measured in days / some costs<br />4: Operations halted for weeks / significant costs<br />5: Operations suspended indefinitely / major costs</p>", dsFutureClimateRisk, null, DataSourceParameter.Display.RADIO);
 		session.save(consequence);
 		session.save(new DataSourceParameterOption("None or Negligible", "0", consequence, 1));
 		session.save(new DataSourceParameterOption("Minor", "1", consequence, 2));
@@ -142,7 +142,7 @@ public class FutureClimateRiskDataSourceLoader {
 		session.save(new DataSourceParameterOption("Extreme", "4", consequence, 5));
 		
 		// Rating of the likelihood of a risk
-		DataSourceParameter likelihood = new DataSourceParameter("Likelihood", "", dsFutureClimateRisk, null, DataSourceParameter.Display.RADIO);
+		DataSourceParameter likelihood = new DataSourceParameter("Likelihood", "<p>Rate how often the climate event might occur. This rating will be combined with your rating of the effect if would have on the port (Consequence), to give you a Risk Level in the Climate Risk Assessment Table.</p><p>1: Recurrent events  / single event – almost impossible<br/>2: Recurrent events / single event – unlikely<br/>3: Recurrent events– once in your career (50 years) / single event  - possible<br/>4: Recurrent events - several times in your  career (10 or 20 years) / single event - probable<br/>5: Recurrent events –expect this every year/ single event – very likely to happen</p>", dsFutureClimateRisk, null, DataSourceParameter.Display.RADIO);
 		session.save(likelihood);
 		session.save(new DataSourceParameterOption("Rare", "0", likelihood, 1));
 		session.save(new DataSourceParameterOption("Unlikely", "1", likelihood, 2));

@@ -76,7 +76,7 @@ public class ProjectedClimateExtremeDataSourceLoader {
 		ProjectedClimateExtremeDataSource dsExtreme = new ProjectedClimateExtremeDataSource("projectedClimateExtreme", "Projected Climate Extreme", "", null, null, displayTypes);
 		
 		// Parameters Climate Variable, with options Temperature, Wind Speed, Rainfall and Relative Humidity
-		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<h6>?</h6>",
+		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<h6>Extreme Temperature, rainfall, wind, sea level expressed as the number of years before an extreme variable is projected to return to a place in future time periods (2025, 2050, 2075, 2100).</h6>",
 				dsExtreme, null, DataSourceParameter.Display.DROPDOWN);		
 		session.save(variableParam);
 		DataSourceParameterOption variableExtremeMaxTemp = new DataSourceParameterOption("Extreme maximum temperature", "Extreme maximum temperature", variableParam, 1);

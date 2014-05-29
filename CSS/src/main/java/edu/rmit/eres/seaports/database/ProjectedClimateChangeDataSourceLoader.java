@@ -91,13 +91,15 @@ public class ProjectedClimateChangeDataSourceLoader {
 		ObservedTrendDataSource ds = new ObservedTrendDataSource("projectedClimateChange", "Projected Climate Change", "", null, null, displayTypes);
 		
 		// Parameter Climate Variable, with options Temperature, Rainfall and Relative Humidity
-		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<p>?.</p>",
+		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<h6>TEMPERATURE/RAINFALL</h6><p>changes to annual mean surface air temperature (&#176;C) and rainfall (mm/day) relative to 1990 for 3 time periods (centred on 2030, 2055, 2090)  and 3 emissions scenarios (low, medium, high).</p>",
 				ds, null, DataSourceParameter.Display.DROPDOWN);		
 		session.save(variableParam);
 		DataSourceParameterOption variableTemp = new DataSourceParameterOption("Temperature", "Surface Air Temperature", variableParam, 1);
 		session.save(variableTemp);
 		DataSourceParameterOption variableRainfall = new DataSourceParameterOption("Rainfall", "Total Rainfall", variableParam, 2);
 		session.save(variableRainfall);
+		//DataSourceParameterOption variableSeaLevel = new DataSourceParameterOption("Sea Level Rise", "Sea Level Rise", variableParam, 3);
+		//session.save(variableSeaLevel);
 		//DataSourceParameterOption variableMaxTemp = new DataSourceParameterOption("Relative Humidity", "Relative Humidity", variableParam, 3);
 		//session.save(variableMaxTemp);
 				
@@ -145,7 +147,7 @@ public class ProjectedClimateChangeDataSourceLoader {
 	{
 		// Regions
 		Region r1 = (Region)(session.get(Region.class, 1)); // Fiji
-		//Region r2 = (Region)(session.get(Region.class, 2)); // PNG
+		Region r2 = (Region)(session.get(Region.class, 2)); // PNG
 		
 		
 		// Emission Scenarios
@@ -159,9 +161,11 @@ public class ProjectedClimateChangeDataSourceLoader {
 		// Climate Variables
 		ProjectedClimateChangeVariable temp = new ProjectedClimateChangeVariable("Surface Air Temperature", "T", "Projected multi-model mean changes in annual mean surface air temperature for 2030, 2055 and 2090, relative to 1990, under the A2 (high), A1B (medium) and B1 (low) emissions scenarios. All models agree on warming in all locations.", "&#8451;", "");
 		ProjectedClimateChangeVariable rf = new ProjectedClimateChangeVariable("Total Rainfall", "RF", "Projected multi-modal mean changes in annual rainfall (mm/day) for 2030, 2055 and 2090, relative to 1990, under the A2 (high); A1B (medium) and B1 (low) emissions scenarios. Regions where at least 80% of the models agree on the direction of change are stippled.", "mm/day", "");
+		//ProjectedClimateChangeVariable slr = new ProjectedClimateChangeVariable("Sea Level Rise", "SLR", "The projection (in cms) of sea level rise for the A1B (medium) emissions scenario in the Fiji region for the average rise around the future time period 2081-2100 relative to the past time period 1981 - 2000", "cm", "");
 		//ObservedTrendVariable rh = new ObservedTrendVariable("Relative Humidity", "RH", "Trend in relative humidity", "%", "%");
 		session.save(temp);
 		session.save(rf);
+		//session.save(slr);
 		//session.save(rh);
 		
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -182,7 +186,6 @@ public class ProjectedClimateChangeDataSourceLoader {
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2030, temp, a2, SEASON_ANNUAL, 0.7, 0.3, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2055, temp, a2, SEASON_ANNUAL, 1.4, 0.3, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2090, temp, a2, SEASON_ANNUAL, 2.6, 0.6, sourceName));
-		
 		
 		
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2030, rf, b1, SEASON_ANNUAL, 3.0, 11.0, sourceName));
@@ -214,5 +217,52 @@ public class ProjectedClimateChangeDataSourceLoader {
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2030, rf, a2, SEASON_DRY, -2.0, 12.0, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2055, rf, a2, SEASON_DRY, -1.0, 18.0, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2090, rf, a2, SEASON_DRY, -1.0, 22.0, sourceName));
+		
+		//session.save(new ProjectedClimateChangeData(creationDate, r1, 2090, slr, a1b, SEASON_ANNUAL, 0.0, 0.0, sourceName));
+		
+		
+		sourceName = "Climate Change in the Pacific: Scientific Assessment and New Research: Vol 5 Papua New Guinea";
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, temp, b1, SEASON_ANNUAL, 0.7, 0.4, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, temp, b1, SEASON_ANNUAL, 1.1, 0.5, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, temp, b1, SEASON_ANNUAL, 1.6, 0.6, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, temp, a1b, SEASON_ANNUAL, 0.8, 0.4, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, temp, a1b, SEASON_ANNUAL, 1.5, 0.5, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, temp, a1b, SEASON_ANNUAL, 2.4, 0.8, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, temp, a2, SEASON_ANNUAL, 0.7, 0.3, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, temp, a2, SEASON_ANNUAL, 1.5, 0.4, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, temp, a2, SEASON_ANNUAL, 2.8, 0.6, sourceName));
+		
+		
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, b1, SEASON_ANNUAL, 3.0, 13.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, b1, SEASON_ANNUAL, 8.0, 13.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, b1, SEASON_ANNUAL, 10.0, 14.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, a1b, SEASON_ANNUAL, 3.0, 13.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, a1b, SEASON_ANNUAL, 7.0, 17.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, a1b, SEASON_ANNUAL, 15.0, 20.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, a2, SEASON_ANNUAL, 5.0, 9.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, a2, SEASON_ANNUAL, 7.0, 13.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, a2, SEASON_ANNUAL, 15.0, 21.0, sourceName));
+		
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, b1, SEASON_WET, 4.0, 12.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, b1, SEASON_WET, 10.0, 13.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, b1, SEASON_WET, 12.0, 12.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, a1b, SEASON_WET, 5.0, 11.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, a1b, SEASON_WET, 9.0, 17.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, a1b, SEASON_WET, 16.0, 18.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, a2, SEASON_WET, 6.0, 10.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, a2, SEASON_WET, 8.0, 12.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, a2, SEASON_WET, 15.0, 20.0, sourceName));
+		
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, b1, SEASON_DRY, 1.0, 15.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, b1, SEASON_DRY, 7.0, 16.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, b1, SEASON_DRY, 10.0, 16.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, a1b, SEASON_DRY, 1.0, 16.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, a1b, SEASON_DRY, 5.0, 20.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, a1b, SEASON_DRY, 15.0, 24.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, rf, a2, SEASON_DRY, 4.0, 12.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, rf, a2, SEASON_DRY, 6.0, 17.0, sourceName));
+		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, rf, a2, SEASON_DRY, 15.0, 26.0, sourceName));
+		
+		//session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, temp, a1b, SEASON_ANNUAL, 0.0, 0.0, sourceName));
 	}
 }

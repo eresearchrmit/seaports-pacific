@@ -73,7 +73,7 @@ public class TradeDataSourceLoader {
 		
 		
 		// Data Source
-		TradeDataSource dsTrade = new TradeDataSource("trade", "Trade Data", "", null, null, displayTypes);
+		TradeDataSource dsTrade = new TradeDataSource("trade", "Trade Data", "<p>Here is some broad trade data for the whole nation. Choose import or export data. You can repeat the process to get both sets of data. Here is where your port will have the best data for you to upload using the &quot;Add File&quot; function</p>", null, null, displayTypes);
 		
 		// Parameter Import/Export, letting the user choose between import trade data or export trade data
 		DataSourceParameter importExportParam = new DataSourceParameter("Import/Export", "<h6>Import/Export</h6><p>Choose 'import' to get the top 10 imports by monetary value over a decade.</p><p>Choose 'export' to get the top 10 exports by monetary value over a decade.</p>",

@@ -71,7 +71,7 @@ public class ObservedExtremeDataSourceLoader {
 		
 		
 		// Data Source
-		ObservedExtremeDataSource dsExtreme = new ObservedExtremeDataSource("observedExtreme", "Observed Extreme", "", null, null, displayTypes);
+		ObservedExtremeDataSource dsExtreme = new ObservedExtremeDataSource("observedExtreme", "Observed Extreme", "Extreme Temperature, rainfall, wind, sea level expressed as the number of years before an extreme variable returns to a place.", null, null, displayTypes);
 		
 		// Parameters Climate Variable, with options Temperature, Wind Speed, Rainfall and Relative Humidity
 		DataSourceParameter variableParam = new DataSourceParameter("Variable", "<h6>?</h6>",

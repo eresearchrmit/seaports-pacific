@@ -28,15 +28,15 @@ import edu.rmit.eres.seaports.model.data.WeatherEvent;
  * @since 04th Mar. 2014
  */
 @Entity
-@DiscriminatorValue(value="Vulnerability")
-public class VulnerabilityDataSource extends DataSource implements Serializable {
+@DiscriminatorValue(value="PastClimateImpactDescription")
+public class PastClimateImpactDescriptionDataSource extends DataSource implements Serializable {
 
 	private static final long serialVersionUID = -1308795024262635690L;
 		
 	/**
 	 * Default constructor of data source
 	 */
-	public VulnerabilityDataSource() {
+	public PastClimateImpactDescriptionDataSource() {
 		super();
 	}
 	
@@ -48,14 +48,14 @@ public class VulnerabilityDataSource extends DataSource implements Serializable 
 	 * @param parameters: the list of parameters for this data source
 	 * @param seaports: the list of seaports for which this data source is available
 	 */
-	public VulnerabilityDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
+	public PastClimateImpactDescriptionDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports) {
 		super(name, displayName, helpText, parameters, seaports);
 	}
 	
 	/**
 	 * Copy constructor of data source
 	 */
-	public VulnerabilityDataSource(DataSource dataSource) {
+	public PastClimateImpactDescriptionDataSource(DataSource dataSource) {
 		super(dataSource);
 	}
 
@@ -68,7 +68,7 @@ public class VulnerabilityDataSource extends DataSource implements Serializable 
 	 * @param seaports: the list of seaports for which this data source is available
 	 * @param displayTypes: the display types available for this data source
 	 */
-	public VulnerabilityDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
+	public PastClimateImpactDescriptionDataSource(String name, String displayName, String helpText, List<DataSourceParameter> parameters, List<Seaport> seaports, List<DisplayType> displayTypes) {
 		super(name, displayName, helpText, parameters, seaports, displayTypes);
 	}
 	

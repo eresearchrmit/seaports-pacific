@@ -65,8 +65,8 @@ public class DatabaseLoader {
 		ObservedExtremeDataSourceLoader.LoadObservedExtremeDataSource(session);
 		ProjectedClimateChangeDataSourceLoader.LoadProjectedClimateChangeDataSource(session);
 		ProjectedClimateExtremeDataSourceLoader.LoadProjectedClimateExtremeDataSource(session);
-		VulnerabilityDataSourceLoader.LoadVulnerabilityDataSource(session);
-		CurrentClimateRiskDataSourceLoader.LoadCurrentClimateRiskDataSource(session);
+		PastClimateImpactDescriptionDataSourceLoader.LoadPastClimateImpactDescriptionDataSource(session);
+		CurrentClimateVulnerabilityDataSourceLoader.LoadCurrentClimateVulnerabilityDataSource(session);
 		FutureClimateRiskDataSourceLoader.LoadFutureClimateRiskDataSource(session);
 		TradeDataSourceLoader.LoadTradeDataSource(session);
 		DemographicsDataSourceLoader.LoadDemographicsDataSource(session);
