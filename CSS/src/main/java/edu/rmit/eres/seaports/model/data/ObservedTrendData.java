@@ -76,7 +76,13 @@ public class ObservedTrendData implements Serializable
 	private String measureSeason;
 	
 	/**
-	 * The numerical value of the data
+	 * The numerical baseline value of the data
+	 */
+	@Column
+	private Double baselineValue;
+	
+	/**
+	 * The numerical value of the change
 	 */
 	@Column
 	private Double value;
@@ -108,18 +114,20 @@ public class ObservedTrendData implements Serializable
 	 * @param periodEnd: the end date of the period this data relates to
 	 * @param variable: variable that this data represents
 	 * @param measureSeason: season when the data is measured (annual, warm season, cool season)
+	 * @param baselineValue: numerical baseline value of the data
 	 * @param value: numerical value of the data
 	 * @param percentageValue: value in term of percentage
 	 * @param picture: the picture representing the data
 	 * @param sourceName: the name of the source of the data
 	 */
-	public ObservedTrendData(Date creationDate, Region region, Date periodStart, Date periodEnd, ObservedTrendVariable variable, String measureSeason, Double value, Double percentageValue, String sourceName) {
+	public ObservedTrendData(Date creationDate, Region region, Date periodStart, Date periodEnd, ObservedTrendVariable variable, String measureSeason, Double baselineValue, Double value, Double percentageValue, String sourceName) {
 		setCreationDate(creationDate);
 		setRegion(region);
 		setPeriodStart(periodStart);
 		setPeriodEnd(periodEnd);
 		setVariable(variable);
 		setMeasureSeason(measureSeason);
+		setBaselineValue(baselineValue);
 		setValue(value);
 		setPercentageValue(percentageValue);
 		setSourceName(sourceName);
@@ -227,6 +235,22 @@ public class ObservedTrendData implements Serializable
 	 */
 	public void setMeasureSeason(String measureSeason) {
 		this.measureSeason = measureSeason;
+	}
+	
+	/**
+	 * Getter for the numerical baseline value of the data
+	 * @return: the current numerical baseline value of the data
+	 */
+	public Double getBaselineValue() {
+		return this.baselineValue;
+	}
+	
+	/**
+	 * Getter for the numerical baseline value of the data
+	 * @param baselineValue: the new numerical baseline value of the data
+	 */
+	public void setBaselineValue(Double baselineValue) {
+		this.baselineValue = baselineValue;
 	}
 	
 	/**
