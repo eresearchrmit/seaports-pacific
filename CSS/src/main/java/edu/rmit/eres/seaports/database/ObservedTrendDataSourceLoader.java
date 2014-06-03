@@ -40,12 +40,12 @@ public class ObservedTrendDataSourceLoader {
 	/**
 	 * String 'Warm' season for measure of data
 	 */
-	public static final String SEASON_WARM = "warm season";
+	public static final String SEASON_WARM = "hot wet season (May - Oct)";
 	
 	/**
 	 * String 'Cool' season for measure of data
 	 */
-	public static final String SEASON_COOL = "cool season";
+	public static final String SEASON_COOL = "cool dry season (Nov - Apr)";
 	
 	/**
 	 * Main method used to load  the CSIRO Data Source only.
@@ -207,11 +207,11 @@ public class ObservedTrendDataSourceLoader {
 		session.save(new ObservedTrendData(creationDate, r1, periodStartDate, periodEndDate, rf, SEASON_COOL, 700.0, 0.76, 0.11, sourceName));
 		
 		String sourceName2 = "Climate Change in the Pacific: Scientific Assessment and New Research: Vol 2 Country Reports, Ch 5 Fiji Islands";
-		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_ANNUAL, -9999.0, -9999.0, null, sourceName2));
-		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_WARM, -9999.0, -9999.0, null, sourceName2));
-		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_COOL, -9999.0, -9999.0, null, sourceName2));
+		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_ANNUAL, -Double.MAX_VALUE, -Double.MAX_VALUE, null, sourceName2));
+		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_WARM, -Double.MAX_VALUE, -Double.MAX_VALUE, null, sourceName2));
+		session.save(new ObservedTrendData(creationDate, r1, periodStartDate2, periodEndDate, slr, SEASON_COOL, -Double.MAX_VALUE, -Double.MAX_VALUE, null, sourceName2));
 
 		// PNG
-		session.save(new ObservedTrendData(creationDate, r2, periodStartDate3, periodEndDate, slr, SEASON_ANNUAL,-9999.0, -9999.0, null, sourceName2));
+		session.save(new ObservedTrendData(creationDate, r2, periodStartDate3, periodEndDate, slr, SEASON_ANNUAL,-Double.MAX_VALUE, -Double.MAX_VALUE, null, sourceName2));
 	}
 }
