@@ -785,7 +785,7 @@ public class ReportController {
 		
 		// Try/Catch this so no exception is thrown is no user is logged in (allow calling from PublicController) 
 		try { model.addAttribute("user", userDao.find(SecurityHelper.getCurrentlyLoggedInUsername())); }
-		catch (NoResultException e) {}
+		catch (NoResultException | AccessDeniedException e) {}
 		
 		ModelAndView mav = new ModelAndView("report");
 		

@@ -1020,7 +1020,7 @@ public class ReportControllerTest {
 		Assert.assertNull(model.get("errorMessage"));
  		
  		// Check the view name
- 		Assert.assertEquals("reportCreated", result.getViewName());
+ 		Assert.assertTrue(result.getViewName().startsWith("redirect:/auth/report?id="));
 	}
 	
 	/* --------------------------------------------------------------------- */

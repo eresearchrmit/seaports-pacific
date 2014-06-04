@@ -60,7 +60,7 @@ public class ElementCategoryDaoTest {
 
 		Assert.assertNotNull(resElementCategory);
 		Assert.assertEquals(elementCategoryeId, resElementCategory.getId());
-		Assert.assertEquals("Future climate", resElementCategory.getName()); // Display type with ID 3 has name 'Future climate'
+		Assert.assertEquals("Future climate &amp; marine", resElementCategory.getName()); // Display type with ID 3 has name 'Future climate & marine'
 		Assert.assertNotNull(resElementCategory.getHelpText());
 		Assert.assertNotNull(resElementCategory.getDescriptionText());
 	}

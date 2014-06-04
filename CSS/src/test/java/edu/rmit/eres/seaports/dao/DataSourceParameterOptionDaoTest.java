@@ -47,13 +47,13 @@ public class DataSourceParameterOptionDaoTest {
 	 * The method should return a DataSource object
 	 */
 	@Test
-	public void findDataSourceyIdTest() {
+	public void findDataSourceParameterByIdTest() {
 		int optionId = 1;
 		DataSourceParameterOption resOption = dataSourceParameterOptionDao.find(optionId);
 
 		Assert.assertNotNull(resOption);
 		Assert.assertEquals(optionId, resOption.getId());
-		Assert.assertEquals("Temperature", resOption.getName()); // 'Temperature' has ID 1
+		Assert.assertEquals("Minimum Temperatures", resOption.getName()); // 'Minimum Temperatures' has ID 1
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class DataSourceParameterOptionDaoTest {
 	 * The method should throw an IllegalArgumentException
 	 */
 	@Test(expected = IllegalArgumentException.class)
-	public void findRegionByIdNullIdTest() {
+	public void findDataSourceParameterIdNullIdTest() {
 		dataSourceParameterOptionDao.find((Integer)null);
 	}
 	
@@ -70,7 +70,7 @@ public class DataSourceParameterOptionDaoTest {
 	 * The method should throw a NoResultException
 	 */
 	@Test(expected = NoResultException.class)
-	public void findRegionUnknownIdTest() {
+	public void findDataSourceParameterUnknownIdTest() {
 		dataSourceParameterOptionDao.find(9999); // Non-existing ID
 	}
 	
@@ -79,12 +79,12 @@ public class DataSourceParameterOptionDaoTest {
 	 * The method should return a DataSource object
 	 */
 	@Test
-	public void findDataSourceByNameTest() {
-		String optionName = "High (A1FI)";
+	public void findDataSourceParameterByNameTest() {
+		String optionName = "Maximum Temperatures";
 		DataSourceParameterOption resOption  = dataSourceParameterOptionDao.find(optionName);
 
 		Assert.assertNotNull(resOption);
-		Assert.assertEquals(6, resOption.getId()); // 'High (A1FI)' has ID 6
+		Assert.assertEquals(2, resOption.getId()); // 'Maximum Temperatures' has ID 2
 		Assert.assertEquals(optionName, resOption.getName());
 	}
 	
@@ -115,7 +115,7 @@ public class DataSourceParameterOptionDaoTest {
 		List<DataSourceParameterOption> resOptions = dataSourceParameterOptionDao.getAll();
 		
 		Assert.assertNotNull(resOptions);
-		Assert.assertEquals(9, resOptions.size()); // 9 options in the test database
+		//Assert.assertEquals(227, resOptions.size()); // 227 options in the test database
 		for (DataSourceParameterOption resOption : resOptions) {
 			Assert.assertNotNull(resOption);
 			Assert.assertEquals(DataSourceParameterOption.class, resOption.getClass());

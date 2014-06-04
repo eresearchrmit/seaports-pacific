@@ -53,7 +53,7 @@ public class DataSourceDaoTest {
 
 		Assert.assertNotNull(resDataSource);
 		Assert.assertEquals(dataSourceId, resDataSource.getId());
-		Assert.assertEquals("csiro", resDataSource.getName()); // 'CSIRO' has ID 1
+		Assert.assertEquals("observedTrend", resDataSource.getName()); // 'observedTrend' has ID 1
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class DataSourceDaoTest {
 	 */
 	@Test
 	public void findDataSourceByNameTest() {
-		String dataSourceName = "csiro";
+		String dataSourceName = "observedTrend";
 		DataSource resDataSource  = dataSourceDao.find(dataSourceName);
 
 		Assert.assertNotNull(resDataSource);
@@ -115,7 +115,7 @@ public class DataSourceDaoTest {
 		List<DataSource> resDataSources = dataSourceDao.getAll();
 		
 		Assert.assertNotNull(resDataSources);
-		Assert.assertEquals(1, resDataSources.size()); // 1 data source in the test database
+		Assert.assertEquals(9, resDataSources.size()); // 9 data sources
 		for (DataSource resDataSource : resDataSources) {
 			Assert.assertNotNull(resDataSource);
 			Assert.assertEquals(DataSource.class, resDataSource.getClass().getSuperclass());
