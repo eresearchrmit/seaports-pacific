@@ -96,7 +96,8 @@ public class UserController {
 			user.setNonLocked(true);
 			user.setEnabled(true);
 			
-			userDao.save(user);
+			user = userDao.save(user);
+			model.addAttribute("user", user);
 			return "introduction";
 		}
 		catch (Exception e) {

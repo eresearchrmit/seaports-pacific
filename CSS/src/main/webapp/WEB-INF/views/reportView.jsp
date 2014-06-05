@@ -57,16 +57,17 @@
 	<c:if test="${not empty report}">	
 		<c:if test="${not empty report.elements}">
 			<div class="element-container">	 	
-			 	<c:set var="counter" value="0" />
+			 	<c:set var="counter" value="1" />
 			 	
 			 	<!-- Iteration on every element in the report -->
 			 	
 				<c:forEach items="${allCategories}" var="category" varStatus="status">
 				 	<c:forEach items="${report.elements}" var="element" varStatus="status">
 						<c:if test="${element.category.id == category.id}">
-							<c:if test="${element.fullWidth == true || counter >= 2}">
+														
+							<c:if test="${element.fullWidth == true || counter > 2}">
 								<div class="clearfix"></div>
-								<c:set var="counter" value="0" />
+								<c:set var="counter" value="1" />
 							</c:if>
 							
 							<c:if test="${element.included == true}">
@@ -77,7 +78,9 @@
 								</div>
 							</c:if>
 							
-							<c:set var="counter" value="${counter + 1}" />
+							<c:if test="${element.fullWidth == false}">
+								<c:set var="counter" value="${counter + 1}" />
+							</c:if>
 							
 							<c:if test="${element.pageBreakAfter == true}">
 								<div class="pagebreak"></div>
@@ -92,7 +95,6 @@
 		
 		<br/><br/><br/><br/>
 		<p class="report-content">${report.fullDescription}</p>
-
 		
 		<div class="report-license">
 			<div class="floatleft">

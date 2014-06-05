@@ -43,7 +43,7 @@
 	</center>
 	<br />
 	<div align="center">
-		<a href="/auth/workboard/my-workboard">
+		<a href="/auth/report/list?user=${user.username}">
 			<button id="btnContinueToWorkboard" class="btn btn-icon btn-blue btn-arrow-right" >
 				<span></span>Get started
 			</button>
