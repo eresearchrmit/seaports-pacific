@@ -26,8 +26,8 @@
 	<iframe width="560" height="315" src="//www.youtube.com/embed/SbKVhbRupus" frameborder="0" allowfullscreen></iframe><br />
 	<br /> --%>
 	
-	<sec:authorize access="isAuthenticated()">
+	<%--<sec:authorize access="isAuthenticated()">
 		<p><a href="#">Link to the Example Report matching the video ></a></p>
-	</sec:authorize>
+	</sec:authorize>--%>
 	
 </div>

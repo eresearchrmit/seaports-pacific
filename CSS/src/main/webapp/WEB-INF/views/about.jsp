@@ -19,16 +19,16 @@
 	</a>
 	
 	<center>
-		<h2>About Climate Smart Seaports</h2>
+		<h2>About Climate Smart Seaports - Pacific</h2>
 	</center>
 	<br />
-	<p class="info-paragraph">This project extends existing applied research activity funded by the National Climate Change Adaptation Research Facility (NCCARF) "Enhancing the resilience of seaports to a changing climate", and adds value through the development of an online decision support tool which will enable Australian port authorities to make better informed climate risk management decisions.  Data for the tool was sourced from public entities: Australian Bureau of Statistics (ABS), Bureau of Meteorology (BoM), Commonwealth Scientific and Industrial Research Organisation (CSIRO) and Ports Australia.</p> 
+	<p class="info-paragraph">The Climate Smart Seaports Tool - Pacific [beta] was developed by the Climate Change Adaptation Program in partnership with the RMIT University eResearch Unit, with funding originally provided by the Australian National Data Service (ANDS) and refined for the Pacific Island Nation context with funding from USAID.</p> 
 
-	<p class="info-paragraph">The Climate Smart Seaports Tool was created by RMIT University eResearch in partnership with the Climate Change Adaptation Program, with funding provided by the Australian National Data Service (ANDS).  ANDS aims to lead the creation of a cohesive national collection of research resources that makes better use of Australian research outputs, enables Australian researchers to easily publish, discover, access and use data, and enables new and more efficient research.</p>
+	<p class="info-paragraph">Data for the tool was sourced from public entities: Bureau of Meteorology (BoM), Commonwealth Scientific and Industrial Research Organisation (CSIRO), and the Fiji Meteorological Services. All data in this tool has been sourced from third parties (which is indicated throughout the tool).</p>
 
-	<p class="info-paragraph">RMIT would particularly like to thank Gippsland Ports and Sydney Ports Corporation for their support in the development of the Climate Smart Seaports Tool.</p>  
+	<p class="info-paragraph">RMIT would particularly like to thank Fiji Ports Corporation Ltd., PNG Ports Corporation Ltd., and Swire Shipping for their support in the development of this Pacific version of the Climate Smart Seaports Tool [beta].</p>  
 
-	<p class="info-paragraph">All data in this tool has been sourced from third parties (which is indicated throughout the tool).</p> 
+	<p class="info-paragraph">This activity is made possible by the support of the American People through the United States Agency for International Development (USAID). The contents are the sole responsibility of the grantee and do not necessarily reflect the views of USAID or the United States Government. </p> 
 	<br />
 	<p class="info-paragraph">For any queries or feedback about the tool, please contact: <a href="mailto:jane.mullett@rmit.edu.au">Jane Mullett</a> (RMIT Climate Change Adaptation Program)</p>
 </div>
