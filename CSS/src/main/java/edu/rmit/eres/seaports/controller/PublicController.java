@@ -98,15 +98,6 @@ public class PublicController {
 	/**
 	 * Displays the Guidelines page
 	 */
-	@RequestMapping(value = {"/public/guidelines"}, method = RequestMethod.GET)
-	public ModelAndView guidelines(Model model) {		
-		tryGetLoggedInUser(model);
-		return new ModelAndView("guidelines");
-	}
-	
-	/**
-	 * Displays the Guidelines page
-	 */
 	@RequestMapping(value = {"/public/help"}, method = RequestMethod.GET)
 	public ModelAndView help(Model model) {		
 		tryGetLoggedInUser(model);

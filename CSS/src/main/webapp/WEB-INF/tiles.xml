@@ -41,11 +41,6 @@
 		<put-attribute name="body" value="/WEB-INF/views/termsOfService.jsp" />
 	</definition>
 	
-	<definition name="guidelines" extends="public.base.definition">
-		<put-attribute name="title" value="Guidelines - Climate Smart Seaports" />
-		<put-attribute name="body" value="/WEB-INF/views/guidelines.jsp" />
-	</definition>
-	
 	<definition name="help" extends="public.base.definition">
 		<put-attribute name="title" value="Help - Climate Smart Seaports" />
 		<put-attribute name="body" value="/WEB-INF/views/help.jsp" />
