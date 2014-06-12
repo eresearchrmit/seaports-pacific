@@ -63,7 +63,7 @@ public class FutureClimateRiskDataSourceLoader {
 		
 		
 		// Data Source
-		FutureClimateRiskDataSource dsFutureClimateRisk = new FutureClimateRiskDataSource("futureClimateRisk", "Future Climate Risk Assessment", "<p><i>Click <a href=\"/resources/docs/matrix-future-climate-risk.docx\" target=\"_blank\">here</a> to download a document to help you to prepare this assessment.</i></p>", 
+		FutureClimateRiskDataSource dsFutureClimateRisk = new FutureClimateRiskDataSource("futureClimateRisk", "Future Climate Risk Assessment", "<p><i>Click <a href=\"/resources/docs/matrix-future-climate-risk.pdf\" target=\"_blank\">here</a> to download a document to help you to prepare this assessment.</i></p>", 
 				null, null, displayTypesFutureClimateRisk);
 		
 		

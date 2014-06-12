@@ -23,10 +23,10 @@
 	</center>
 	
 	<p style="text-align:center; margin: 25px 0; font-size: 12pt">
-		<strong>Copyright (c) 2013, RMIT University, Australia. All rights reserved.</strong>
+		<strong>Copyright (c) 2014, RMIT University, Australia. All rights reserved.</strong>
 	</p>
 	
-	<p style="text-align:justify; font-size: 12pt">This open-source project is under the BSD license (See '<i>license.txt</i>' for details).<br />It is hosted at: <a href="https://code.google.com/p/climate-smart-seaports/" target="_blank">https://code.google.com/p/climate-smart-seaports/</a></p>
+	<p style="text-align:justify; font-size: 12pt">This open-source project is under the BSD license (See '<i>license.txt</i>' for details).<br />It is hosted at: <a href="https://code.google.com/p/climate-smart-seaports/" target="_blank">https://code.google.com/p/climate-smart-seaports-pacific/</a></p>
 	
 	<p style="text-align:justify; font-size: 11pt">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 		<ul style="text-align:justify; font-size: 11pt">
@@ -54,7 +54,7 @@
 			We request attribution as: &copy; [author name] [year of publication]
 		</p>
 		<p style="text-align:justify; font-size: 12pt">
-			example:<i> &copy; John Smith 2013</i>
+			example:<i> &copy; John Smith 2014</i>
 		</p>
 		<p style="text-align:justify; font-size: 12pt">
 			The author name and year of publication can be found in each report.

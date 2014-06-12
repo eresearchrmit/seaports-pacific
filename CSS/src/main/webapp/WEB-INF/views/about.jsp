@@ -22,7 +22,7 @@
 		<h2>About Climate Smart Seaports - Pacific</h2>
 	</center>
 	<br />
-	<p class="info-paragraph">The Climate Smart Seaports Tool - Pacific [beta] was developed by the Climate Change Adaptation Program in partnership with the RMIT University eResearch Unit, with funding originally provided by the Australian National Data Service (ANDS) and refined for the Pacific Island Nation context with funding from USAID.</p> 
+	<p class="info-paragraph">The Climate Smart Seaports - Pacific tool was developed by the Climate Change Adaptation Program in partnership with the RMIT University eResearch Unit, with funding originally provided by the Australian National Data Service (ANDS) and refined for the Pacific Island Nation context with funding from USAID.</p> 
 
 	<p class="info-paragraph">Data for the tool was sourced from public entities: Bureau of Meteorology (BoM), Commonwealth Scientific and Industrial Research Organisation (CSIRO), and the Fiji Meteorological Services. All data in this tool has been sourced from third parties (which is indicated throughout the tool).</p>
 

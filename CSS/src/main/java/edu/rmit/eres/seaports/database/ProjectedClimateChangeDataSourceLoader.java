@@ -176,7 +176,7 @@ public class ProjectedClimateChangeDataSourceLoader {
 			creationDate = new Date();
 		}
 		
-		String sourceName = "Climate Change in the Pacific: Scientific Assessment and New Research: Vol 5 Fiji Islands";
+		String sourceName = "Climate Change in the Pacific: Scientific Assessment and New Research. Volume 1: Regional Overview. Volume 2: Country Reports. (Australian Bureau of Meteorology and CSIRO, 2011)";
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2030, temp, b1, SEASON_ANNUAL, 0.6, 0.4, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2055, temp, b1, SEASON_ANNUAL, 1.0, 0.5, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r1, 2090, temp, b1, SEASON_ANNUAL, 1.4, 0.7, sourceName));
@@ -220,8 +220,6 @@ public class ProjectedClimateChangeDataSourceLoader {
 		
 		//session.save(new ProjectedClimateChangeData(creationDate, r1, 2090, slr, a1b, SEASON_ANNUAL, 0.0, 0.0, sourceName));
 		
-		
-		sourceName = "Climate Change in the Pacific: Scientific Assessment and New Research: Vol 5 Papua New Guinea";
 		session.save(new ProjectedClimateChangeData(creationDate, r2, 2030, temp, b1, SEASON_ANNUAL, 0.7, 0.4, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r2, 2055, temp, b1, SEASON_ANNUAL, 1.1, 0.5, sourceName));
 		session.save(new ProjectedClimateChangeData(creationDate, r2, 2090, temp, b1, SEASON_ANNUAL, 1.6, 0.6, sourceName));
