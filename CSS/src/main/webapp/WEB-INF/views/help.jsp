@@ -21,14 +21,22 @@
 			<span></span>Download Complete Guidelines PDF (3.8MB)
 		</button>
 	</a>
+	<br />
+	<br />
+	
+	<p>Download the 10 minutes <b>video tutorial</b> for a step-by-step demonstration of the tool features.</p>
+	
+	<a href="<c:url value="/resources/climate-smart-seaports-pacific-video-tutorial.wmv" />" title="Download video tutorial" target="_blank">
+		<button class="btn-icon btn-blue btn-arrow-down" >
+			<span></span>Download Video Tutorial (142.7MB)
+		</button>
+	</a>
 	
 	<%--<p>TO BE REPLACED BY VIDEO TUTORIAL</p>
 	<iframe width="560" height="315" src="//www.youtube.com/embed/SbKVhbRupus" frameborder="0" allowfullscreen></iframe><br />
 	<br /> --%>
 	
-	<%--<sec:authorize access="isAuthenticated()">
-		<p><a href="#">Link to the Example Report matching the video ></a></p>
-	</sec:authorize>--%>
+	<%--<p><a href="#">Link to the Example Report matching the video ></a></p>--%>
 	
 	<br />
 	<h2>Resources</h2>
