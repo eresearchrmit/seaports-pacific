@@ -26,7 +26,7 @@
 		<strong>Copyright (c) 2014, RMIT University, Australia. All rights reserved.</strong>
 	</p>
 	
-	<p style="text-align:justify; font-size: 12pt">This open-source project is under the BSD license (See '<i>license.txt</i>' for details).<br />It is hosted at: <a href="https://code.google.com/p/climate-smart-seaports/" target="_blank">https://code.google.com/p/climate-smart-seaports-pacific/</a></p>
+	<p style="text-align:justify; font-size: 12pt">This open-source project is under the BSD license (See '<i>license.txt</i>' for details).<br />It is hosted at: <a href="https://github.com/eresearchrmit/seaports-pacific/" target="_blank">https://github.com/eresearchrmit/seaports-pacific/</a></p>
 	
 	<p style="text-align:justify; font-size: 11pt">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 		<ul style="text-align:justify; font-size: 11pt">
